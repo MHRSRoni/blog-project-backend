@@ -38,7 +38,9 @@ const userProfileSchema = new Schema({
         type: String,
         default: 'unverified'
     }
-})
+},
+    { versionKey: false, timestamps: true }
+)
 
 userProfileSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
