@@ -20,6 +20,7 @@ exports.readPostController = async (req, res, next) => {
         const { slug } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
+
         let result;
 
         if (slug) {

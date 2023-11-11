@@ -38,8 +38,6 @@ exports.readAllPostService = async (page, limit) => {
 
     const postCount = await postModel.find().count();
 
-    console.log(postCount)
-
     const allPosts = await postModel.find()
         .skip(startIndex)
         .limit(limit)
