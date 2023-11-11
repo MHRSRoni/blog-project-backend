@@ -4,7 +4,7 @@ const { postValidationSchema } = require("./postValidationSchema")
 
 exports.createPostController = async (req, res, next) => {
     try {
-        const userId = 'agagg';
+        const userId = req.user.id;
         const postData = await postValidationSchema.validateAsync(req.body);
 
         const result = await createPostService(userId, postData);
