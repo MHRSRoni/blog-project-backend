@@ -5,7 +5,7 @@ const postRouter = require('express').Router();
 
 postRouter.post('/create', isLoggedIn, createPostController);
 
-postRouter.get('/read/:slug', readPostController);
+postRouter.get('/read', readPostController);
 
 postRouter.post('/update/:slug', isLoggedIn, updatePostController);
 

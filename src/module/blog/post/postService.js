@@ -20,17 +20,49 @@ exports.createPostService = async (userId, postData) => {
     }
 };
 
-exports.readPostService = async (slug) => {
-    const post = await postModel.findOne({ slug });
+exports.readSinglePostService = async (slug) => {
 
-    if (!post) {
-        throw createError(404, 'Post not found!');
-    }
+    const post = await postModel.findOne({ slug }).select({ _id: 0, updatedAt: 0 })
 
-    return {
-        success: true,
-        data: post
+    return { status: "success", operation: 'read', data: post }
+
+
+};
+
+exports.readAllPostService = async (page, limit) => {
+
+    let post = {};
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const postCount = await postModel.find().count();
+
+    console.log(postCount)
+
+    const allPosts = await postModel.find()
+        .skip(startIndex)
+        .limit(limit)
+
+    post.totalPost = postCount;
+    post.pageCount = Math.ceil(postCount / limit);
+
+    if (endIndex < postCount) {
+        post.next = {
+            page: page + 1,
+            limit: limit
+        }
     }
+    if (startIndex > 0) {
+        post.prev = {
+            page: page - 1,
+            limit: limit
+        }
+    }
+    post.resultPosts = allPosts;
+
+    return { status: 'success', operation: 'read', data: post }
+
 };
 
 exports.updatePostService = async (slug, postData) => {

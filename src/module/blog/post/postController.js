@@ -1,4 +1,4 @@
-const { createPostService, updatePostService, readPostService, deletePostService } = require("./postService");
+const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService } = require("./postService");
 const { postValidationSchema } = require("./postValidationSchema")
 
 
@@ -17,9 +17,16 @@ exports.createPostController = async (req, res, next) => {
 
 exports.readPostController = async (req, res, next) => {
     try {
-        const { slug } = req.params;
+        const { slug } = req.query;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 6;
+        let result;
 
-        const result = await readPostService(slug);
+        if (slug) {
+            result = await readSinglePostService(slug);
+        } else {
+            result = await readAllPostService(page, limit);
+        }
 
         return res.status(200).json(result)
     } catch (error) {
