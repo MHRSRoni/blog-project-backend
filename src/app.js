@@ -35,7 +35,6 @@ app.use(express.json({ limit: '50mb' }));
 
 
 //!Managing Backend routing
-// readdirSync("./src/routes").map(r => app.use("/api/v1", require(`./src/routes/${r}`)));
 app.use('/api/v1', router)
 
 
@@ -60,7 +59,7 @@ app.start = async () => {
     try {
         await ConnectDB()
         app.listen(port, () => {
-            console.log(`✅ Server Running http://localhost:${port}`)
+            console.log(`✅ Server Running Port ${port}`)
         })
     } catch (error) {
         console.log(error)
