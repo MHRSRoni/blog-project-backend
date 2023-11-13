@@ -6,7 +6,7 @@ exports.isLoggedIn = async (req, res, next) => {
     try {
         const { token } = req.headers;
         if (!token) {
-            throw createError(401, 'Unauthorized')
+            throw createError(401, 'You are not logged in!')
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user.id = decoded.id;
@@ -15,6 +15,7 @@ exports.isLoggedIn = async (req, res, next) => {
 
 
     } catch (error) {
-        throw createError(401, 'Unauthorized');
+        next(error)
+
     }
 }
