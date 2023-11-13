@@ -2,6 +2,8 @@ const createError = require('http-errors');
 const userProfileModel = require("./userProfileModel");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const sendEmail = require('../../../utils/email');
+const userOtpModel = require('./userOtpModel');
 
 
 // registration
@@ -29,3 +31,31 @@ exports.userLoginService = async (loginData) => {
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
     return { success: true, message: 'Login Successful', token, ...rest };
 }
+
+
+// otp service
+
+exports.userOtpService = async (email, emailSubject) => {
+
+    if (!email) {
+        throw createError(404, 'User not found');
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+
+    const emailData = {
+        to: email,
+        subject: emailSubject,
+        html: `Your OTP is :  ${otp}`
+    }
+
+    await userOtpModel.updateOne({ email: email }, { "otp.code": otp }, { upsert: true });
+
+    await sendEmail(emailData);
+
+    return {
+        success: true,
+        message: 'OTP sent successfully',
+    }
+}
+

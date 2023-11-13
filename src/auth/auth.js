@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors')
 
+
+// Check if user is logged in
 exports.isLoggedIn = async (req, res, next) => {
 
     try {
