@@ -3,7 +3,7 @@ const { createPostController, updatePostController, readPostController, deletePo
 
 const postRouter = require('express').Router();
 
-postRouter.post('/create', isLoggedIn, createPostController);
+postRouter.post('/create', createPostController);
 
 postRouter.get('/read', readPostController);
 
