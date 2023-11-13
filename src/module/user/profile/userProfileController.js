@@ -61,13 +61,20 @@ exports.otp = (req, res, next) => {
 
 
 exports.otpSendController = async (req, res, next) => {
+
     try {
         const { email, emailSubject } = req.body;
+        // right
         const result = await userOtpService(email, emailSubject, userProfileModel);
+
+
         res.status(200).json(result);
     } catch (error) {
+        console.log(error)
+
         next(error)
     }
+
 
 }
 

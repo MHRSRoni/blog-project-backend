@@ -42,16 +42,13 @@ exports.userOtpService = async (email, emailSubject) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-
     const emailData = {
         to: email,
         subject: emailSubject,
         html: `Your OTP is :  ${otp}`
     }
-
     await userOtpModel.updateOne({ email: email }, { "otp.code": otp }, { upsert: true });
-
-    await sendEmail(emailData);
+    const sendmail = await sendEmail(emailData);
 
     return {
         success: true,
