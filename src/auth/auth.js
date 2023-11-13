@@ -9,8 +9,8 @@ exports.isLoggedIn = async (req, res, next) => {
             throw createError(401, 'Unauthorized')
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.headers.id = decoded.id;
-        req.headers.email = decoded.email;
+        req.user.id = decoded.id;
+        req.user.email = decoded.email;
         next()
 
 

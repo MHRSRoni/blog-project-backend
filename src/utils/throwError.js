@@ -9,13 +9,13 @@ const throwError = (...error) => {
     })
 
     if(env.toLowerCase() === 'production' && productionError) {
-        throw productionError
+        return productionError
     }
     else if(env.toLowerCase() === 'development' && developmentError) {
-        throw developmentError
+        return developmentError
     }
     else {
-        throw error[0]
+        return error[0]
     }
 }
 
