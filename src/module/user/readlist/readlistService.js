@@ -1,5 +1,5 @@
 const readlistModel = require("./readlistModel");
-const giveError = require('../../utils/throwError');
+const giveError = require('../../../utils/throwError');
 
 const readReadlist = async (userId) => {
 
