@@ -17,8 +17,6 @@ const PORT = process.env.RUNNING_PORT || 6000;
 app.use(express.json({ limit: '50mb' }));
 secure(app);
 
-
-
 //-------------- route ----------------//
 //Managing Backend routing
 app.use('/api/v1', router)

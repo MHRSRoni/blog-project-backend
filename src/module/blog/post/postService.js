@@ -5,11 +5,26 @@ const createError = require('http-errors');
 exports.createPostService = async (userId, postData) => {
     const checkTitle = await postModel.findOne({ title: postData.title });
 
-    if (checkTitle) {
-        throw createError(409, 'Title already exists!');
+    let post;
+
+    while (checkTitle) {
+        post = await postModel.create({
+            ...postData,
+            slug: slugify(postData.title + '-' + Math.floor(Math.random() * 1000)),
+            userId: userId
+        });
+
+        if (post) {
+            return {
+                success: true,
+                message: 'New Post has been Created!',
+                data: post
+            };
+        }
     }
 
-    const post = await postModel.create({
+
+    post = await postModel.create({
         ...postData, slug: slugify(postData.title), userId: userId
     });
 
@@ -29,7 +44,7 @@ exports.readSinglePostService = async (slug) => {
 
 };
 
-exports.readAllPostService = async (page, limit) => {
+exports.readAllPostService = async (page, limit, sort) => {
 
     let post = {};
 
@@ -38,9 +53,27 @@ exports.readAllPostService = async (page, limit) => {
 
     const postCount = await postModel.find().count();
 
-    const allPosts = await postModel.find()
+    let allPosts = await postModel.find()
         .skip(startIndex)
         .limit(limit)
+
+    if (sort === 'latest') {
+        allPosts = await postModel.find().sort({ createdAt: 'desc' })
+            .skip(startIndex)
+            .limit(limit)
+    }
+
+    if (sort === 'top') {
+        allPosts = await postModel.find().sort({ 'react.like': 'desc' })
+            .skip(startIndex)
+            .limit(limit)
+    }
+
+    // if (sort === 'relevant') {
+    //     allPosts = await postModel.find().sort({ category: 'desc' })
+    //         .skip(startIndex)
+    //         .limit(limit)
+    // }
 
     post.totalPost = postCount;
     post.pageCount = Math.ceil(postCount / limit);
@@ -62,6 +95,42 @@ exports.readAllPostService = async (page, limit) => {
     return { status: 'success', operation: 'read', data: post }
 
 };
+
+// exports.readLatestPostService = async (page, limit) => {
+//     let post = {};
+
+//     const startIndex = (page - 1) * limit;
+//     const endIndex = page * limit;
+
+//     const postCount = await postModel.find().count();
+
+//     const allPosts = await postModel.find().sort({ createdAt: 'desc' })
+//         .skip(startIndex)
+//         .limit(limit)
+
+//     post.totalPost = postCount;
+//     post.pageCount = Math.ceil(postCount / limit);
+
+//     if (endIndex < postCount) {
+//         post.next = {
+//             page: page + 1,
+//             limit: limit
+//         }
+//     }
+//     if (startIndex > 0) {
+//         post.prev = {
+//             page: page - 1,
+//             limit: limit
+//         }
+//     }
+//     post.resultPosts = allPosts;
+
+//     return { status: 'success', operation: 'read', data: post }
+// }
+
+exports.readTopPostService = async () => {
+
+}
 
 exports.updatePostService = async (slug, postData) => {
     const updatePost = await postModel.findOneAndUpdate(

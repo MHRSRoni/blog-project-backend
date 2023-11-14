@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const postSchema = new Schema({
     userId: {
-        type: Schema.Types.ObjectId,
+        // type: Schema.Types.ObjectId,
         type: String,
         ref: 'users',
         required: true
@@ -34,10 +34,12 @@ const postSchema = new Schema({
     },
     react: {
         like: {
-            type: Number
+            type: Number,
+            default: 0
         },
         dislike: {
-            type: Number
+            type: Number,
+            default: 0
         }
     },
     readTime: {
