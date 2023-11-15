@@ -6,7 +6,7 @@ exports.createComment = async (userId, postId, comment) => {
     const savedComment = await new commentModel({userId, postId, comment}).save()
 
     if(!savedComment){
-        return giveError(
+        throw giveError(
             createError(501, "comment not saved", {mode : 'development'}),
             createError(501, 'something went wrong', {mode : 'production'})
         )
@@ -25,7 +25,7 @@ exports.readComment = async ( postId, currentPage = 1, pageSize = 3) => {
                                 .limit(pageSize)
 
     if(comments?.length < 1){
-        return giveError(
+        throw giveError(
             createError(404, "no comment found in the database", {mode : 'development'}),
             createError(404, 'no comments, yet', {mode : 'production'})
         )
@@ -40,7 +40,7 @@ exports.updateComment = async (userId, postId, comment) => {
     const savedComment = await commentModel.findOneAndUpdate({userId, postId}, {comment}, {new : true})
 
     if(!savedComment){
-        return giveError(
+        throw giveError(
             createError(501, "comment not saved", {mode : 'development'}),
             createError(501, 'something went wrong', {mode : 'production'})
         )
@@ -55,7 +55,7 @@ exports.deleteComment = async (userId, postId) => {
     const deletedComment = await commentModel.findOneAndUpdate({userId, postId})
 
     if(!deletedComment){
-        return giveError(
+        throw giveError(
             createError(501, "comment not deleted", {mode : 'development'}),
             createError(501, 'something went wrong', {mode : 'production'})
         )

@@ -3,9 +3,9 @@ const { commentSchema, ObjectId } = require("./commentValidation");
 
 exports.createCommentController = async (req, res, next) => {
     try {
-        const userId = req.user.id
-        const {comment, postId} = req.body;
-        const validComment = commentSchema.validateAsync({userId, postId, comment});
+        const userId = req.user?.id ;
+        const {comment, postId } = req.body;
+        const validComment = await commentSchema.validateAsync({userId, postId, comment});
         const result = await createComment(validComment);
         return res.status(201).json(result);
         
