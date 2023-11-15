@@ -2,8 +2,8 @@ const createError = require("http-errors")
 const giveError = require('../../utils/throwError')
 const commentModel = require('./commentModel')
 
-exports.createComment = async (userId, postId, comment) => {
-    const savedComment = await new commentModel({userId, postId, comment}).save()
+exports.createComment = async (validComment) => {
+    const savedComment = await new commentModel({...validComment, user : validComment.userId}).save()
 
     if(!savedComment){
         throw giveError(
@@ -18,11 +18,16 @@ exports.createComment = async (userId, postId, comment) => {
 
 exports.readComment = async ( postId, currentPage = 1, pageSize = 3) => {
 
-    const totalComment = await commentModel.find({postId}).count()
-    const totalPage = Math.ceil(totalComment / totalPage)
+    const totalComment = await commentModel.countDocuments({postId})
+    const totalPage = Math.ceil(totalComment / pageSize)
     const comments = await commentModel.find({postId}, {comment : 1, _id : 1})
-                                .skip(pageSize * currentPage - 1)
+                                .skip(pageSize * (currentPage - 1))
                                 .limit(pageSize)
+                                .populate({
+                                    path : 'user',
+                                    select : 'name picture',
+                                })
+                                .exec()
 
     if(comments?.length < 1){
         throw giveError(
@@ -35,9 +40,9 @@ exports.readComment = async ( postId, currentPage = 1, pageSize = 3) => {
 
 }
 
-exports.updateComment = async (userId, postId, comment) => {
+exports.updateComment = async ({userId : user, commentId : _id, comment}) => {
 
-    const savedComment = await commentModel.findOneAndUpdate({userId, postId}, {comment}, {new : true})
+    const savedComment = await commentModel.findOneAndUpdate({user, _id}, {comment : comment}, {new : true})
 
     if(!savedComment){
         throw giveError(
@@ -50,9 +55,9 @@ exports.updateComment = async (userId, postId, comment) => {
 
 }
 
-exports.deleteComment = async (userId, postId) => {
+exports.deleteComment = async (userId, _id) => {
 
-    const deletedComment = await commentModel.findOneAndUpdate({userId, postId})
+    const deletedComment = await commentModel.findOneAndDelete({user : userId, _id})
 
     if(!deletedComment){
         throw giveError(

@@ -1,5 +1,5 @@
 const { isLoggedIn } = require('../../../auth/auth');
-const { createPostController, updatePostController, readPostController, deletePostController, likeDislikePostController, updateReactController, searchPostController } = require('./postController');
+const { createPostController, updatePostController, readPostController, deletePostController,  updateReactController } = require('./postController');
 
 const postRouter = require('express').Router();
 
