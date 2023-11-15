@@ -19,11 +19,11 @@ exports.userRegistrator = async (userData) => {
 exports.userLoginService = async (loginData) => {
     const user = await userProfileModel.findOne({ email: loginData.email });
     if (!user) {
-        throw createError(404, 'User not found');
+        throw createError(401, 'email and password mismatch');
     }
     const isMatch = await bcrypt.compare(loginData.password, user.password);
     if (!isMatch) {
-        throw createError(401, 'Password Mismatch');
+        throw createError(401, 'email and password mismatch');
     }
     const { password, ...rest } = user._doc
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);

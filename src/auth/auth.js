@@ -10,8 +10,7 @@ exports.isLoggedIn = async (req, res, next) => {
             throw createError(401, 'You are not logged in!')
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        req.user = {};
+        req.user = {}
         req.user.id = decoded.id;
         req.user.email = decoded.email;
 
