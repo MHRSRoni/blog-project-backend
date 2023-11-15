@@ -9,10 +9,11 @@ const sendEmail = async (option) => {
         secure: false,
         auth: {
             user: 'minarfwd@gmail.com',
-            pass: 'leyz vrti nfrd kevu'
+            pass: 'leve pxxi lgmu ckjn'
         }
     });
 
+    //leve pxxi lgmu ckjn
 
     // const transporter = nodemailer.createTransport({
     //     service: "gmail",
@@ -33,7 +34,7 @@ const sendEmail = async (option) => {
         subject: option.subject,
         text: option.html
     }
-    console.log(option)
+    console.log("From Email File", option)
 
     await transporter.sendMail(mailOptions)
 

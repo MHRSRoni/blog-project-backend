@@ -56,3 +56,25 @@ exports.userOtpService = async (email, emailSubject) => {
     }
 }
 
+// Assuming userOtpModel is the Mongoose model for OTPs
+exports.otpVerifyService = async (email, otp) => {
+    console.log(email, otp)
+
+    if (!email || !otp || otp == 0) {
+        throw createError(400, 'Email and OTP are required');
+    }
+    const userOtp = await userOtpModel.findOne({ email: email });
+    // console.log("above condition: ->", userOtp.otp.code)
+
+    if (userOtp.otp.code == otp) {
+        await userOtpModel.findOneAndUpdate({ email: email, "otp.code": otp }, { 'otp.code': 0 });
+        return {
+            success: true,
+            message: 'OTP verification successful',
+        };
+    } else {
+        throw createError(401, 'Unauthorized: Incorrect or missing OTP');
+    }
+};
+
+

@@ -1,9 +1,11 @@
 const { userRegistrationSchema, userLoginSchema, userEmailSchema } = require("./userProfileValidation");
-const { userRegistrator, userLoginService, userOtpService } = require("./userProfileService");
+const { userRegistrator, userLoginService, userOtpService, otpVerifyService } = require("./userProfileService");
 const userProfileModel = require("./userProfileModel");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
+const sendEmail = require("../../../utils/email");
+const userOtpModel = require("./userOtpModel");
 
 
 exports.userRegisterController = async (req, res, next) => {
@@ -48,14 +50,14 @@ exports.userLogoutController = (req, res, next) => {
 
 
 
-exports.otp = (req, res, next) => {
-    try {
-        const otp = Math.floor(100000 + Math.random() * 900000);
-        res.status(200).json({ otp });
-    } catch (error) {
-        next(error);
-    }
-}
+// exports.otp = (req, res, next) => {
+//     try {
+//         const otp = Math.floor(100000 + Math.random() * 900000);
+//         res.status(200).json({ otp });
+//     } catch (error) {
+//         next(error);
+//     }
+// }
 
 
 
@@ -64,36 +66,74 @@ exports.otpSendController = async (req, res, next) => {
 
     try {
         const { email, emailSubject } = req.body;
-        // right
         const result = await userOtpService(email, emailSubject, userProfileModel);
-
-
         res.status(200).json(result);
     } catch (error) {
         console.log(error)
-
         next(error)
     }
-
-
 }
+
+// otp verifyController
+exports.otpVerifyController = async (req, res, next) => {
+    try {
+        const { email, otp } = req.body;
+        // Verify OTP
+        const result = await otpVerifyService(email, otp);
+        res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+};
+
 
 // Password Reset 
 
-exports.userPasswordResetController = async (req, res, next) => {
+exports.userForgetPasswordController = async (req, res, next) => {
+    const { email } = req.body;
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    try {
+        const user = await userProfileModel.findOne({ email }
+        )
+        if (!user) createError(404, "User Not Found");
+
+        await userOtpModel.updateOne({ email }, { 'otp.code': otp }, { upsert: true });
+
+        // send Email with OTP
+        const emailData = {
+            to: email,
+            subject: 'Password Reset OTP',
+            html: `Your OTP is ${otp}`
+        }
+        await sendEmail(emailData);
+        res.status(200).json({ message: "Your Password Reset OTP Send Successfully" });
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
+// Verify OTP and reset Password Controller
+
+exports.userUpdatePasswordController = async (req, res, next) => {
 
     try {
-        const { email } = req.query;
-
-        const verifiedEmail = await userEmailSchema.validateAsync(email);
-
-        const user = await userProfileModel.findOne({ email: verifiedEmail });
+        const { email, otp, newPassword } = req.body;
+        // verify Otp user means otp
+        const user = await userOtpModel.findOne({ email, 'otp.code': otp });
         if (!user) {
-            throw createError(404, 'User not found');
+            return res.status(400).json({ message: "Invalid OTP" });
         }
-        const result = await userOtpService(email, "Reset Password");
-        res.status(200).json(result);
+        // Update Password and clear OTP
+
+        user.password = newPassword;
+        user.otp.code = 0
+        await user.save();
+        return res.status(200).json({ message: "Password Update Successful" })
     } catch (error) {
+        console.error(error);
         next(error);
+
     }
 }
