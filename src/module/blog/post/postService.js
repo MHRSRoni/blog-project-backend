@@ -5,13 +5,19 @@ const createError = require('http-errors');
 exports.createPostService = async (userId, postData) => {
     const checkTitle = await postModel.findOne({ title: postData.title });
 
+    const wordsPerMinute = 130;
+    const words = postData.description.split(/\s+/).length;
+    const minute = (words / wordsPerMinute).toFixed(1);
+
+    postData.userId = userId;
+    postData.readTime = minute;
+
     let post;
 
     while (checkTitle) {
         post = await postModel.create({
             ...postData,
             slug: slugify(postData.title + '-' + Math.floor(Math.random() * 1000)),
-            userId: userId
         });
 
         if (post) {
@@ -30,6 +36,7 @@ exports.createPostService = async (userId, postData) => {
 
     return {
         success: true,
+        operation: 'create',
         message: 'New Post has been Created!',
         data: post
     }
@@ -39,7 +46,7 @@ exports.readSinglePostService = async (slug) => {
 
     const post = await postModel.findOne({ slug }).select({ _id: 0, updatedAt: 0 })
 
-    return { status: "success", operation: 'read', data: post }
+    return { success: true, operation: 'read', data: post }
 
 
 };
@@ -92,48 +99,27 @@ exports.readAllPostService = async (page, limit, sort) => {
     }
     post.resultPosts = allPosts;
 
-    return { status: 'success', operation: 'read', data: post }
+    return {
+        success: true,
+        operation: 'read',
+        data: post
+    }
 
 };
 
-// exports.readLatestPostService = async (page, limit) => {
-//     let post = {};
+exports.updatePostService = async (slug, userId, postData) => {
 
-//     const startIndex = (page - 1) * limit;
-//     const endIndex = page * limit;
+    const wordsPerMinute = 130;
+    const words = postData.description.split(/\s+/).length;
+    const minute = Math.ceil(words / wordsPerMinute);
 
-//     const postCount = await postModel.find().count();
+    if (postData.description) {
+        await postModel.findOneAndUpdate(
+            { slug, userId }, { ...postData, slug: slugify(postData.title), readTime: minute }
+        );
+    }
 
-//     const allPosts = await postModel.find().sort({ createdAt: 'desc' })
-//         .skip(startIndex)
-//         .limit(limit)
-
-//     post.totalPost = postCount;
-//     post.pageCount = Math.ceil(postCount / limit);
-
-//     if (endIndex < postCount) {
-//         post.next = {
-//             page: page + 1,
-//             limit: limit
-//         }
-//     }
-//     if (startIndex > 0) {
-//         post.prev = {
-//             page: page - 1,
-//             limit: limit
-//         }
-//     }
-//     post.resultPosts = allPosts;
-
-//     return { status: 'success', operation: 'read', data: post }
-// }
-
-exports.readTopPostService = async () => {
-
-}
-
-exports.updatePostService = async (slug, postData) => {
-    const updatePost = await postModel.findOneAndUpdate(
+    await postModel.findOneAndUpdate(
         { slug }, { ...postData, slug: slugify(postData.title) }
     );
 
@@ -143,14 +129,14 @@ exports.updatePostService = async (slug, postData) => {
 
     return {
         success: true,
-        message: 'Post has been Ubdated!',
-        data: updatePost
+        operation: 'update',
+        message: 'Post has been Ubdated!'
     }
 };
 
-exports.deletePostService = async (slug) => {
+exports.deletePostService = async (slug, userId) => {
 
-    const deletePost = await postModel.findOneAndDelete({ slug });
+    const deletePost = await postModel.findOneAndDelete({ slug, userId });
 
     if (!deletePost) {
         throw createError(404, 'Post not found!');
@@ -158,6 +144,25 @@ exports.deletePostService = async (slug) => {
 
     return {
         success: true,
+        operation: 'delete',
         message: 'Post has been Deleted!'
+    }
+};
+
+exports.searchPostService = async (page, limit, search) => {
+
+    const searchPost = await postModel.find({
+        $or: [
+            { title: { $regex: search, $options: 'i' } },
+            { description: { $regex: search, $options: 'i' } }
+        ]
+    })
+        .skip((page - 1) * limit)
+        .limit(limit)
+
+    return {
+        success: true,
+        operation: 'read',
+        data: searchPost
     }
 };
