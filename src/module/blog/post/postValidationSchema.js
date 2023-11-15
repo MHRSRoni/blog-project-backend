@@ -1,20 +1,36 @@
-const joi = require('joi');
+const Joi = require('joi');
 
-const postValidationSchema = joi.object({
-    categoryId: joi.string().required(),
-    title: joi.string().trim().required(),
-    description: joi.string().trim().required(),
-    picture: joi.string(),
-    react: joi.array()
-
+exports.postCreateValidationSchema = Joi.object({
+    categoryId: Joi.string().required().messages({
+        'string.empty': 'please provide category id',
+        'any.required': 'category id is required'
+    }),
+    title: Joi.string().trim().required().messages({
+        'string.empty': 'please provide title',
+        'any.required': 'title is required'
+    }),
+    description: Joi.string().trim().required().messages({
+        'string.empty': 'please provide description',
+        'any.required': 'description is required'
+    }),
+    picture: Joi.string(),
 
 });
 
-const reactValidationSchema = joi.string().valid('like', 'dislike', 'love').required().messages({
+exports.postUpdateValidationSchema = Joi.object({
+    categoryId: Joi.string().messages({
+        'string.empty': 'please provide category id',
+    }),
+    title: Joi.string().trim().messages({
+        'string.empty': 'please provide title',
+    }),
+    description: Joi.string().trim().messages({
+        'string.empty': 'please provide description',
+    }),
+    picture: Joi.string(),
+    
+});
+
+exports.reactValidationSchema = Joi.string().valid('like', 'dislike', 'love').required().messages({
     'any.only': 'Invalid react type'
 });
-
-module.exports = {
-    postValidationSchema,
-    reactValidationSchema
-}

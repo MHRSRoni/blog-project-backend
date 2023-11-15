@@ -109,18 +109,29 @@ exports.readAllPostService = async (page, limit, sort) => {
 
 exports.updatePostService = async (slug, userId, postData) => {
 
-    const wordsPerMinute = 130;
-    const words = postData.description.split(/\s+/).length;
-    const minute = Math.ceil(words / wordsPerMinute);
+    if(postData?.title) {
+        let newSlug = slugify(postData.title);
+        let exist = false
+        do{
+            exist = await postModel.findOne({ slug : newSlug });
+            if(!exist) break
+            newSlug = slugify(postData.title + '-' + Math.floor(Math.random() * 1000));
 
-    if (postData.description) {
-        await postModel.findOneAndUpdate(
-            { slug, userId }, { ...postData, slug: slugify(postData.title), readTime: minute }
-        );
+        }while(exist)
+        postData.slug = newSlug
     }
+        
 
-    await postModel.findOneAndUpdate(
-        { slug }, { ...postData, slug: slugify(postData.title) }
+    if (postData?.description) {
+        const wordsPerMinute = 130;
+        const words = postData?.description?.split(/\s+/).length;
+        const minute = Math.ceil(words / wordsPerMinute);
+        postData.readTime = minute;
+        
+    }
+    
+    const updatePost = await postModel.findOneAndUpdate(
+        { slug, userId }, { ...postData }
     );
 
     if (!updatePost) {
@@ -130,7 +141,7 @@ exports.updatePostService = async (slug, userId, postData) => {
     return {
         success: true,
         operation: 'update',
-        message: 'Post has been Ubdated!'
+        message: 'Post has been Updated!'
     }
 };
 

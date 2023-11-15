@@ -1,12 +1,12 @@
 const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService } = require("./postService");
-const { postValidationSchema, reactValidationSchema } = require("./postValidationSchema");
+const { reactValidationSchema, postCreateValidationSchema, postUpdateValidationSchema } = require("./postValidationSchema");
 const { checkReactService, updateReactService, updateReactCountService, createReactService } = require("./reactService");
 
 
 exports.createPostController = async (req, res, next) => {
     try {
         const userId = req.user?.id;
-        const postData = await postValidationSchema.validateAsync(req.body);
+        const postData = await postCreateValidationSchema.validateAsync(req.body);
 
         const result = await createPostService(userId, postData);
 
@@ -18,7 +18,7 @@ exports.createPostController = async (req, res, next) => {
 
 exports.readPostController = async (req, res, next) => {
     try {
-        const { sort } = req.body;
+        const { sort } = req.query;
         const { slug } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
@@ -40,9 +40,10 @@ exports.readPostController = async (req, res, next) => {
 exports.updatePostController = async (req, res, next) => {
     try {
         const { slug } = req.params;
-        const postData = await postValidationSchema.validateAsync(req.body);
+        const userId = req.user?.id;
+        const postData = await postUpdateValidationSchema.validateAsync(req.body);
 
-        const result = await updatePostService(slug, postData);
+        const result = await updatePostService(slug, userId, postData);
 
         return res.status(200).json(result)
     } catch (error) {
@@ -52,9 +53,10 @@ exports.updatePostController = async (req, res, next) => {
 
 exports.deletePostController = async (req, res, next) => {
     try {
-        const { postId } = req.params;
+        const { slug } = req.params;
+        const userId = req?.user?.id;
 
-        const result = await deletePostService(postId);
+        const result = await deletePostService(slug, userId);
 
         return res.status(200).json(result)
     } catch (error) {
@@ -78,7 +80,7 @@ exports.likeDislikePostController = async (req, res, next) => {
 exports.updateReactController = async (req, res, next) => {
     try {
         const { postId, react } = req.params;
-        const userId = req.user.id;
+        const userId = req?.user?.id;
 
         const validReact = await reactValidationSchema.validateAsync(react);
 
