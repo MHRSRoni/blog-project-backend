@@ -30,13 +30,17 @@ app.use('*', (req, res, next) => {
 
 //---------- Error Handler ---------------//
 app.use((err, req, res, next) => {
-    if(process.env.NODE_ENV !== 'production'){
+    if (err.isJoi) {
+        err.status = 400;
+    }
+    if (process.env.NODE_ENV !== 'production') {
+        console.log(err)
         return res.status(err.status || 500).json({
             success: false,
             message: err.message,
-            error : err.error
+            error: err
         })
-    }else{
+    } else {
         return res.status(err.status || 500).json({
             success: false,
             message: err.message
