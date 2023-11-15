@@ -20,6 +20,7 @@ exports.readPostController = async (req, res, next) => {
     try {
         const { sort } = req.query;
         const { slug } = req.query;
+        const { search } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
 
@@ -27,6 +28,8 @@ exports.readPostController = async (req, res, next) => {
 
         if (slug) {
             result = await readSinglePostService(slug);
+        } else if (search) {
+            result = await searchPostService(page, limit, search);
         } else {
             result = await readAllPostService(page, limit, sort);
         }
@@ -105,18 +108,3 @@ exports.updateReactController = async (req, res, next) => {
         next(error)
     }
 };
-
-exports.searchPostController = async (req, res, next) => {
-    try {
-        const { search } = req.query || "";
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 12;
-
-        const result = await searchPostService(page, limit, search);
-
-        return res.status(200).json(result)
-
-    } catch (error) {
-        next(error)
-    }
-}

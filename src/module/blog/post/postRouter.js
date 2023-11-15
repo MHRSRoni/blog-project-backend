@@ -13,7 +13,7 @@ postRouter.delete('/delete/:slug', isLoggedIn, deletePostController);
 
 postRouter.post('/react/:postId/:react', isLoggedIn, updateReactController);
 
-postRouter.get('/', searchPostController);
+
 
 
 module.exports = postRouter;

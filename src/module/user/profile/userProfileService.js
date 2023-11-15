@@ -17,15 +17,39 @@ exports.userRegistrator = async (userData) => {
 }
 
 exports.userLoginService = async (loginData) => {
+
     const user = await userProfileModel.findOne({ email: loginData.email });
+
     if (!user) {
         throw createError(401, 'email and password mismatch');
     }
+
+    if (user.status === 'unverified') {
+        throw createError(401, 'Please verify your email');
+    }
+
     const isMatch = await bcrypt.compare(loginData.password, user.password);
     if (!isMatch) {
         throw createError(401, 'email and password mismatch');
     }
+
     const { password, ...rest } = user._doc
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
     return { success: true, message: 'Login Successful', token, ...rest };
+};
+
+exports.userProfileUpdateService = async (userId, updateData) => {
+    const existingUsername = await userProfileModel.findOne({ userName: updateData.userName });
+
+    if (existingUsername) {
+        throw createError.Conflict('Username already exists');
+    }
+
+    const profileUpdate = await userProfileModel.findByIdAndUpdate(userId, updateData, { new: true });
+
+    return {
+        success: true,
+        message: 'user profile has been Updated!',
+        data: profileUpdate
+    };
 }
