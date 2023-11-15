@@ -1,5 +1,6 @@
 const createError = require("http-errors")
 const giveError = require('../../utils/throwError')
+const commentModel = require('./commentModel')
 
 exports.createComment = async (userId, postId, comment) => {
     const savedComment = await new commentModel({userId, postId, comment}).save()
