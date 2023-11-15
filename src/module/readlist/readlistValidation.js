@@ -1,3 +1,5 @@
-const ObjectIdSchema = Joi.string().trim().length(24).required()
+// const joi = require('joi')
 
-module.exports = {ObjectIdSchema}
+// const ObjectIdSchema = joi.object().string().trim().length(24).required()
+
+// module.exports = { ObjectIdSchema }

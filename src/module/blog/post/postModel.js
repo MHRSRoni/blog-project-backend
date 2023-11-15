@@ -2,8 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const postSchema = new Schema({
     userId: {
-        // type: Schema.Types.ObjectId,
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: 'users',
         required: true
     },
@@ -40,6 +39,10 @@ const postSchema = new Schema({
         dislike: {
             type: Number,
             default: 0
+        },
+        love: {
+            type: Number,
+            default: 0
         }
     },
     readTime: {
@@ -47,6 +50,8 @@ const postSchema = new Schema({
     }
 
 }, { timestamps: true, versionKey: false })
+
+postSchema.index({ title: 'text', description: 'text' })
 
 const postModel = model('posts', postSchema);
 

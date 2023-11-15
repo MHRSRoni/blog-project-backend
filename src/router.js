@@ -9,7 +9,7 @@ const router = require('express').Router();
 
 router.use('/user', userProfileRouter)
 router.use('/comments', commentRouter)
-router.use('/readlist'. readlistRouter)
+router.use('/readlist', readlistRouter)
 router.use('/post', postRouter)
 
 

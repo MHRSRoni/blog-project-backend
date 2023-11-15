@@ -7,8 +7,14 @@ const postValidationSchema = joi.object({
     picture: joi.string(),
     react: joi.array()
 
-})
+
+});
+
+const reactValidationSchema = joi.string().valid('like', 'dislike', 'love').required().messages({
+    'any.only': 'Invalid react type'
+});
 
 module.exports = {
-    postValidationSchema
+    postValidationSchema,
+    reactValidationSchema
 }

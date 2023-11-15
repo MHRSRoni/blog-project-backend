@@ -1,10 +1,11 @@
-const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, readLatestPostService, readTopPostService } = require("./postService");
-const { postValidationSchema } = require("./postValidationSchema")
+const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService } = require("./postService");
+const { postValidationSchema, reactValidationSchema } = require("./postValidationSchema");
+const { checkReactService, updateReactService, updateReactCountService, createReactService } = require("./reactService");
 
 
 exports.createPostController = async (req, res, next) => {
     try {
-        const userId = 'dfgdfg';
+        const userId = req.user.id;
         const postData = await postValidationSchema.validateAsync(req.body);
 
         const result = await createPostService(userId, postData);
@@ -60,3 +61,60 @@ exports.deletePostController = async (req, res, next) => {
         next(error)
     }
 };
+
+exports.likeDislikePostController = async (req, res, next) => {
+    try {
+        const { react } = req.body;
+        const { slug } = req.params;
+
+        const result = await likeDislikePostService(slug, react);
+
+        return res.status(200).json(result)
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.updateReactController = async (req, res, next) => {
+    try {
+        const { postId, react } = req.params;
+        const userId = req.user.id;
+
+        const validReact = await reactValidationSchema.validateAsync(react);
+
+        const existingReact = await checkReactService(postId, userId);
+
+        if (existingReact) {
+            const result = await updateReactService(postId, userId, validReact);
+
+            await updateReactCountService(postId, validReact, existingReact);
+
+            return res.status(200).json(result)
+
+        }
+
+        const result = await createReactService(postId, userId, validReact);
+
+        await updateReactCountService(postId, validReact, existingReact);
+
+        return res.status(200).json(result);
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.searchPostController = async (req, res, next) => {
+    try {
+        const { search } = req.query || "";
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+
+        const result = await searchPostService(page, limit, search);
+
+        return res.status(200).json(result)
+
+    } catch (error) {
+        next(error)
+    }
+}
