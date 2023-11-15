@@ -21,6 +21,9 @@ exports.updateReactService = async (postId, userId, react) => {
 
 exports.updateReactCountService = async (postId, curReact, preReact) => {
 
+    if(curReact == preReact){
+        return {sucess : true, message : 'react updated', operation : 'no change'}
+    }
     const currentReact = `react.${curReact}`;
     const previousReact = `react.${preReact}`;
 

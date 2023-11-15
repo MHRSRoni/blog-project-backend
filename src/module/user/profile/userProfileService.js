@@ -21,7 +21,7 @@ exports.userLoginService = async (loginData) => {
     const user = await userProfileModel.findOne({ email: loginData.email });
 
     if (!user) {
-        throw createError(404, 'User not found');
+        throw createError(401, 'email and password mismatch');
     }
 
     if (user.status === 'unverified') {
@@ -30,7 +30,7 @@ exports.userLoginService = async (loginData) => {
 
     const isMatch = await bcrypt.compare(loginData.password, user.password);
     if (!isMatch) {
-        throw createError(401, 'Password Mismatch');
+        throw createError(401, 'email and password mismatch');
     }
 
     const { password, ...rest } = user._doc
