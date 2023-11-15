@@ -1,9 +1,9 @@
 const {Schema, model} = require('mongoose')
 
 const commentSchema = new Schema({
-    userId : {
+    user : {
         type : Schema.Types.ObjectId,
-        ref : 'user',
+        ref : 'users',
         required : true,
     },
     postId : {
@@ -15,7 +15,8 @@ const commentSchema = new Schema({
         type : String,
         required : true,
     }
-})
+},{versionKey : false, timestamps : true})
+
 
 
 const commentModel = model('comment', commentSchema);
