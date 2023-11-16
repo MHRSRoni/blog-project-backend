@@ -1,4 +1,4 @@
-const { userRegisterController, userLoginController, userLogoutController, otpSendController, otpVerifyController, userForgetPasswordController, userUpdatePasswordController } = require('./userProfileController');
+const { userRegisterController, userLoginController, userLogoutController, otpSendController, otpVerifyController, userForgetPasswordController, userUpdatePasswordController, userProfileController, userProfileUpdateController } = require('./userProfileController');
 const { isLoggedIn } = require('../../../auth/auth');
 const { imageUpload } = require('../../../utils/imageUpload');
 const { parseUserFormData } = require('../../../utils/parseFormData');

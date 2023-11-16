@@ -7,8 +7,7 @@ const postSchema = new Schema({
         required: true
     },
     categoryId: {
-        // type: Schema.Types.ObjectId,
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: 'categories',
         required: true
     },
