@@ -1,16 +1,18 @@
-const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService } = require("./postService");
+const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService, imageUploadService } = require("./postService");
 const { reactValidationSchema, postCreateValidationSchema, postUpdateValidationSchema } = require("./postValidationSchema");
 const { checkReactService, updateReactService, updateReactCountService, createReactService } = require("./reactService");
+const formidable = require('formidable');
+const cloudinary = require('cloudinary').v2;
 
 
 exports.createPostController = async (req, res, next) => {
     try {
         const userId = req.user?.id;
-        const postData = await postCreateValidationSchema.validateAsync(req.body);
 
-        const result = await createPostService(userId, postData);
+        const result = await createPostService(userId, req.body);
 
         return res.status(200).json(result)
+
     } catch (error) {
         next(error)
     }
