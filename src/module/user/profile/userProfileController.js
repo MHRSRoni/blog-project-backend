@@ -34,9 +34,7 @@ exports.userLoginController = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
-
-
+};
 
 exports.userLogoutController = (req, res, next) => {
     try {
@@ -137,3 +135,31 @@ exports.userUpdatePasswordController = async (req, res, next) => {
 
     }
 }
+
+
+exports.userProfileController = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+
+        const profile = await userProfileModel.findById(userId, { password: 0 });
+
+        return res.status(200).json(profile);
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.userProfileUpdateController = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const updateData = req.body;
+
+        const result = await userProfileUpdateService(userId, updateData);
+
+        return res.status(200).json(result);
+
+    } catch (error) {
+        next(error)
+    }
+};
