@@ -1,17 +1,17 @@
-const {Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const readlistSchema = new Schema({
-    userId : {
-        type : Schema.Types.ObjectId,
-        ref : 'user',
-        required : true,
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        required: true,
     },
-    postId : {
-        type : Schema.Types.ObjectId,
-        ref : 'blog',
-        required : true,
+    postId: {
+        type: Schema.Types.ObjectId,
+        ref: 'posts',
+        required: true,
     }
-},{timestamps : true , versionKey : false});
+}, { timestamps: true, versionKey: false });
 
 
 const readlistModel = model('readlist', readlistSchema);
