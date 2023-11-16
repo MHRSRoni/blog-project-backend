@@ -13,8 +13,11 @@ exports.userRegistrator = async (userData) => {
     if (existingEmail) {
         throw createError(409, 'Email already exists');
     } else {
+        const hashPassword = bcrypt.hashSync(userData.password, 10 );
+        userData.password = hashPassword;
+
         const newUser = await new userProfileModel(userData).save();
-        return newUser;
+        return {success : true, data : newUser};
     }
 }
 
@@ -66,13 +69,11 @@ exports.userOtpService = async (email, emailSubject) => {
 
 // Assuming userOtpModel is the Mongoose model for OTPs
 exports.otpVerifyService = async (email, otp) => {
-    console.log(email, otp)
 
     if (!email || !otp || otp == 0) {
         throw createError(400, 'Email and OTP are required');
     }
     const userOtp = await userOtpModel.findOne({ email: email });
-    // console.log("above condition: ->", userOtp.otp.code)
 
     if (userOtp.otp.code == otp) {
         await userOtpModel.findOneAndUpdate({ email: email, "otp.code": otp }, { 'otp.code': 0 });
@@ -86,7 +87,6 @@ exports.otpVerifyService = async (email, otp) => {
 };
 
 
-};
 
 exports.userProfileUpdateService = async (userId, updateData) => {
     const existingUsername = await userProfileModel.findOne({ userName: updateData.userName });
@@ -102,4 +102,17 @@ exports.userProfileUpdateService = async (userId, updateData) => {
         message: 'user profile has been Updated!',
         data: profileUpdate
     };
+}
+
+
+exports.userVerifiyService = async (email) => {
+    await userProfileModel.findOneAndUpdate({ email: email }, { status: 'verified' });
+    return {success : true, message : 'Email verified successfully'}
+}
+
+
+exports.updatePasswordService = async (email, password) => {
+    const hashPassword = bcrypt.hashSync(password, 10);
+    await userProfileModel.findOneAndUpdate({email}, {password : hashPassword});
+    return {sucess : true, message : 'Password updated successfully'}
 }

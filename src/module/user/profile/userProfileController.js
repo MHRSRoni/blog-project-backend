@@ -1,11 +1,12 @@
-const { userRegistrationSchema, userLoginSchema, userEmailSchema } = require("./userProfileValidation");
-const { userRegistrator, userLoginService, userOtpService, otpVerifyService } = require("./userProfileService");
+const { userRegistrationSchema, userLoginSchema, userEmailSchema, otpSendReqSchema, passwordSetSchema } = require("./userProfileValidation");
+const { userRegistrator, userLoginService, userOtpService, otpVerifyService, userVerifiyService, updatePasswordService } = require("./userProfileService");
 const userProfileModel = require("./userProfileModel");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 const sendEmail = require("../../../utils/email");
 const userOtpModel = require("./userOtpModel");
+const { generateToken } = require("../../../utils/generateToken");
 
 
 exports.userRegisterController = async (req, res, next) => {
@@ -13,8 +14,14 @@ exports.userRegisterController = async (req, res, next) => {
     try {
         const userData = req.body;
         const verifiedData = await userRegistrationSchema.validateAsync(userData);
-        const result = await userRegistrator(verifiedData);
-        res.status(200).json(result);
+
+        const registered = await userRegistrator(verifiedData);
+        if(registered.success){
+            const result = await userOtpService(verifiedData.email, "Registration OTP");
+            res.status(201).json(result);
+        }
+        
+        res.status(500).json({status : false , message : 'something went wrong, try again'});
 
     } catch (error) {
         next(error)
@@ -48,26 +55,17 @@ exports.userLogoutController = (req, res, next) => {
 
 
 
-// exports.otp = (req, res, next) => {
-//     try {
-//         const otp = Math.floor(100000 + Math.random() * 900000);
-//         res.status(200).json({ otp });
-//     } catch (error) {
-//         next(error);
-//     }
-// }
-
-
-
-
 exports.otpSendController = async (req, res, next) => {
 
     try {
-        const { email, emailSubject } = req.body;
-        const result = await userOtpService(email, emailSubject, userProfileModel);
+        const {email, subject} = req.query
+
+        const {email : validEmail,subject : validSubject} = await otpSendReqSchema.validateAsync({email, subject})
+
+        const result = await userOtpService(validEmail, validSubject);
         res.status(200).json(result);
+
     } catch (error) {
-        console.log(error)
         next(error)
     }
 }
@@ -75,12 +73,19 @@ exports.otpSendController = async (req, res, next) => {
 // otp verifyController
 exports.otpVerifyController = async (req, res, next) => {
     try {
-        const { email, otp } = req.body;
+        const { email, otp, subject } = req.query;
         // Verify OTP
-        const result = await otpVerifyService(email, otp);
-        res.status(200).json(result);
+        const {email : validEmail,subject : validSubject} = await otpSendReqSchema.validateAsync({email, subject})
+        const otpVerified = await otpVerifyService(validEmail, otp);
+
+        if(otpVerified.success){
+            const verified = await generateToken({email : validEmail,subject : validSubject})
+            await userOtpModel.findOneAndUpdate({email : validEmail}, {token : verified})
+            res.status(200).json({success : true, message : 'OTP verified successfully', token : verified});
+        }
+
+        res.status(500).json({success : false, message : 'something went wrong, try again'});
     } catch (error) {
-        console.log(error);
         next(error);
     }
 };
@@ -89,23 +94,31 @@ exports.otpVerifyController = async (req, res, next) => {
 // Password Reset 
 
 exports.userForgetPasswordController = async (req, res, next) => {
-    const { email } = req.body;
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
     try {
-        const user = await userProfileModel.findOne({ email }
-        )
-        if (!user) createError(404, "User Not Found");
 
-        await userOtpModel.updateOne({ email }, { 'otp.code': otp }, { upsert: true });
+        const {token} = req.query;
+        const {password , repeatPassword} = req.body;
 
-        // send Email with OTP
-        const emailData = {
-            to: email,
-            subject: 'Password Reset OTP',
-            html: `Your OTP is ${otp}`
+        const {email, subject} = jwt.verify(token, process.env.JWT_SECRET);
+
+        if(subject == 'forget password'){
+            const {password : validPassword} = await passwordSetSchema.validateAsync({password, repeatPassword})
+
+            const updated = await updatePasswordService(email, validPassword);
+
+            if(updated.success){
+                res.status(200).json(updated);
+            }
+            else{
+                res.status(500).json({success : false, message : 'something went wrong, try again'});
+            }
+            
         }
-        await sendEmail(emailData);
-        res.status(200).json({ message: "Your Password Reset OTP Send Successfully" });
+
+        return res.status(500).json({success : false, message : 'something went wrong, try again'});
+
+        
     } catch (error) {
         console.log(error);
         next(error);

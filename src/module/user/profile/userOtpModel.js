@@ -13,6 +13,10 @@ const otpSchema = new mongoose.Schema({
         type: {
             type: String
         }
+    },
+    token : {
+        type : String,
+        default : ''
     }
 }, { timestamps: true, versionKey: false });
 
