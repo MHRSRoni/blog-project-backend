@@ -1,5 +1,5 @@
-const { userRegistrationSchema, userLoginSchema, userEmailSchema, otpSendReqSchema, passwordSetSchema } = require("./userProfileValidation");
-const { userRegistrator, userLoginService, userOtpService, otpVerifyService, userVerifiyService, updatePasswordService } = require("./userProfileService");
+const { userRegistrationSchema, userLoginSchema, otpSendReqSchema, passwordSetSchema } = require("./userProfileValidation");
+const { userRegistrator, userLoginService, userOtpService, otpVerifyService, userVerifiyService, updatePasswordService, userProfileUpdateService } = require("./userProfileService");
 const userProfileModel = require("./userProfileModel");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -79,7 +79,12 @@ exports.otpVerifyController = async (req, res, next) => {
         const otpVerified = await otpVerifyService(validEmail, otp);
 
         if(otpVerified.success){
-            const verified = await generateToken({email : validEmail,subject : validSubject})
+            // const verified = await generateToken({email : validEmail,subject : validSubject})
+            if(validSubject ==  'verify email'){
+                await userVerifiyService(validEmail);
+                return res.status(200).json({success : true, message : 'Email verified successfully'});
+            }
+
             await userOtpModel.findOneAndUpdate({email : validEmail}, {token : verified})
             res.status(200).json({success : true, message : 'OTP verified successfully', token : verified});
         }

@@ -21,6 +21,24 @@ exports.userRegistrationSchema = Joi.object({
         'string.min': "password must be 6 characters long",
         'any.required': "password is a required field",
     }),
+    repeatPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+        'any.only': 'passwords do not match', 
+        'any.required' : "repeat password is a required field",
+    }),
+})
+
+exports.userLoginSchema = Joi.object({
+    email: Joi.string().email().trim().required().lowercase().messages({
+        'string.base' : "email must be a type of text",
+        'string.email' : "email must be a valid email",
+        'string.empty': 'Please provide an email address',
+        'any.required' : "email is a required field",
+    }),
+    password: Joi.string().required().min(6).messages({
+        'string.base': "password must be a type of text",
+        'string.min': "password must be 6 characters long",
+        'any.required': "password is a required field",
+    })
 })
 
 
@@ -43,7 +61,7 @@ exports.userPasswordChangeSchema = Joi.object({
     
 })
 
-exports.userLoginSchema = Joi.object({
+exports.otpSendReqSchema = Joi.object({
     email: Joi.string().email().trim().required().lowercase().messages({
         'string.base' : "email must be a type of text",
         'string.empty': 'Please provide an email address',
@@ -67,8 +85,6 @@ exports.passwordSetSchema = Joi.object({
 })
 
 
-e
 exports.userEmailSchema = Joi.string().email().trim().required();
 
 // const userOtpVerifySchema = joi.string().email().trim().required
-
