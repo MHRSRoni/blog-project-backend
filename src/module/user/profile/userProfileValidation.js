@@ -47,7 +47,20 @@ const userLoginSchema = Joi.object({
     }),
 })
 
+
+const userPasswordChangeSchema = joi.object({
+
+    password: joi.string().required().min(6),
+    repeatPassword: joi.ref('password'),
+});
+const userEmailSchema = joi.string().email().trim().required();
+
+// const userOtpVerifySchema = joi.string().email().trim().required
+
+
 module.exports = {
     userRegistrationSchema,
-    userLoginSchema
+    userLoginSchema,
+    userPasswordChangeSchema,
+    userEmailSchema
 }
