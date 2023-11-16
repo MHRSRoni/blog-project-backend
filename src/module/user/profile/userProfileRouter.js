@@ -1,9 +1,13 @@
 const { userRegisterController, userLoginController, userLogoutController, otpSendController, otpVerifyController, userForgetPasswordController, userUpdatePasswordController, userProfileController, userProfileUpdateController } = require('./userProfileController');
 const { isLoggedIn } = require('../../../auth/auth');
+const { imageUpload } = require('../../../utils/imageUpload');
+const { parseUserFormData } = require('../../../utils/parseFormData');
+const { validateCreateUserdata } = require('./userProfileValidation');
 
 const router = require('express').Router();
 
 router.post('/registration', userRegisterController);
+
 router.post('/login', userLoginController);
 router.get('/logOut', userLogoutController);
 router.post('/otp', otpSendController);

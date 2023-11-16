@@ -1,9 +1,6 @@
 const postModel = require("./postModel");
 const createError = require('http-errors');
 const { createSlug } = require("../../../utils/createSlug");
-// const { imageUpload } = require("../../../utils/imageUpload");
-// const formidable = require('formidable');
-// const cloudinary = require('cloudinary').v2;
 
 exports.createPostService = async (userId, postData) => {
     const checkTitle = await postModel.findOne({ title: postData.title })
@@ -34,7 +31,7 @@ exports.createPostService = async (userId, postData) => {
 
 
     post = await postModel.create({
-        ...postData, slug: slugify(postData.title), userId: userId
+        ...postData, slug: createSlug(postData.title), userId: userId
     });
 
     return {
