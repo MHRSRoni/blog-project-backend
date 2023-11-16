@@ -9,9 +9,8 @@ const createError = require('http-errors');
 exports.userRegisterController = async (req, res, next) => {
 
     try {
-        const userData = req.body;
-        const verifiedData = await userRegistrationSchema.validateAsync(userData);
-        const result = await userRegistrator(verifiedData);
+
+        const result = await userRegistrator(req.body);
         res.status(200).json(result);
 
     } catch (error) {
