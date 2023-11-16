@@ -1,9 +1,12 @@
-const slugify = require("slugify");
 const postModel = require("./postModel");
 const createError = require('http-errors');
+const { createSlug } = require("../../../utils/createSlug");
+// const { imageUpload } = require("../../../utils/imageUpload");
+// const formidable = require('formidable');
+// const cloudinary = require('cloudinary').v2;
 
 exports.createPostService = async (userId, postData) => {
-    const checkTitle = await postModel.findOne({ title: postData.title });
+    const checkTitle = await postModel.findOne({ title: postData.title })
 
     const wordsPerMinute = 130;
     const words = postData.description.split(/\s+/).length;
@@ -17,7 +20,7 @@ exports.createPostService = async (userId, postData) => {
     while (checkTitle) {
         post = await postModel.create({
             ...postData,
-            slug: slugify(postData.title + '-' + Math.floor(Math.random() * 1000)),
+            slug: createSlug(postData.title) + '-' + Math.floor(Math.random() * 1000),
         });
 
         if (post) {
@@ -109,27 +112,27 @@ exports.readAllPostService = async (page, limit, sort) => {
 
 exports.updatePostService = async (slug, userId, postData) => {
 
-    if(postData?.title) {
-        let newSlug = slugify(postData.title);
+    if (postData?.title) {
+        let newSlug = createSlug(postData.title);
         let exist = false
-        do{
-            exist = await postModel.findOne({ slug : newSlug });
-            if(!exist) break
-            newSlug = slugify(postData.title + '-' + Math.floor(Math.random() * 1000));
+        do {
+            exist = await postModel.findOne({ slug: newSlug });
+            if (!exist) break
+            newSlug = createSlug(postData.title) + '-' + Math.floor(Math.random() * 1000);
 
-        }while(exist)
+        } while (exist)
         postData.slug = newSlug
     }
-        
+
 
     if (postData?.description) {
         const wordsPerMinute = 130;
         const words = postData?.description?.split(/\s+/).length;
         const minute = Math.ceil(words / wordsPerMinute);
         postData.readTime = minute;
-        
+
     }
-    
+
     const updatePost = await postModel.findOneAndUpdate(
         { slug, userId }, { ...postData }
     );
@@ -177,3 +180,22 @@ exports.searchPostService = async (page, limit, search) => {
         data: searchPost
     }
 };
+
+exports.imageUploadService = async (req) => {
+    const form = formidable({ multiples: true });
+
+    form.parse(req, async (err, fields, files) => {
+        const config = {
+            cloud_name: "dscxtnb94",
+            api_key: "487396911159431",
+            api_secret: "JX_Az4I67YiWh7gVODcnw5yxFtY",
+            secure: true
+        }
+
+        console.log(fields)
+        const response = await cloudinary.uploader.upload(files.image.filepath, config)
+
+        return response;
+
+    })
+}
