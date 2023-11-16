@@ -85,9 +85,6 @@ exports.otpVerifyService = async (email, otp) => {
     }
 };
 
-
-};
-
 exports.userProfileUpdateService = async (userId, updateData) => {
     const existingUsername = await userProfileModel.findOne({ userName: updateData.userName });
 
