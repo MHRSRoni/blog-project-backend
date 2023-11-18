@@ -44,7 +44,10 @@ exports.createPostService = async (userId, postData) => {
 
 exports.readSinglePostService = async (slug) => {
 
-    const post = await postModel.findOne({ slug }).select({ _id: 0, updatedAt: 0 })
+    const post = await postModel.findOne({ slug })
+        .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
+        // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+        .select({ _id: 0, updatedAt: 0 })
 
     return { success: true, operation: 'read', data: post }
 
@@ -61,17 +64,23 @@ exports.readAllPostService = async (page, limit, sort) => {
     const postCount = await postModel.find().count();
 
     let allPosts = await postModel.find()
+        .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
+        // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
         .skip(startIndex)
         .limit(limit)
 
     if (sort === 'latest') {
         allPosts = await postModel.find().sort({ createdAt: 'desc' })
+            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
+            // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
             .skip(startIndex)
             .limit(limit)
     }
 
     if (sort === 'top') {
         allPosts = await postModel.find().sort({ 'react.like': 'desc' })
+            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
+            // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
             .skip(startIndex)
             .limit(limit)
     }
@@ -195,4 +204,4 @@ exports.imageUploadService = async (req) => {
         return response;
 
     })
-}
+};

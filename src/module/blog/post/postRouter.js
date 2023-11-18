@@ -11,7 +11,7 @@ postRouter.post('/create', isLoggedIn, parsePostFormData, validateCreatePostData
 
 postRouter.get('/read', readPostController);
 
-postRouter.post('/update/:slug', isLoggedIn, updatePostController);
+postRouter.post('/update/:slug', isLoggedIn, parsePostFormData, validateCreatePostData, imageUpload('post'), updatePostController);
 
 postRouter.delete('/delete/:slug', isLoggedIn, deletePostController);
 
