@@ -1,8 +1,9 @@
 
 exports.createSlug = (input) => {
-    let slug = input.toLowerCase();
+    // let slug = input.toLowerCase();
 
-    slug = slug.replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
+    let slug = slug.replace(/\s+/g, '-')
+    // .replace(/[^\w-]+/g, '')
 
     return slug
 }
