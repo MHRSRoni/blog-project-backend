@@ -8,36 +8,21 @@ const sendEmail = async (option) => {
         port: 587,
         secure: false,
         auth: {
-            user: 'minarfwd@gmail.com',
-            pass: 'leve pxxi lgmu ckjn'
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS
         }
     });
 
-    //leve pxxi lgmu ckjn
-
-    // const transporter = nodemailer.createTransport({
-    //     service: "gmail",
-    //     host: "smtp.gmail.com",
-    //     port: 587,
-    //     secure: false,
-    //     auth: {
-    //         user: SMTP_USER_NAME,
-    //         pass: SMTP_USER_PASSWORD,
-    //     },
-    // });
 
     // Define Email Options
-
     const mailOptions = {
-        from: 'Bongo Coders, <nunurma@gmail.com>',
+        from: 'Health Plus, <healthplus.bongocoders@gmail.com>',
         to: option.to,
         subject: option.subject,
-        text: option.html
+        html: option.html
     }
-    console.log("From Email File", option)
 
-    await transporter.sendMail(mailOptions)
-
+    const result = await transporter.sendMail(mailOptions)
 }
 
 module.exports = sendEmail;
