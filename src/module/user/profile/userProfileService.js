@@ -13,11 +13,11 @@ exports.userRegistrator = async (userData) => {
     if (existingEmail) {
         throw createError(409, 'Email already exists');
     } else {
-        const hashPassword = bcrypt.hashSync(userData.password, 10 );
+        const hashPassword = bcrypt.hashSync(userData.password, 10);
         userData.password = hashPassword;
 
         const newUser = await new userProfileModel(userData).save();
-        return {success : true, data : newUser};
+        return { success: true, data: newUser };
     }
 }
 
@@ -86,8 +86,6 @@ exports.otpVerifyService = async (email, otp) => {
     }
 };
 
-
-
 exports.userProfileUpdateService = async (userId, updateData) => {
     const existingUsername = await userProfileModel.findOne({ userName: updateData.userName });
 
@@ -107,12 +105,12 @@ exports.userProfileUpdateService = async (userId, updateData) => {
 
 exports.userVerifiyService = async (email) => {
     await userProfileModel.findOneAndUpdate({ email: email }, { status: 'verified' });
-    return {success : true, message : 'Email verified successfully'}
+    return { success: true, message: 'Email verified successfully' }
 }
 
 
 exports.updatePasswordService = async (email, password) => {
     const hashPassword = bcrypt.hashSync(password, 10);
-    await userProfileModel.findOneAndUpdate({email}, {password : hashPassword});
-    return {sucess : true, message : 'Password updated successfully'}
+    await userProfileModel.findOneAndUpdate({ email }, { password: hashPassword });
+    return { sucess: true, message: 'Password updated successfully' }
 }
