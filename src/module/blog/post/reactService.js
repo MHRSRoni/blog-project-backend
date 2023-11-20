@@ -8,21 +8,31 @@ exports.checkReactService = async (postId, userId) => {
     return result?.react;
 }
 
-exports.countReactService = async (postId) => {
+exports.updateReactService = async (postId, userId, curReact, preReact) => {
 
-}
+    if (curReact == preReact) {
+        await reactModel.findOneAndUpdate(
+            { postId, userId },
+            { react: 'none' })
+        return { sucess: true, message: 'react updated', }
+    }
 
-exports.updateReactService = async (postId, userId, react) => {
     const updated = await reactModel.findOneAndUpdate(
-        { postId, userId }, { react }, { new: true })
+        { postId, userId }, { react: curReact }, { new: true })
+
 
     return { success: true, data: updated }
 };
 
 exports.updateReactCountService = async (postId, curReact, preReact) => {
 
-    if(curReact == preReact){
-        return {sucess : true, message : 'react updated', operation : 'no change'}
+    if (curReact == preReact) {
+        const previousReact = `react.${preReact}`;
+        await postModel.findByIdAndUpdate(
+            postId,
+            { $inc: { [previousReact]: -1 } },
+        )
+        return { sucess: true, message: 'react updated' }
     }
     const currentReact = `react.${curReact}`;
     const previousReact = `react.${preReact}`;
@@ -31,32 +41,6 @@ exports.updateReactCountService = async (postId, curReact, preReact) => {
         postId,
         { $inc: { [currentReact]: 1, [previousReact]: -1 } },
     )
-
-
-
-
-
-    // let value;
-
-    // await reactModel.findOne({ userId, postId })
-
-    // if (react === 'like') {
-    //     value = await postModel.findOneAndUpdate(
-    //         { slug },
-    //         { $inc: { 'react.like': 1 } },
-    //         { new: true }
-    //     )
-
-    // }
-
-
-    //     }else {
-    //     value = await postModel.findOneAndUpdate(
-    //         { slug },
-    //         { $inc: { 'react.dislike': 1 } },
-    //         { new: true }
-    //     )
-    // }
 
     return { success: true, data: value }
 };

@@ -13,7 +13,8 @@ const reactSchema = new Schema({
     },
     react: {
         type: String,
-        enum: ['like', 'dislike', 'love'],
+        enum: ['like', 'dislike', 'love', 'none'],
+        default: 'none'
     }
 }, { timestamps: true, versionKey: false });
 
