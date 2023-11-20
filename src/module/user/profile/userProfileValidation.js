@@ -61,20 +61,7 @@ exports.userPasswordChangeSchema = Joi.object({
     
 })
 
-exports.otpSendReqSchema = Joi.object({
-    email: Joi.string().email().trim().required().lowercase().messages({
-        'string.base' : "email must be a type of text",
-        'string.empty': 'Please provide an email address',
-        'string.email' : "email must be a valid email",
-        'any.required' : "email is a required field",
-    }),
-    subject : Joi.string().trim().lowercase().valid('forget password', 'verify email').required().messages({
-        'string.base' : 'subject must be a type of text',
-        'string.empty' : 'Please provide a subject',
-        'any.required' : 'subject is a required field',
-        'any.only' : 'subject is not valid'
-    })
-})
+
 
 exports.passwordSetSchema = Joi.object({
     password : Joi.string().required().min(6).messages({

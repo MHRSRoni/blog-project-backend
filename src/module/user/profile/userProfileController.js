@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 const sendEmail = require("../../../utils/email");
-const userOtpModel = require("./userOtpModel");
+const userOtpModel = require("../../auth/verification/userOtpModel");
 const { generateToken } = require("../../../utils/generateToken");
 
 
@@ -29,6 +29,15 @@ exports.userRegisterController = async (req, res, next) => {
 }
 
 
+exports.userEmailVerifyController = async (req, res, next) => {
+    try{
+        const {email} = req.query;
+        const result = await userVerifiyService(email);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error)
+    }
+}
 
 
 exports.userLoginController = async (req, res, next) => {
@@ -102,12 +111,9 @@ exports.userForgetPasswordController = async (req, res, next) => {
     
     try {
 
-        const {token} = req.query;
         const {password , repeatPassword} = req.body;
 
-        const {email, subject} = jwt.verify(token, process.env.JWT_SECRET);
 
-        if(subject == 'forget password'){
             const {password : validPassword} = await passwordSetSchema.validateAsync({password, repeatPassword})
 
             const updated = await updatePasswordService(email, validPassword);
@@ -119,10 +125,8 @@ exports.userForgetPasswordController = async (req, res, next) => {
                 res.status(500).json({success : false, message : 'something went wrong, try again'});
             }
             
-        }
-
-        return res.status(500).json({success : false, message : 'something went wrong, try again'});
-
+            return res.status(500).json({success : false, message : 'something went wrong, try again'});
+            
         
     } catch (error) {
         console.log(error);
