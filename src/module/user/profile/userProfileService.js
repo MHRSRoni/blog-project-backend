@@ -13,18 +13,14 @@ exports.userRegistrator = async (userData) => {
     if (existingEmail) {
         throw createError(409, 'Email already exists');
     } else {
-        const hashPassword = bcrypt.hashSync(userData.password, 10);
-        userData.password = hashPassword;
 
         const newUser = await new userProfileModel(userData).save();
-        return { success: true, data: newUser };
+        return { success: true, message: 'user  regeistation successful' };
     }
 }
 
 exports.userLoginService = async (loginData) => {
-
-    const user = await userProfileModel.findOne({ email: loginData.email });
-
+    const user = await userProfileModel.findOne({ email: loginData.email }).lean();
     if (!user) {
         throw createError(401, 'email and password mismatch');
     }
@@ -32,13 +28,14 @@ exports.userLoginService = async (loginData) => {
     if (user.status === 'unverified') {
         throw createError(401, 'Please verify your email');
     }
-
+    
     const isMatch = await bcrypt.compare(loginData.password, user.password);
+
     if (!isMatch) {
         throw createError(401, 'email and password mismatch');
     }
 
-    const { password, ...rest } = user._doc
+    const { password, ...rest } = user
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
     return { success: true, message: 'Login Successful', token, ...rest };
 }
@@ -94,7 +91,7 @@ exports.userProfileUpdateService = async (userId, updateData) => {
     }
 
     const profileUpdate = await userProfileModel.findByIdAndUpdate(userId, updateData, { new: true });
-
+    profileUpdate.password = undefined;
     return {
         success: true,
         message: 'user profile has been Updated!',
@@ -112,5 +109,5 @@ exports.userVerifiyService = async (email) => {
 exports.updatePasswordService = async (email, password) => {
     const hashPassword = bcrypt.hashSync(password, 10);
     await userProfileModel.findOneAndUpdate({ email }, { password: hashPassword });
-    return { sucess: true, message: 'Password updated successfully' }
+    return { success: true, message: 'Password updated successfully' }
 }

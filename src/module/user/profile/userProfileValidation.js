@@ -69,6 +69,11 @@ exports.passwordSetSchema = Joi.object({
         'string.min' : "password must be 6 characters long",
         'any.required' : "password is a required field",
     }),
+    repeatPassword : Joi.string().required().min(6).messages({
+        'string.base' : "password must be a type of text",
+        'string.min' : "password must be 6 characters long",
+        'any.required' : "password is a required field",
+    }),
 })
 
 

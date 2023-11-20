@@ -15,13 +15,9 @@ exports.userRegisterController = async (req, res, next) => {
         const userData = req.body;
         const verifiedData = await userRegistrationSchema.validateAsync(userData);
 
-        const registered = await userRegistrator(verifiedData);
-        if(registered.success){
-            const result = await userOtpService(verifiedData.email, "Registration OTP");
-            res.status(201).json(result);
-        }
+        const result = await userRegistrator(verifiedData);
         
-        res.status(500).json({status : false , message : 'something went wrong, try again'});
+        res.status(500).json(result);
 
     } catch (error) {
         next(error)
@@ -63,57 +59,14 @@ exports.userLogoutController = (req, res, next) => {
 
 
 
-
-exports.otpSendController = async (req, res, next) => {
-
-    try {
-        const {email, subject} = req.query
-
-        const {email : validEmail,subject : validSubject} = await otpSendReqSchema.validateAsync({email, subject})
-
-        const result = await userOtpService(validEmail, validSubject);
-        res.status(200).json(result);
-
-    } catch (error) {
-        next(error)
-    }
-}
-
-// otp verifyController
-exports.otpVerifyController = async (req, res, next) => {
-    try {
-        const { email, otp, subject } = req.query;
-        // Verify OTP
-        const {email : validEmail,subject : validSubject} = await otpSendReqSchema.validateAsync({email, subject})
-        const otpVerified = await otpVerifyService(validEmail, otp);
-
-        if(otpVerified.success){
-            // const verified = await generateToken({email : validEmail,subject : validSubject})
-            if(validSubject ==  'verify email'){
-                await userVerifiyService(validEmail);
-                return res.status(200).json({success : true, message : 'Email verified successfully'});
-            }
-
-            await userOtpModel.findOneAndUpdate({email : validEmail}, {token : verified})
-            res.status(200).json({success : true, message : 'OTP verified successfully', token : verified});
-        }
-
-        res.status(500).json({success : false, message : 'something went wrong, try again'});
-    } catch (error) {
-        next(error);
-    }
-};
-
-
 // Password Reset 
-
 exports.userForgetPasswordController = async (req, res, next) => {
     
     try {
 
         const {password , repeatPassword} = req.body;
 
-
+            const {email} = req.query
             const {password : validPassword} = await passwordSetSchema.validateAsync({password, repeatPassword})
 
             const updated = await updatePasswordService(email, validPassword);
@@ -125,11 +78,8 @@ exports.userForgetPasswordController = async (req, res, next) => {
                 res.status(500).json({success : false, message : 'something went wrong, try again'});
             }
             
-            return res.status(500).json({success : false, message : 'something went wrong, try again'});
-            
         
     } catch (error) {
-        console.log(error);
         next(error);
     }
 }

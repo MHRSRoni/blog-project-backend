@@ -7,7 +7,7 @@ exports.otpSendReqSchema = Joi.object({
         'string.email' : "email must be a valid email",
         'any.required' : "email is a required field",
     }),
-    subject : Joi.string().trim().lowercase().valid('forget password', 'verify email').required().messages({
+    subject : Joi.string().trim().lowercase().valid('forget password', 'email verification').required().messages({
         'string.base' : 'subject must be a type of text',
         'string.empty' : 'Please provide a subject',
         'any.required' : 'subject is a required field',
@@ -24,7 +24,7 @@ exports.otpVerifyReqSchema = Joi.object({
         'string.email' : "email must be a valid email",
         'any.required' : "email is a required field",
     }),
-    subject : Joi.string().trim().lowercase().valid('forget password', 'verify email').required().messages({
+    subject : Joi.string().trim().lowercase().valid('forget password', 'email verification').required().messages({
         'string.base' : 'subject must be a type of text',
         'string.empty' : 'Please provide a subject',
         'any.required' : 'subject is a required field',

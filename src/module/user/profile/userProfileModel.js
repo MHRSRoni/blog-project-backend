@@ -49,6 +49,7 @@ userProfileSchema.pre('save', async function (next) {
     next();
 })
 
+
 const userProfileModel = model('users', userProfileSchema);
 
 module.exports = userProfileModel;

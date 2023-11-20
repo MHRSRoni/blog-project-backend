@@ -1,4 +1,5 @@
 const sendEmail = require("../../../utils/email")
+const userProfileModel = require("../../user/profile/userProfileModel")
 const userOtpModel = require("./userOtpModel")
 const { generateOtp, encrypt, generateToken } = require("./verificationUtils")
 
@@ -6,7 +7,10 @@ const { generateOtp, encrypt, generateToken } = require("./verificationUtils")
 
 
 exports.sendOtpService = async (email, subject) => {
-
+    const exist = await userProfileModel.findOne({email})
+    if(!exist) {
+        return {success : false, message : 'user not found'}
+    }
     const otp =  generateOtp() //generate otp
     await userOtpModel.findOneAndUpdate({email},{otp, subject}, {upsert : true})   //save in database
     await sendEmail({to: email, subject, html : `your otp code is ${otp}`}) //send email
