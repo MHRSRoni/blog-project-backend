@@ -15,7 +15,7 @@ exports.userRegistrator = async (userData) => {
     } else {
 
         const newUser = await new userProfileModel(userData).save();
-        return { success: true, message: 'user  regeistation successful' };
+        return { success: true, message: 'user  registation successful' };
     }
 }
 

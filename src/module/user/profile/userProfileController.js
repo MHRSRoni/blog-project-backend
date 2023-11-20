@@ -17,7 +17,7 @@ exports.userRegisterController = async (req, res, next) => {
 
         const result = await userRegistrator(verifiedData);
         
-        res.status(500).json(result);
+        res.status(201).json(result);
 
     } catch (error) {
         next(error)
