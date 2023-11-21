@@ -1,6 +1,7 @@
 const postModel = require("./postModel");
 const createError = require('http-errors');
 const { createSlug } = require("../../../utils/createSlug");
+const userProfileModel = require("../../user/profile/userProfileModel");
 
 exports.createPostService = async (userId, postData) => {
     const checkTitle = await postModel.findOne({ title: postData.title })
@@ -55,7 +56,6 @@ exports.readSinglePostService = async (slug) => {
 };
 
 exports.readAllPostService = async (page, limit, sort) => {
-
     let post = {};
 
     const startIndex = (page - 1) * limit;
@@ -65,31 +65,25 @@ exports.readAllPostService = async (page, limit, sort) => {
 
     let allPosts = await postModel.find()
         .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-        // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+        .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
         .skip(startIndex)
         .limit(limit)
 
-    if (sort === 'latest') {
+    if (sort == 'latest') {
         allPosts = await postModel.find().sort({ createdAt: 'desc' })
             .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-            // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+            .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
             .skip(startIndex)
             .limit(limit)
     }
 
-    if (sort === 'top') {
+    if (sort == 'top') {
         allPosts = await postModel.find().sort({ 'react.like': 'desc' })
             .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-            // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+            .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
             .skip(startIndex)
             .limit(limit)
     }
-
-    // if (sort === 'relevant') {
-    //     allPosts = await postModel.find().sort({ category: 'desc' })
-    //         .skip(startIndex)
-    //         .limit(limit)
-    // }
 
     post.totalPost = postCount;
     post.pageCount = Math.ceil(postCount / limit);
@@ -114,6 +108,41 @@ exports.readAllPostService = async (page, limit, sort) => {
         data: post
     }
 
+};
+
+exports.readRelevantPostService = async (page, limit, email) => {
+
+    if (email !== null) {
+        const user = await userProfileModel.findOne({ email });
+
+        if (user.categoryList == '') {
+            throw createError(404, 'Category List not found!');
+        }
+
+        const posts = await postModel.find({ category: user.categoryList })
+            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
+            .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        return {
+            success: true,
+            operation: 'read',
+            data: posts
+        }
+    } else {
+        const posts = await postModel.find()
+            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
+            .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        return {
+            success: true,
+            operation: 'read',
+            data: posts
+        }
+    }
 };
 
 exports.updatePostService = async (slug, userId, postData) => {

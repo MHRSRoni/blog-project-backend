@@ -1,4 +1,5 @@
 const { isLoggedIn } = require('../../../auth/auth');
+const { findUserToken } = require('../../../utils/findUserToken');
 
 const { imageUpload } = require('../../../utils/imageUpload');
 const { parsePostFormData } = require('../../../utils/parseFormData');
@@ -9,7 +10,7 @@ const postRouter = require('express').Router();
 
 postRouter.post('/create', isLoggedIn, parsePostFormData, validateCreatePostData, imageUpload('post'), createPostController);
 
-postRouter.get('/read', readPostController);
+postRouter.get('/read', findUserToken, readPostController);
 
 postRouter.post('/update/:slug', isLoggedIn, parsePostFormData, validateCreatePostData, imageUpload('post'), updatePostController);
 
