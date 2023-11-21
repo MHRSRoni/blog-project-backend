@@ -1,6 +1,7 @@
 const postModel = require("./postModel");
 const createError = require('http-errors');
 const { createSlug } = require("../../../utils/createSlug");
+const userProfileModel = require("../../user/profile/userProfileModel");
 
 exports.createPostService = async (userId, postData) => {
     const checkTitle = await postModel.findOne({ title: postData.title })
@@ -45,8 +46,8 @@ exports.createPostService = async (userId, postData) => {
 exports.readSinglePostService = async (slug) => {
 
     const post = await postModel.findOne({ slug })
-        .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-        // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+        .populate('userId', 'name picture -_id')
+        // .populate('categoryId', 'name cover - _id')
         .select({ _id: 0, updatedAt: 0 })
 
     return { success: true, operation: 'read', data: post }
@@ -55,8 +56,8 @@ exports.readSinglePostService = async (slug) => {
 };
 
 exports.readAllPostService = async (page, limit, sort) => {
-
     let post = {};
+    console.log('all')
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -64,32 +65,27 @@ exports.readAllPostService = async (page, limit, sort) => {
     const postCount = await postModel.find().count();
 
     let allPosts = await postModel.find()
-        .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-        // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+        .populate('userId', 'name picture -_id')
+        // .populate('categoryId', 'name cover - _id')
         .skip(startIndex)
         .limit(limit)
 
-    if (sort === 'latest') {
+    if (sort == 'latest') {
         allPosts = await postModel.find().sort({ createdAt: 'desc' })
-            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-            // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+            .populate('userId', 'name picture -_id')
+            //.populate('categoryId', 'name cover - _id')
             .skip(startIndex)
             .limit(limit)
     }
 
-    if (sort === 'top') {
+    if (sort == 'top') {
+        console.log('top')
         allPosts = await postModel.find().sort({ 'react.like': 'desc' })
-            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-            // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+            .populate('userId', 'name picture -_id')
+            //.populate('categoryId', 'name cover - _id')
             .skip(startIndex)
             .limit(limit)
     }
-
-    // if (sort === 'relevant') {
-    //     allPosts = await postModel.find().sort({ category: 'desc' })
-    //         .skip(startIndex)
-    //         .limit(limit)
-    // }
 
     post.totalPost = postCount;
     post.pageCount = Math.ceil(postCount / limit);
@@ -114,6 +110,41 @@ exports.readAllPostService = async (page, limit, sort) => {
         data: post
     }
 
+};
+
+exports.readRelevantPostService = async (page, limit, email) => {
+    if (email !== null) {
+        const user = await userProfileModel.findOne({ email });
+
+        if (user?.interest.length === 0) {
+            throw createError(404, 'Interest not found!');
+        }
+
+        const posts = await postModel.find({ categoryId: user.interest })
+            .populate('userId', 'name picture -_id')
+            //.populate('categoryId', 'name cover - _id')
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        return {
+            success: true,
+            operation: 'read',
+            data: posts
+        }
+    } else {
+        console.log('null')
+        const posts = await postModel.find()
+            .populate('userId', 'name picture -_id')
+            //.populate('categoryId', 'name cover - _id')
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        return {
+            success: true,
+            operation: 'read',
+            data: posts
+        }
+    }
 };
 
 exports.updatePostService = async (slug, userId, postData) => {
