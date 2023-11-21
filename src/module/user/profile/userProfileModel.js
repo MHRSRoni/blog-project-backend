@@ -30,6 +30,9 @@ const userProfileSchema = new Schema({
         type: String,
         trim: true,
     },
+    interest : {
+        type : Array
+    },
     role: {
         type: String,
         default: 'user'

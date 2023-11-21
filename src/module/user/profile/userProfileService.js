@@ -89,7 +89,8 @@ exports.userProfileUpdateService = async (userId, updateData) => {
     if (existingUsername) {
         throw createError.Conflict('Username already exists');
     }
-
+    updateData.email = undefined
+    updateData.password = undefined
     const profileUpdate = await userProfileModel.findByIdAndUpdate(userId, updateData, { new: true });
     profileUpdate.password = undefined;
     return {
