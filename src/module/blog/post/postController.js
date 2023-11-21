@@ -34,7 +34,7 @@ exports.readPostController = async (req, res, next) => {
             result = await readSinglePostService(slug);
         } else if (search) {
             result = await searchPostService(page, limit, search);
-        } else if (sort == 'relevant') {
+        } else if (sort === 'relevant') {
             result = await readRelevantPostService(page, limit, email);
         } else {
             result = await readAllPostService(page, limit, sort);

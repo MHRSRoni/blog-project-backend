@@ -46,8 +46,8 @@ exports.createPostService = async (userId, postData) => {
 exports.readSinglePostService = async (slug) => {
 
     const post = await postModel.findOne({ slug })
-        .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-        // .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+        .populate('userId', 'name picture -_id')
+        // .populate('categoryId', 'name cover - _id')
         .select({ _id: 0, updatedAt: 0 })
 
     return { success: true, operation: 'read', data: post }
@@ -57,6 +57,7 @@ exports.readSinglePostService = async (slug) => {
 
 exports.readAllPostService = async (page, limit, sort) => {
     let post = {};
+    console.log('all')
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -64,23 +65,24 @@ exports.readAllPostService = async (page, limit, sort) => {
     const postCount = await postModel.find().count();
 
     let allPosts = await postModel.find()
-        .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-        .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+        .populate('userId', 'name picture -_id')
+        // .populate('categoryId', 'name cover - _id')
         .skip(startIndex)
         .limit(limit)
 
     if (sort == 'latest') {
         allPosts = await postModel.find().sort({ createdAt: 'desc' })
-            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-            .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+            .populate('userId', 'name picture -_id')
+            //.populate('categoryId', 'name cover - _id')
             .skip(startIndex)
             .limit(limit)
     }
 
     if (sort == 'top') {
+        console.log('top')
         allPosts = await postModel.find().sort({ 'react.like': 'desc' })
-            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-            .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+            .populate('userId', 'name picture -_id')
+            //.populate('categoryId', 'name cover - _id')
             .skip(startIndex)
             .limit(limit)
     }
@@ -111,17 +113,16 @@ exports.readAllPostService = async (page, limit, sort) => {
 };
 
 exports.readRelevantPostService = async (page, limit, email) => {
-
     if (email !== null) {
         const user = await userProfileModel.findOne({ email });
 
-        if (user.categoryList == '') {
-            throw createError(404, 'Category List not found!');
+        if (user?.interest.length === 0) {
+            throw createError(404, 'Interest not found!');
         }
 
-        const posts = await postModel.find({ category: user.categoryList })
-            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-            .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+        const posts = await postModel.find({ categoryId: user.interest })
+            .populate('userId', 'name picture -_id')
+            //.populate('categoryId', 'name cover - _id')
             .skip((page - 1) * limit)
             .limit(limit)
 
@@ -131,9 +132,10 @@ exports.readRelevantPostService = async (page, limit, email) => {
             data: posts
         }
     } else {
+        console.log('null')
         const posts = await postModel.find()
-            .populate({ path: 'userId', select: { name: 1, picture: 1, _id: 0 } })
-            .populate({ path: 'categoryId', select: { name: 1, _id: 0 } })
+            .populate('userId', 'name picture -_id')
+            //.populate('categoryId', 'name cover - _id')
             .skip((page - 1) * limit)
             .limit(limit)
 
