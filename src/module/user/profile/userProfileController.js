@@ -12,11 +12,10 @@ const { generateToken } = require("../../../utils/generateToken");
 exports.userRegisterController = async (req, res, next) => {
 
     try {
-        const userData = req.body;
-        const verifiedData = await userRegistrationSchema.validateAsync(userData);
+        // const verifiedData = await userRegistrationSchema.validateAsync(userData);
 
-        const result = await userRegistrator(verifiedData);
-        
+        const result = await userRegistrator(req.body);
+
         res.status(201).json(result);
 
     } catch (error) {
@@ -26,8 +25,8 @@ exports.userRegisterController = async (req, res, next) => {
 
 
 exports.userEmailVerifyController = async (req, res, next) => {
-    try{
-        const {email} = req.query;
+    try {
+        const { email } = req.query;
         const result = await userVerifiyService(email);
         res.status(200).json(result);
     } catch (error) {
@@ -61,24 +60,24 @@ exports.userLogoutController = (req, res, next) => {
 
 // Password Reset 
 exports.userForgetPasswordController = async (req, res, next) => {
-    
+
     try {
 
-        const {password , repeatPassword} = req.body;
+        const { password, repeatPassword } = req.body;
 
-            const {email} = req.query
-            const {password : validPassword} = await passwordSetSchema.validateAsync({password, repeatPassword})
+        const { email } = req.query
+        const { password: validPassword } = await passwordSetSchema.validateAsync({ password, repeatPassword })
 
-            const updated = await updatePasswordService(email, validPassword);
+        const updated = await updatePasswordService(email, validPassword);
 
-            if(updated.success){
-                res.status(200).json(updated);
-            }
-            else{
-                res.status(500).json({success : false, message : 'something went wrong, try again'});
-            }
-            
-        
+        if (updated.success) {
+            res.status(200).json(updated);
+        }
+        else {
+            res.status(500).json({ success: false, message: 'something went wrong, try again' });
+        }
+
+
     } catch (error) {
         next(error);
     }
