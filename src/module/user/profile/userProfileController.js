@@ -36,8 +36,8 @@ exports.userEmailVerifyController = async (req, res, next) => {
 
 
 exports.userLoginController = async (req, res, next) => {
-
     try {
+
         const loginData = await userLoginSchema.validateAsync(req.body);
         const result = await userLoginService(loginData);
         res.status(200).json(result);

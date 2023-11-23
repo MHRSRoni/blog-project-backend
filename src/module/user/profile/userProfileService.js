@@ -8,19 +8,26 @@ const userOtpModel = require('../../auth/verification/userOtpModel');
 
 // registration
 exports.userRegistrator = async (userData) => {
+    const picture = 'https://res.cloudinary.com/dscxtnb94/image/upload/v1700723393/health_plus/user/download_dxmyep.png'
 
     const existingEmail = await userProfileModel.findOne({ email: userData.email });
+    const existingUsername = await userProfileModel.findOne({ userName: userData.userName });
     if (existingEmail) {
         throw createError(409, 'Email already exists');
+    } else if (existingUsername) {
+        throw createError(409, 'Username already exists');
     } else {
-
-        const newUser = await new userProfileModel(userData).save();
+        if (!userData.picture) {
+            userData.picture = picture;
+        }
+        await new userProfileModel(userData).save();
         return { success: true, message: 'user  registation successful' };
     }
 }
 
 exports.userLoginService = async (loginData) => {
-    const user = await userProfileModel.findOne({ email: loginData.email }).lean();
+    const user = await userProfileModel.findOne({ email: loginData.email });
+    // .lean();
     if (!user) {
         throw createError(401, 'email and password mismatch');
     }
@@ -28,7 +35,7 @@ exports.userLoginService = async (loginData) => {
     if (user.status === 'unverified') {
         throw createError(401, 'Please verify your email');
     }
-    
+
     const isMatch = await bcrypt.compare(loginData.password, user.password);
 
     if (!isMatch) {
