@@ -57,7 +57,6 @@ exports.readSinglePostService = async (slug) => {
 
 exports.readAllPostService = async (page, limit, sort) => {
     let post = {};
-    console.log('all')
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -113,6 +112,11 @@ exports.readAllPostService = async (page, limit, sort) => {
 };
 
 exports.readRelevantPostService = async (page, limit, email) => {
+    let post = {};
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
     if (email !== null) {
         const user = await userProfileModel.findOne({ email });
 
@@ -120,29 +124,68 @@ exports.readRelevantPostService = async (page, limit, email) => {
             throw createError(404, 'Interest not found!');
         }
 
-        const posts = await postModel.find({ categoryId: user.interest })
+        const postCount = await postModel.find({ categoryId: user.interest }).count();
+
+        let allPosts = await postModel.find({ categoryId: user.interest })
             .populate('userId', 'name picture -_id')
             //.populate('categoryId', 'name cover - _id')
-            .skip((page - 1) * limit)
+            .skip(startIndex)
             .limit(limit)
+
+        post.totalPost = postCount;
+        post.pageCount = Math.ceil(postCount / limit);
+
+        if (endIndex < postCount) {
+            post.next = {
+                page: page + 1,
+                limit: limit
+            }
+        }
+        if (startIndex > 0) {
+            post.prev = {
+                page: page - 1,
+                limit: limit
+            }
+        }
+        post.resultPosts = allPosts;
 
         return {
             success: true,
             operation: 'read',
-            data: posts
+            data: post
         }
     } else {
-        console.log('null')
-        const posts = await postModel.find()
+
+        const postCount = await postModel.find().count();
+
+        const allPosts = await postModel.find()
             .populate('userId', 'name picture -_id')
             //.populate('categoryId', 'name cover - _id')
             .skip((page - 1) * limit)
             .limit(limit)
 
+        post.totalPost = postCount;
+        post.pageCount = Math.ceil(postCount / limit);
+
+        if (endIndex < postCount) {
+            post.next = {
+                page: page + 1,
+                limit: limit
+            }
+        }
+        if (startIndex > 0) {
+            post.prev = {
+                page: page - 1,
+                limit: limit
+            }
+        }
+        post.resultPosts = allPosts;
+
+
         return {
             success: true,
             operation: 'read',
-            data: posts
+            data: post
         }
     }
 };

@@ -2,6 +2,7 @@ const cloudinary = require('cloudinary').v2;
 
 exports.imageUpload = type => async (req, res, next) => {
     try {
+        console.log('hi')
         const folder = `health_plus/${type}`;
         const config = {
             cloud_name: process.env.CLOUD_NAME,
