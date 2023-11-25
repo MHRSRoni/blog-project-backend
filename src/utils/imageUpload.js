@@ -12,7 +12,7 @@ exports.imageUpload = type => async (req, res, next) => {
             folder: folder
         }
 
-        if (req.files.image) {
+        if (req.files?.image) {
             const response = await cloudinary.uploader.upload(req.files.image.filepath, config)
 
             req.body.picture = response.url

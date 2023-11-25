@@ -28,7 +28,7 @@ const userRegistrationSchema = Joi.object({
     picture: Joi.string()
 })
 
-exports.userLoginSchema = Joi.object({
+const userLoginSchema = Joi.object({
     email: Joi.string().email().trim().required().lowercase().messages({
         'string.base': "email must be a type of text",
         'string.email': "email must be a valid email",
@@ -43,7 +43,7 @@ exports.userLoginSchema = Joi.object({
 })
 
 
-exports.userPasswordChangeSchema = Joi.object({
+const userPasswordChangeSchema = Joi.object({
 
     password: Joi.string().required().min(6).messages({
         'string.base': "password must be a type of text",
@@ -64,7 +64,7 @@ exports.userPasswordChangeSchema = Joi.object({
 
 
 
-exports.passwordSetSchema = Joi.object({
+const passwordSetSchema = Joi.object({
     password: Joi.string().required().min(6).messages({
         'string.base': "password must be a type of text",
         'string.min': "password must be 6 characters long",
@@ -78,7 +78,7 @@ exports.passwordSetSchema = Joi.object({
 })
 
 
-exports.userEmailSchema = Joi.string().email().trim().required();
+const userEmailSchema = Joi.string().email().trim().required();
 
 // const userOtpVerifySchema = joi.string().email().trim().required
 
@@ -96,5 +96,10 @@ const validateCreateUserdata = async (req, res, next) => {
 }
 
 module.exports = {
-    validateCreateUserdata
+    validateCreateUserdata,
+    userLoginSchema,
+    userPasswordChangeSchema,
+    passwordSetSchema,
+    userEmailSchema
+
 }
