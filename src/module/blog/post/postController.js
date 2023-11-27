@@ -1,4 +1,4 @@
-const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService, imageUploadService, readRelevantPostService } = require("./postService");
+const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService, imageUploadService, readRelevantPostService, readPostByCategoryService } = require("./postService");
 const { reactValidationSchema, postCreateValidationSchema, postUpdateValidationSchema } = require("./postValidationSchema");
 const { checkReactService, updateReactService, updateReactCountService, createReactService } = require("./reactService");
 const formidable = require('formidable');
@@ -23,6 +23,7 @@ exports.readPostController = async (req, res, next) => {
         const { sort } = req.query;
         const { slug } = req.query;
         const { search } = req.query;
+        const { category } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
 
@@ -36,7 +37,10 @@ exports.readPostController = async (req, res, next) => {
             result = await searchPostService(page, limit, search);
         } else if (sort === 'relevant') {
             result = await readRelevantPostService(page, limit, email);
-        } else {
+        } else if (category) {
+            result = await readPostByCategoryService(page, limit, category);
+        }
+        else {
             result = await readAllPostService(page, limit, sort);
         }
 

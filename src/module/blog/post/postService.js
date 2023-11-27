@@ -111,6 +111,44 @@ exports.readAllPostService = async (page, limit, sort) => {
 
 };
 
+exports.readPostByCategoryService = async (page, limit, category) => {
+    let post = {};
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const postCount = await postModel.find({categoryId : category}).count();
+
+    let allPosts = await postModel.find({categoryId : category})
+        .populate('userId', 'name picture -_id')
+        .skip(startIndex)
+        .limit(limit)
+
+    post.totalPost = postCount;
+    post.pageCount = Math.ceil(postCount / limit);
+
+    if (endIndex < postCount) {
+        post.next = {
+            page: page + 1,
+            limit: limit
+        }
+    }
+    if (startIndex > 0) {
+        post.prev = {
+            page: page - 1,
+            limit: limit
+        }
+    }
+    post.resultPosts = allPosts;
+
+    return {
+        success: true,
+        operation: 'read',
+        data: post
+    }
+
+};
+
 exports.readRelevantPostService = async (page, limit, email) => {
     let post = {};
 
