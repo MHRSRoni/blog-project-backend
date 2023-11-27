@@ -4,17 +4,19 @@ const formidable = require('formidable');
 exports.parsePostFormData = async (req, res, next) => {
     try {
         const form = formidable({ multiples: true });
-        
-        if(!req.body){
+        if(Object.keys(req.body).length < 1){
             form.parse(req, async (err, fields, files) => {
             
                 req.body = fields
+                console.log(req.body)
     
                 req.files = files
                 next()
             })
+        }else{
+            next()
         }
-        next()
+        
 
     } catch (error) {
         console.log(error)
