@@ -223,7 +223,6 @@ exports.readRelevantPostService = async (page, limit, email) => {
         }
         post.resultPosts = allPosts;
 
-
         return {
             success: true,
             operation: 'read',
@@ -303,21 +302,3 @@ exports.searchPostService = async (page, limit, search) => {
     }
 };
 
-exports.imageUploadService = async (req) => {
-    const form = formidable({ multiples: true });
-
-    form.parse(req, async (err, fields, files) => {
-        const config = {
-            cloud_name: "dscxtnb94",
-            api_key: "487396911159431",
-            api_secret: "JX_Az4I67YiWh7gVODcnw5yxFtY",
-            secure: true
-        }
-
-        console.log(fields)
-        const response = await cloudinary.uploader.upload(files.image.filepath, config)
-
-        return response;
-
-    })
-};
