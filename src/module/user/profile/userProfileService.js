@@ -26,7 +26,7 @@ exports.userRegistrator = async (userData) => {
 }
 
 exports.userLoginService = async (loginData) => {
-    const user = await userProfileModel.findOne({ email: loginData.email });
+    const user = await userProfileModel.findOne({ email: loginData.email })
     // .lean();
     if (!user) {
         throw createError(401, 'email and password mismatch');
@@ -38,15 +38,19 @@ exports.userLoginService = async (loginData) => {
 
     const isMatch = await bcrypt.compare(loginData.password, user.password);
 
+    user.password = undefined
+
     if (!isMatch) {
         throw createError(401, 'email and password mismatch');
     }
-
-    const { password, ...rest } = user
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
-    return { success: true, message: 'Login Successful', token, ...rest };
+    return {
+        success: true,
+        message: 'Login Successful',
+        data: user,
+        token,
+    };
 }
-
 
 // otp service
 
