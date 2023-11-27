@@ -117,7 +117,7 @@ exports.readPostByCategoryService = async (page, limit, category) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const postCount = await postModel.find({categoryId : category}).count();
+    const postCount = await postModel.countDocuments({categoryId : category});
 
     let allPosts = await postModel.find({categoryId : category})
         .populate('userId', 'name picture -_id')
