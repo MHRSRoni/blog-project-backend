@@ -2,6 +2,7 @@ const postModel = require("./postModel");
 const createError = require('http-errors');
 const { createSlug } = require("../../../utils/createSlug");
 const userProfileModel = require("../../user/profile/userProfileModel");
+const categoryModel = require("../category/categoryModel");
 
 exports.createPostService = async (userId, postData) => {
     const checkTitle = await postModel.findOne({ title: postData.title })
@@ -111,16 +112,18 @@ exports.readAllPostService = async (page, limit, sort) => {
 
 };
 
-exports.readPostByCategoryService = async (page, limit, category) => {
+exports.readPostByCategoryService = async (page, limit, categoryId) => {
     let post = {};
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const postCount = await postModel.countDocuments({categoryId : category});
+    const postCount = await postModel.countDocuments({ categoryId: categoryId });
+    const category = await categoryModel.findById(categoryId);
 
-    let allPosts = await postModel.find({categoryId : category})
+    let allPosts = await postModel.find({ categoryId: categoryId })
         .populate('userId', 'name picture -_id')
+        // .populate('categoryId', 'name cover - _id')
         .skip(startIndex)
         .limit(limit)
 
@@ -144,6 +147,7 @@ exports.readPostByCategoryService = async (page, limit, category) => {
     return {
         success: true,
         operation: 'read',
+        categoryName: category.title,
         data: post
     }
 
