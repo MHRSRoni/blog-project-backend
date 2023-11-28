@@ -25,7 +25,7 @@ const userRegistrationSchema = Joi.object({
         'any.only': 'passwords do not match',
         'any.required': "repeat password is a required field",
     }),
-    picture: Joi.string()
+    picture: Joi.any()
 })
 
 const userLoginSchema = Joi.object({
