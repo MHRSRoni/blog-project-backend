@@ -54,9 +54,8 @@ exports.updatePostController = async (req, res, next) => {
     try {
         const { slug } = req.params;
         const userId = req.user?.id;
-        const postData = await postUpdateValidationSchema.validateAsync(req.body);
 
-        const result = await updatePostService(slug, userId, postData);
+        const result = await updatePostService(slug, userId, req.body);
 
         return res.status(200).json(result)
     } catch (error) {
