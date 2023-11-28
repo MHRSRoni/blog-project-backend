@@ -48,7 +48,6 @@ exports.readSinglePostService = async (slug) => {
     const post = await postModel.findOne({ slug })
         .populate('userId', 'name picture -_id')
         // .populate('categoryId', 'name cover - _id')
-        .select({ _id: 0, updatedAt: 0 })
 
     return { success: true, operation: 'read', data: post }
 
