@@ -51,7 +51,7 @@ exports.validateCreatePostData = async (req, res, next) => {
                 'string.empty': 'please provide description',
                 'any.required': 'description is required'
             }),
-            picture: Joi.string().required().messages({
+            picture: Joi.required().messages({
                 'string.empty': 'please provide a picture',
                 'any.required': 'picture is required'
             }),

@@ -6,9 +6,8 @@ exports.parseFormData = async (req, res, next) => {
         if (Object.keys(req.body).length < 1) {
             form.parse(req, async (err, fields, files) => {
 
-                req.body = fields
+                req.body = { ...files, ...fields }
 
-                req.files = files
                 next()
             })
         } else {

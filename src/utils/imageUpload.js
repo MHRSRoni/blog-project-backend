@@ -11,8 +11,8 @@ exports.imageUpload = type => async (req, res, next) => {
             folder: folder
         }
 
-        if (req.files?.picture) {
-            const response = await cloudinary.uploader.upload(req.files.picture.filepath, config)
+        if (req.body?.picture) {
+            const response = await cloudinary.uploader.upload(req.body.picture.filepath, config)
 
             req.body.picture = response.url
         }
