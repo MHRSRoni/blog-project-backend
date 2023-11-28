@@ -2,6 +2,7 @@ const postModel = require("./postModel");
 const createError = require('http-errors');
 const { createSlug } = require("../../../utils/createSlug");
 const userProfileModel = require("../../user/profile/userProfileModel");
+const categoryModel = require("../category/categoryModel");
 
 exports.createPostService = async (userId, postData) => {
     const checkTitle = await postModel.findOne({ title: postData.title })
@@ -110,16 +111,18 @@ exports.readAllPostService = async (page, limit, sort) => {
 
 };
 
-exports.readPostByCategoryService = async (page, limit, category) => {
+exports.readPostByCategoryService = async (page, limit, categoryId) => {
     let post = {};
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const postCount = await postModel.countDocuments({categoryId : category});
+    const postCount = await postModel.countDocuments({ categoryId: categoryId });
+    const category = await categoryModel.findById(categoryId);
 
-    let allPosts = await postModel.find({categoryId : category})
+    let allPosts = await postModel.find({ categoryId: categoryId })
         .populate('userId', 'name picture -_id')
+        // .populate('categoryId', 'name cover - _id')
         .skip(startIndex)
         .limit(limit)
 
@@ -143,6 +146,7 @@ exports.readPostByCategoryService = async (page, limit, category) => {
     return {
         success: true,
         operation: 'read',
+        categoryName: category.title,
         data: post
     }
 
@@ -217,7 +221,6 @@ exports.readRelevantPostService = async (page, limit, email) => {
             }
         }
         post.resultPosts = allPosts;
-
 
         return {
             success: true,
@@ -298,21 +301,3 @@ exports.searchPostService = async (page, limit, search) => {
     }
 };
 
-exports.imageUploadService = async (req) => {
-    const form = formidable({ multiples: true });
-
-    form.parse(req, async (err, fields, files) => {
-        const config = {
-            cloud_name: "dscxtnb94",
-            api_key: "487396911159431",
-            api_secret: "JX_Az4I67YiWh7gVODcnw5yxFtY",
-            secure: true
-        }
-
-        console.log(fields)
-        const response = await cloudinary.uploader.upload(files.image.filepath, config)
-
-        return response;
-
-    })
-};

@@ -62,8 +62,6 @@ const userPasswordChangeSchema = Joi.object({
 
 })
 
-
-
 const passwordSetSchema = Joi.object({
     password: Joi.string().required().min(6).messages({
         'string.base': "password must be a type of text",
@@ -84,13 +82,11 @@ const userEmailSchema = Joi.string().email().trim().required();
 
 const validateCreateUserdata = async (req, res, next) => {
     try {
-
         const data = await userRegistrationSchema.validateAsync(req.body)
         req.body = data;
-        console.log('before data')
+
         next();
     } catch (error) {
-        console.log('error', error)
         next(error)
     }
 }
