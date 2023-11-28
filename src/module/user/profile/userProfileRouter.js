@@ -11,7 +11,7 @@ router.post('/login', userLoginController);
 router.get('/logOut', userLogoutController);
 router.get('/profile', isLoggedIn, userProfileController);
 
-router.post('/profile/update', isLoggedIn, userProfileUpdateController);
+router.post('/profile/update', isLoggedIn, imageUpload('user'), userProfileUpdateController);
 router.post('/update-password', userUpdatePasswordController);
 
 router.get('/email-verify', isVerifiedFor('email verification'), userEmailVerifyController)

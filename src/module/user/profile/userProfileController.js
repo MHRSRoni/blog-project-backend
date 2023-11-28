@@ -12,8 +12,6 @@ const { generateToken } = require("../../../utils/generateToken");
 exports.userRegisterController = async (req, res, next) => {
 
     try {
-        // const verifiedData = await userRegistrationSchema.validateAsync(userData);
-
         const result = await userRegistrator(req.body);
 
         res.status(201).json(result);
