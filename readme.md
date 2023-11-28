@@ -182,13 +182,13 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
 
 **Parameters**
 
-| Name          | Type     | In        | Required |
-| ------------- | -------- | --------- | -------- |
-| `categoryId`  | objectId | form-data | Yes      |
-| `picture`     | file     | form-data | Yes      |
-| `title`       | string   | form-data | Yes      |
-| `description` | string   | form-data | Yes      |
-| `token`       | string   | headers   | Yes      |
+| Name          | Type     | In      | Required |
+| ------------- | -------- | ------- | -------- |
+| `categoryId`  | objectId | body    | Yes      |
+| `picture`     | file     | body    | Yes      |
+| `title`       | string   | body    | Yes      |
+| `description` | string   | body    | Yes      |
+| `token`       | string   | headers | Yes      |
 
 **Status codes**
 | Status code | Description |
@@ -229,14 +229,14 @@ Returns update a blog post from the inventory.
 
 **Parameters**
 
-| Name          | Type     | In        | Required |
-| ------------- | -------- | --------- | -------- |
-| `slug`        | string   | path      | Yes      |
-| `categoryId`  | objectId | form-data | Yes      |
-| `image`       | file     | form-data | No       |
-| `title`       | string   | form-data | Yes      |
-| `description` | string   | form-data | Yes      |
-| `token`       | string   | headers   | Yes      |
+| Name          | Type     | In      | Required |
+| ------------- | -------- | ------- | -------- |
+| `slug`        | string   | path    | Yes      |
+| `categoryId`  | objectId | body    | Yes      |
+| `picture`     | file     | body    | Yes      |
+| `title`       | string   | body    | Yes      |
+| `description` | string   | body    | Yes      |
+| `token`       | string   | headers | Yes      |
 
 **Status codes**
 
@@ -297,10 +297,11 @@ Returns react a blog post from the inventory.
 
 **Parameters**
 
-| Name      | Type   | In      | Required |
-| --------- | ------ | ------- | -------- |
-| `comment` | string | body    | Yes      |
-| `token`   | string | headers | Yes      |
+| Name      | Type     | In      | Required |
+| --------- | -------- | ------- | -------- |
+| `postId`  | objectId | path    | Yes      |
+| `comment` | string   | body    | Yes      |
+| `token`   | string   | headers | Yes      |
 
 **Status codes**
 
@@ -316,10 +317,11 @@ Returns react a blog post from the inventory.
 
 **Parameters**
 
-| Name          | Type   | In    | Required |
-| ------------- | ------ | ----- | -------- |
-| `currentPage` | number | query | No       |
-| `pageSize`    | number | query | No       |
+| Name          | Type     | In    | Required |
+| ------------- | -------- | ----- | -------- |
+| `postId`      | objectId | path  | Yes      |
+| `currentPage` | number   | query | No       |
+| `pageSize`    | number   | query | No       |
 
 **Status codes**
 
@@ -334,10 +336,11 @@ Returns react a blog post from the inventory.
 
 **Parameters**
 
-| Name      | Type   | In      | Required |
-| --------- | ------ | ------- | -------- |
-| `comment` | string | body    | Yes      |
-| `token`   | string | headers | Yes      |
+| Name        | Type     | In      | Required |
+| ----------- | -------- | ------- | -------- |
+| `commentId` | objectId | path    | Yes      |
+| `comment`   | string   | body    | Yes      |
+| `token`     | string   | headers | Yes      |
 
 **Status codes**
 
@@ -352,9 +355,10 @@ Returns react a blog post from the inventory.
 
 **Parameters**
 
-| Name    | Type   | In      | Required |
-| ------- | ------ | ------- | -------- |
-| `token` | string | headers | Yes      |
+| Name        | Type     | In      | Required |
+| ----------- | -------- | ------- | -------- |
+| `commentId` | objectId | path    | Yes      |
+| `token`     | string   | headers | Yes      |
 
 **Status codes**
 
@@ -399,11 +403,12 @@ Returns react a blog post from the inventory.
 
 **Parameters**
 
-| Name          | Type   | In   | Required |
-| ------------- | ------ | ---- | -------- |
-| `title`       | string | body | Yes      |
-| `description` | string | body | Yes      |
-| `cover`       | string | body | Yes      |
+| Name          | Type     | In   | Required |
+| ------------- | -------- | ---- | -------- |
+| `categoryId`  | objectId | path | Yes      |
+| `title`       | string   | body | Yes      |
+| `description` | string   | body | Yes      |
+| `cover`       | string   | body | Yes      |
 
 **Status codes**
 
@@ -415,6 +420,12 @@ Returns react a blog post from the inventory.
 ### Delete Category
 
 **`DELETE /category/delete/:categoryId`**
+
+**Parameters**
+
+| Name         | Type     | In   | Required |
+| ------------ | -------- | ---- | -------- |
+| `categoryId` | objectId | path | Yes      |
 
 **Status codes**
 
@@ -449,9 +460,10 @@ Returns react a blog post from the inventory.
 
 **Parameters**
 
-| Name    | Type   | In      | Required |
-| ------- | ------ | ------- | -------- |
-| `token` | string | headers | Yes      |
+| Name     | Type     | In      | Required |
+| -------- | -------- | ------- | -------- |
+| `postId` | objectId | path    | Yes      |
+| `token`  | string   | headers | Yes      |
 
 **Status codes**
 
