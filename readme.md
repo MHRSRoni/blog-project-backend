@@ -185,7 +185,7 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
 | Name          | Type     | In        | Required |
 | ------------- | -------- | --------- | -------- |
 | `categoryId`  | objectId | form-data | Yes      |
-| `image`       | file     | form-data | No       |
+| `image`       | file     | form-data | Yes      |
 | `title`       | string   | form-data | Yes      |
 | `description` | string   | form-data | Yes      |
 | `token`       | string   | headers   | Yes      |
