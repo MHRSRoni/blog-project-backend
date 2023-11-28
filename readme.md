@@ -17,7 +17,7 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
   - [Send Verification(otp)](#send-verification)
   - [Verify Verification(otp)](#verify-verification)
 - [Blog Post](#blog-post)
-  - [Create Blog Post](#create-a-new-blog-post)
+  - [Create Blog Post](#create-blog-post)
   - [Read Blog Post](#read-blog-post)
   - [Update Blog Post](#update-blog-post)
   - [Delete Blog Post](#delete-blog-post)
@@ -176,7 +176,7 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
 
 ## Blog Post
 
-### Create a new blog post
+### Create blog post
 
 **`POST /post/create`**
 
@@ -185,7 +185,7 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
 | Name          | Type     | In        | Required |
 | ------------- | -------- | --------- | -------- |
 | `categoryId`  | objectId | form-data | Yes      |
-| `image`       | file     | form-data | Yes      |
+| `picture`     | file     | form-data | Yes      |
 | `title`       | string   | form-data | Yes      |
 | `description` | string   | form-data | Yes      |
 | `token`       | string   | headers   | Yes      |
