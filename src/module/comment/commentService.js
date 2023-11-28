@@ -27,6 +27,7 @@ exports.readComment = async ( postId, currentPage = 1, pageSize = 3) => {
                                     path : 'user',
                                     select : 'name picture',
                                 })
+                                .sort({ updatedAt: 'desc' })
                                 .exec()
 
     if(comments?.length < 1){
