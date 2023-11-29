@@ -26,12 +26,15 @@ exports.updateReactService = async (postId, userId, curReact, preReact) => {
 
 exports.updateReactCountService = async (postId, curReact, preReact) => {
 
-    if (curReact == preReact) {
+    if (curReact === preReact) {
         const previousReact = `react.${preReact}`;
         await postModel.findByIdAndUpdate(
             postId,
             { $inc: { [previousReact]: -1 } },
         )
+        await reactModel.findOneAndUpdate(
+            { postId },
+            { react: 'none' })
         return { sucess: true, message: 'react updated' }
     }
     const currentReact = `react.${curReact}`;
