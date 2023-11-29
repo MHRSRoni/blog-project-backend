@@ -50,6 +50,7 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
 | `name`           | string | body | Yes      |
 | `userName`       | string | body | Yes      |
 | `email`          | string | body | Yes      |
+| `picture`        | file   | body | No       |
 | `password`       | string | body | Yes      |
 | `repeatPassword` | string | body | Yes      |
 
@@ -124,10 +125,12 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
 
 **Parameters**
 
-| Name           | Type   | In    | Required | Description                               |
-| -------------- | ------ | ----- | -------- | ----------------------------------------- |
-| `access-token` | string | query | Yes      | Get access-token from email verification. |
-| `email`        | string | query | Yes      |
+| Name             | Type   | In    | Required | Description                               |
+| ---------------- | ------ | ----- | -------- | ----------------------------------------- |
+| `access-token`   | string | query | Yes      | Get access-token from email verification. |
+| `email`          | string | query | Yes      |
+| `password`       | string | body  | Yes      |
+| `repeatPassword` | string | body  | Yes      |
 
 **Status codes**
 | Status code | Description |
