@@ -3,13 +3,16 @@
 const express = require('express');
 const createError = require('http-errors');
 require('dotenv').config();
+require('./utils/loginWithGoogle');
+const passport = require('passport');
+const session = require('express-session')
+
 
 //module 
 const ConnectDB = require('./config/ConnectDB');
 const secure = require('./config/security');
 const router = require('./router');
 const { parseFormData } = require('./utils/parseFormData');
-
 
 
 //--------------- app -----------------//
@@ -22,6 +25,10 @@ app.use(parseFormData)
 
 secure(app);
 
+app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //-------------- route ----------------//
 //Managing Backend routing
@@ -31,7 +38,6 @@ app.use('/api/v1', router)
 app.use('*', (req, res, next) => {
     next(createError(404, 'Route not found'));
 })
-
 
 
 //---------- Error Handler ---------------//
