@@ -2,6 +2,12 @@ const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userProfileSchema = new Schema({
+    userType: {
+        type: String,
+        required: true,
+        default: 'normal',
+        enum: ['google', 'facebook', 'nomal']
+    },
     name: {
         type: String,
         required: true,
@@ -20,7 +26,7 @@ const userProfileSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: () => this.userType == 'normal' ? true : false,
     },
     picture: {
         type: String,
@@ -30,8 +36,8 @@ const userProfileSchema = new Schema({
         type: String,
         trim: true,
     },
-    interest : {
-        type : Array
+    interest: {
+        type: Array
     },
     role: {
         type: String,
@@ -39,7 +45,7 @@ const userProfileSchema = new Schema({
     },
     status: {
         type: String,
-        default: 'unverified'
+        default: () => this.userType == 'normal' ? 'unverified' : 'verified'
     }
 },
     { versionKey: false, timestamps: true }

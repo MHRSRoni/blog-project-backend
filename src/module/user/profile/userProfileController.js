@@ -1,12 +1,9 @@
-const { userRegistrationSchema, userLoginSchema, otpSendReqSchema, passwordSetSchema } = require("./userProfileValidation");
-const { userRegistrator, userLoginService, userOtpService, otpVerifyService, userVerifiyService, updatePasswordService, userProfileUpdateService } = require("./userProfileService");
+const { userLoginSchema, passwordSetSchema } = require("./userProfileValidation");
+const { userRegistrator, userLoginService, userVerifiyService, updatePasswordService, userProfileUpdateService } = require("./userProfileService");
 const userProfileModel = require("./userProfileModel");
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const createError = require('http-errors');
-const sendEmail = require("../../../utils/email");
 const userOtpModel = require("../../auth/verification/userOtpModel");
-const { generateToken } = require("../../../utils/generateToken");
+const createError = require('http-errors');
+const createToken = require("../../../utils/createToken");
 
 
 exports.userRegisterController = async (req, res, next) => {
@@ -19,7 +16,7 @@ exports.userRegisterController = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
+};
 
 
 exports.userEmailVerifyController = async (req, res, next) => {
@@ -30,7 +27,7 @@ exports.userEmailVerifyController = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
+};
 
 
 exports.userLoginController = async (req, res, next) => {
@@ -47,14 +44,17 @@ exports.userLoginController = async (req, res, next) => {
 
 exports.userLogoutController = (req, res, next) => {
     try {
-        res.status(200).json({ message: 'Logout successful' });
+        req.session.destroy()
+            .status(200)
+            .json({
+                success: true,
+                message: 'Logout success! Goodbye!'
+            });
 
     } catch (error) {
         next(error);
     }
 };
-
-
 
 // Password Reset 
 exports.userForgetPasswordController = async (req, res, next) => {
@@ -79,7 +79,7 @@ exports.userForgetPasswordController = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-}
+};
 
 // Verify OTP and reset Password Controller
 
@@ -103,8 +103,7 @@ exports.userUpdatePasswordController = async (req, res, next) => {
         next(error);
 
     }
-}
-
+};
 
 exports.userProfileController = async (req, res, next) => {
     try {
@@ -128,6 +127,69 @@ exports.userProfileUpdateController = async (req, res, next) => {
 
         return res.status(200).json(result);
 
+    } catch (error) {
+        next(error)
+    }
+};
+
+//!Login With Google
+
+exports.protectedController = async (req, res, next) => {
+    try {
+        console.log(req.user)
+        const user = await userProfileModel.findOne(
+            { email: req.user.emails[0].value }
+        );
+        if (user?.password !== undefined) {
+            throw createError(409, 'Please login with password')
+        }
+
+        if (user?.userType === 'google') {
+            const userData = {
+                email: user.email, id: user._id, role: user.role
+            }
+            const token = createToken(userData, '24h');
+
+            res.json({
+                success: true,
+                message: 'login success',
+                data: user,
+                token
+            })
+        } else {
+            const userProfile = await userProfileModel.create({
+                name: req.user.displayName,
+                userName: req.user.name.givenName.toLowerCase() + Math.floor(Math.random() * 1000),
+                email: req.user.emails[0].value,
+                picture: req.user.photos[0].value,
+                userType: 'google'
+            })
+
+            const userData = {
+                email: userProfile.email, id: userProfile._id, role: userProfile.role
+            }
+
+            const token = createToken(userData, '24h');
+
+            res.status(200).json({
+                success: true,
+                message: `Hello ${req.user.displayName}`,
+                data: userProfile,
+                token
+            })
+        }
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.failureController = async (req, res, next) => {
+    try {
+        res.status(200).json({
+            success: false,
+            message: 'Failed to authenticate..',
+        })
     } catch (error) {
         next(error)
     }
