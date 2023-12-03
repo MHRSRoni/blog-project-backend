@@ -32,7 +32,6 @@ exports.userEmailVerifyController = async (req, res, next) => {
 
 exports.userLoginController = async (req, res, next) => {
     try {
-
         const loginData = await userLoginSchema.validateAsync(req.body);
         const result = await userLoginService(loginData);
         res.status(200).json(result);
@@ -45,16 +44,15 @@ exports.userLoginController = async (req, res, next) => {
 exports.userLogoutController = (req, res, next) => {
     try {
         req.session.destroy()
-            .status(200)
+        res.status(200)
             .json({
                 success: true,
                 message: 'Logout success! Goodbye!'
             });
-
     } catch (error) {
-        next(error);
+        next(error)
     }
-};
+}
 
 // Password Reset 
 exports.userForgetPasswordController = async (req, res, next) => {
@@ -136,7 +134,6 @@ exports.userProfileUpdateController = async (req, res, next) => {
 
 exports.protectedController = async (req, res, next) => {
     try {
-        console.log(req.user)
         const user = await userProfileModel.findOne(
             { email: req.user.emails[0].value }
         );
@@ -146,7 +143,7 @@ exports.protectedController = async (req, res, next) => {
 
         if (user?.userType === 'google') {
             const userData = {
-                email: user.email, id: user._id, role: user.role
+                userType: user.userType, email: user.email, id: user._id, role: user.role
             }
             const token = createToken(userData, '24h');
 
@@ -166,9 +163,8 @@ exports.protectedController = async (req, res, next) => {
             })
 
             const userData = {
-                email: userProfile.email, id: userProfile._id, role: userProfile.role
+                userType: userProfile.userType, email: userProfile.email, id: userProfile._id, role: userProfile.role
             }
-
             const token = createToken(userData, '24h');
 
             res.status(200).json({

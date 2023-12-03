@@ -230,6 +230,41 @@ exports.readRelevantPostService = async (page, limit, email) => {
     }
 };
 
+exports.allPostByUser = async (userId, limit, page) => {
+    let post = {};
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const posts = await postModel.find({ userId }).skip(startIndex).limit(limit);
+
+
+
+    // post.totalPost = posts.length;
+    post.pageCount = Math.ceil(posts.length / limit);
+
+    if (endIndex < posts.length) {
+        post.next = {
+            page: page + 1,
+            limit: limit
+        }
+    }
+    if (startIndex > 0) {
+        post.prev = {
+            page: page - 1,
+            limit: limit
+        }
+    }
+
+    post.resultPosts = posts;
+
+    return {
+        success: true,
+        postCount: posts.length,
+        data: post,
+    }
+}
+
 exports.updatePostService = async (slug, userId, postData) => {
 
     if (postData?.title) {
@@ -283,21 +318,55 @@ exports.deletePostService = async (slug, userId) => {
     }
 };
 
-exports.searchPostService = async (page, limit, search) => {
+exports.searchPostService = async (page, limit, search, query) => {
 
-    const searchPost = await postModel.find({
-        $or: [
-            { title: { $regex: search, $options: 'i' } },
-            { description: { $regex: search, $options: 'i' } }
-        ]
-    })
+    let finalQuery = {};
+    let post = {};
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    if (search) {
+        finalQuery = {
+            $or: [
+                { title: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } }
+            ]
+        }
+    }
+    if (query) {
+        finalQuery = { ...finalQuery, ...query }
+    }
+
+    const totalPost = await postModel.countDocuments(finalQuery);
+
+    const searchPost = await postModel.find(finalQuery)
         .skip((page - 1) * limit)
         .limit(limit)
+        .populate('userId', 'name picture _id')
+        .populate('categoryId', 'title _id')
+
+
+    post.totalPost = totalPost;
+    post.pageCount = Math.ceil(totalPost / limit);
+
+    if (endIndex < totalPost) {
+        post.next = {
+            page: page + 1,
+            limit: limit
+        }
+    }
+    if (startIndex > 0) {
+        post.prev = {
+            page: page - 1,
+            limit: limit
+        }
+    }
+    post.resultPosts = searchPost;
 
     return {
         success: true,
         operation: 'read',
-        data: searchPost
+        data: post
     }
 };
 

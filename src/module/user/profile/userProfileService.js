@@ -43,7 +43,7 @@ exports.userLoginService = async (loginData) => {
     if (!isMatch) {
         throw createError(401, 'email and password mismatch');
     }
-    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
+    const token = jwt.sign({ userType: user?.userType, id: user._id, email: user.email }, process.env.JWT_SECRET);
     return {
         success: true,
         message: 'Login Successful',

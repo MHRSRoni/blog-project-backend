@@ -1,5 +1,5 @@
 const { userRegisterController, userLoginController, userLogoutController, userForgetPasswordController, userUpdatePasswordController, userProfileController, userProfileUpdateController, userEmailVerifyController, protectedController, failureController } = require('./userProfileController');
-const { isLoggedIn, isLoggedInGoogle } = require('../../../auth/auth');
+const { isLoggedIn } = require('../../../auth/auth');
 const { imageUpload } = require('../../../utils/imageUpload');
 const { validateCreateUserdata } = require('./userProfileValidation');
 const { isVerifiedFor } = require('../../auth/verification/verificationMiddleware');
@@ -9,7 +9,8 @@ const router = require('express').Router();
 
 router.post('/registration', validateCreateUserdata, imageUpload('user'), userRegisterController);
 router.post('/login', userLoginController);
-router.get('/logOut', userLogoutController);
+router.get('/logout', userLogoutController)
+
 router.get('/profile', isLoggedIn, userProfileController);
 
 router.post('/profile/update', isLoggedIn, imageUpload('user'), userProfileUpdateController);
