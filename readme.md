@@ -213,8 +213,8 @@ Returns a single and multiple blog post from the inventory.
 | `page`     | number   | query | No       | default = 1, any      | pagination                                                |
 | `limit`    | number   | query | No       | default = 6, any      | How much do you want to show posts when the API is called |
 | `sort`     | string   | query | No       | relevant, latest, top | filter                                                    |
-| `category` | objectId | query | No       | categoryId            | find post by categoryId                                   |
-| `user`     | objectId | query | No       | userId                | find post by userId                                       |
+| `category` | objectId | query | No       | category              | find post by categoryId                                   |
+| `user`     | objectId | query | No       | user                  | find post by userId                                       |
 | `slug`     | string   | query | No       | No                    | find sigle post                                           |
 | `search`   | string   | query | No       | No                    |
 
