@@ -17,7 +17,7 @@ exports.createPostController = async (req, res, next) => {
 
 exports.readPostController = async (req, res, next) => {
     try {
-        const { sort, slug, search, category, userId } = req.query;
+        const { sort, slug, search, category, user } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
         const email = req.user?.email || null;
@@ -30,8 +30,8 @@ exports.readPostController = async (req, res, next) => {
             result = await readRelevantPostService(page, limit, email);
         } else if (category) {
             result = await searchPostService(page, limit, search, { categoryId: category });
-        } else if (userId) {
-            result = await searchPostService(page, limit, search, { userId })
+        } else if (user) {
+            result = await searchPostService(page, limit, search, { userId: user })
         } else if (search) {
             result = await searchPostService(page, limit, search)
         } else {
