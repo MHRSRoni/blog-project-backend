@@ -1,8 +1,7 @@
-const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService, imageUploadService, readRelevantPostService, readPostByCategoryService } = require("./postService");
-const { reactValidationSchema, postCreateValidationSchema, postUpdateValidationSchema } = require("./postValidationSchema");
+const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService, readRelevantPostService, readPostByCategoryService, allPostByUser } = require("./postService");
+const { reactValidationSchema } = require("./postValidationSchema");
 const { checkReactService, updateReactService, updateReactCountService, createReactService } = require("./reactService");
-const formidable = require('formidable');
-const cloudinary = require('cloudinary').v2;
+
 
 
 exports.createPostController = async (req, res, next) => {
@@ -24,6 +23,7 @@ exports.readPostController = async (req, res, next) => {
         const { slug } = req.query;
         const { search } = req.query;
         const { category } = req.query;
+        const { userId } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
 
@@ -39,6 +39,8 @@ exports.readPostController = async (req, res, next) => {
             result = await readRelevantPostService(page, limit, email);
         } else if (category) {
             result = await readPostByCategoryService(page, limit, category);
+        } else if (userId) {
+            result = await allPostByUser(userId)
         }
         else {
             result = await readAllPostService(page, limit, sort);

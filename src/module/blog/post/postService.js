@@ -231,6 +231,16 @@ exports.readRelevantPostService = async (page, limit, email) => {
     }
 };
 
+exports.allPostByUser = async (userId) => {
+    const posts = await postModel.find({ userId })
+
+    return {
+        success: true,
+        postCount: posts.length,
+        data: posts,
+    }
+}
+
 exports.updatePostService = async (slug, userId, postData) => {
 
     if (postData?.title) {
