@@ -18,7 +18,7 @@ const secure = (app) => {
     app.use(helmet());
     app.use(hpp());
     app.use(mongoSanitize());
-    app.use(limiter);
+    // app.use(limiter);
 }
 
 module.exports = secure;
