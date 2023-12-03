@@ -163,9 +163,8 @@ exports.protectedController = async (req, res, next) => {
             })
 
             const userData = {
-                email: userProfile.email, id: userProfile._id, role: userProfile.role
+                userType: userProfile.userType, email: userProfile.email, id: userProfile._id, role: userProfile.role
             }
-
             const token = createToken(userData, '24h');
 
             res.status(200).json({

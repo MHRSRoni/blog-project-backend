@@ -1,8 +1,6 @@
-const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService, readRelevantPostService, readPostByCategoryService, allPostByUser } = require("./postService");
+const { createPostService, updatePostService, deletePostService, readSinglePostService, readAllPostService, likeDislikePostService, searchPostService, readRelevantPostService, } = require("./postService");
 const { reactValidationSchema } = require("./postValidationSchema");
 const { checkReactService, updateReactService, updateReactCountService, createReactService } = require("./reactService");
-
-
 
 exports.createPostController = async (req, res, next) => {
     try {
@@ -19,30 +17,24 @@ exports.createPostController = async (req, res, next) => {
 
 exports.readPostController = async (req, res, next) => {
     try {
-        const { sort } = req.query;
-        const { slug } = req.query;
-        const { search } = req.query;
-        const { category } = req.query;
-        const { userId } = req.query;
+        const { sort, slug, search, category, userId } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
-
         const email = req.user?.email || null;
 
         let result;
 
         if (slug) {
             result = await readSinglePostService(slug);
-        } else if (search) {
-            result = await searchPostService(page, limit, search);
         } else if (sort === 'relevant') {
             result = await readRelevantPostService(page, limit, email);
         } else if (category) {
-            result = await readPostByCategoryService(page, limit, category);
+            result = await searchPostService(page, limit, search, { categoryId: category });
         } else if (userId) {
-            result = await allPostByUser(userId)
-        }
-        else {
+            result = await searchPostService(page, limit, search, { userId })
+        } else if (search) {
+            result = await searchPostService(page, limit, search)
+        } else {
             result = await readAllPostService(page, limit, sort);
         }
 
