@@ -21,6 +21,7 @@ exports.readPostController = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
         const email = req.user?.email || null;
+        const userId = req.user?.id;
 
         let result;
 
@@ -35,7 +36,7 @@ exports.readPostController = async (req, res, next) => {
         } else if (search) {
             result = await searchPostService(page, limit, search)
         } else {
-            result = await readAllPostService(page, limit, sort);
+            result = await readAllPostService(userId, page, limit, sort);
         }
 
         return res.status(200).json(result)
@@ -95,17 +96,17 @@ exports.updateReactController = async (req, res, next) => {
         if (existingReact) {
             const result = await updateReactService(postId, userId, validReact);
 
-            await updateReactCountService(postId, validReact, existingReact);
+            await updateReactCountService(postId, userId, validReact, existingReact);
 
             return res.status(200).json(result)
 
+        } else {
+            const result = await createReactService(postId, userId, validReact);
+
+            await updateReactCountService(postId, userId, validReact, existingReact);
+
+            return res.status(200).json(result);
         }
-
-        const result = await createReactService(postId, userId, validReact);
-
-        await updateReactCountService(postId, validReact, existingReact);
-
-        return res.status(200).json(result);
 
     } catch (error) {
         next(error)
