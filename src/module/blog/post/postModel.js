@@ -42,10 +42,17 @@ const postSchema = new Schema({
         love: {
             type: Number,
             default: 0
-        }
+        },
+        reactUserId: {
+            type: Array
+        },
     },
     readTime: {
         type: Number
+    },
+    liked: {
+        type: Boolean,
+        default: false
     }
 
 }, { timestamps: true, versionKey: false })

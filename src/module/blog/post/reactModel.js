@@ -3,12 +3,12 @@ const { Schema, model } = require('mongoose');
 const reactSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
-        ref: 'user',
+        ref: 'users',
         required: true
     },
     postId: {
         type: Schema.Types.ObjectId,
-        ref: 'blog',
+        ref: 'blogs',
         required: true
     },
     react: {

@@ -6,7 +6,7 @@ exports.checkReactService = async (postId, userId) => {
     const result = await reactModel.findOne({ postId, userId });
 
     return result?.react;
-}
+};
 
 exports.updateReactService = async (postId, userId, curReact, preReact) => {
 
@@ -24,7 +24,7 @@ exports.updateReactService = async (postId, userId, curReact, preReact) => {
     return { success: true, data: updated }
 };
 
-exports.updateReactCountService = async (postId, curReact, preReact) => {
+exports.updateReactCountService = async (postId, userId, curReact, preReact) => {
 
     if (curReact == preReact) {
         const previousReact = `react.${preReact}`;
@@ -35,20 +35,29 @@ exports.updateReactCountService = async (postId, curReact, preReact) => {
         await reactModel.findOneAndUpdate(
             { postId },
             { react: 'none' })
+        await postModel.findByIdAndUpdate(postId,
+            { $pull: { 'react.reactUserId': userId } }
+        )
         return { success: true, message: 'react updated' }
     }
+
     const currentReact = `react.${curReact}`;
     const previousReact = `react.${preReact}`;
 
-    const value = await postModel.findByIdAndUpdate(
+    await postModel.findByIdAndUpdate(
         postId,
         { $inc: { [currentReact]: 1, [previousReact]: -1 } },
     )
+    await postModel.findByIdAndUpdate(postId,
+        { $push: { 'react.reactUserId': userId } }
+    )
+
     return { success: true, message: 'react updated' }
+
 };
 
 exports.createReactService = async (postId, userId, react) => {
     const created = await reactModel.create({ postId, userId, react })
 
     return { success: true, data: created }
-}
+};

@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const { createSlug } = require("../../../utils/createSlug");
 const userProfileModel = require("../../user/profile/userProfileModel");
 const categoryModel = require("../category/categoryModel");
+const reactModel = require("./reactModel");
 
 exports.createPostService = async (userId, postData) => {
     const checkTitle = await postModel.findOne({ title: postData.title })
@@ -53,36 +54,36 @@ exports.readSinglePostService = async (slug) => {
 
     return { success: true, operation: 'read', data: post }
 
-
 };
 
-exports.readAllPostService = async (page, limit, sort) => {
+exports.readAllPostService = async (userId, page, limit, sort) => {
+
     let post = {};
+    let allPosts;
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const postCount = await postModel.find().count();
-
-    let allPosts = await postModel.find()
-        .populate('userId', 'name picture -_id')
-        // .populate('categoryId', 'name cover - _id')
-        .skip(startIndex)
-        .limit(limit)
+    const postCount = await postModel.countDocuments();
 
     if (sort == 'latest') {
         allPosts = await postModel.find().sort({ createdAt: 'desc' })
             .populate('userId', 'name picture -_id')
-            //.populate('categoryId', 'name cover - _id')
+            // .populate('categoryId', 'name cover - _id')
             .skip(startIndex)
             .limit(limit)
-    }
 
-    if (sort == 'top') {
-        console.log('top')
+
+    } else if (sort == 'top') {
         allPosts = await postModel.find().sort({ 'react.like': 'desc' })
             .populate('userId', 'name picture -_id')
-            //.populate('categoryId', 'name cover - _id')
+            // .populate('categoryId', 'name cover - _id')
+            .skip(startIndex)
+            .limit(limit)
+    } else {
+        allPosts = await postModel.find()
+            .populate('userId', 'name picture -_id')
+            // .populate('categoryId', 'name cover - _id')
             .skip(startIndex)
             .limit(limit)
     }
@@ -102,6 +103,7 @@ exports.readAllPostService = async (page, limit, sort) => {
             limit: limit
         }
     }
+
     post.resultPosts = allPosts;
 
     return {
@@ -319,7 +321,7 @@ exports.deletePostService = async (slug, userId) => {
     }
 };
 
-exports.searchPostService = async (page, limit, search, query) => {
+exports.searchPostService = async (page, limit, search, query, postId) => {
 
     let finalQuery = {};
     let post = {};
@@ -339,6 +341,7 @@ exports.searchPostService = async (page, limit, search, query) => {
     }
 
     const totalPost = await postModel.countDocuments(finalQuery);
+    const react = await reactModel.find({ postId }, { userId: 1 });
 
     const searchPost = await postModel.find(finalQuery)
         .skip((page - 1) * limit)

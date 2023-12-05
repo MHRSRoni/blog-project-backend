@@ -10,6 +10,7 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
   - [User Registration](#user-registration)
   - [Account Verify](#account-verify)
   - [User Login](#user-login)
+  - [Login With Google](#login-with-google)
   - [User Profile](#user-profile)
   - [Update User Profile](#update-user-profile)
   - [Forget Password](#forget-password)
@@ -97,6 +98,16 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
 | 401 Unauthorized | Indicates password does not match. |
 | 400 Bad Request | Indicates that the parameters provided are invalid. |
 
+### Login With Google
+
+**`GET /auth/google`**
+
+**Status codes**
+| Status code | Description |
+|-----------------|-----------------------------------------------------|
+| 200 Ok | Indicates a successful response. |
+| 400 Bad Request | Indicates that the parameters provided are invalid. |
+
 ### User Profile
 
 **`GET /user/profile`**
@@ -111,6 +122,14 @@ The API is available at `https://health-plus-q4tt.onrender.com/api/v1`
 ### Update User Profile
 
 **`POST /user/profile/update`**
+
+**Parameters**
+
+| Name      | Type   | In   | Required |
+| --------- | ------ | ---- | -------- |
+| `name`    | string | body | Yes      |
+| `picture` | file   | body | No       |
+| `phone`   | file   | body | No       |
 
 **Status codes**
 | Status code | Description |

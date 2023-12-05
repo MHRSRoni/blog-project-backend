@@ -5,8 +5,8 @@ const userProfileSchema = new Schema({
     userType: {
         type: String,
         required: true,
-        default: 'normal',
-        enum: ['google', 'facebook', 'nomal']
+        enum: ['google', 'facebook', 'normal'],
+        default: 'normal'
     },
     name: {
         type: String,
