@@ -20,7 +20,7 @@ exports.readComment = async ( postId, currentPage = 1, pageSize = 3) => {
 
     const totalComment = await commentModel.countDocuments({postId})
     const totalPage = Math.ceil(totalComment / pageSize)
-    const comments = await commentModel.find({postId}, {comment : 1, _id : 1})
+    const comments = await commentModel.find({postId}, {comment : 1, _id : 1, updatedAt : 1})
                                 .skip(pageSize * (currentPage - 1))
                                 .limit(pageSize)
                                 .populate({
