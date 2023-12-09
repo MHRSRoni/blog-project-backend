@@ -1,7 +1,8 @@
+const postModel = require("../post/postModel");
 const categoryModel = require("./categoryModel");
 
 exports.readCategory = async () => {
-    const category = await categoryModel.find({});
+    const category = await categoryModel.find({})
 
     if (!category) {
         throw createError(404, "category not found");

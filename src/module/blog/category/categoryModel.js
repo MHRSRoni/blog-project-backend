@@ -13,6 +13,10 @@ const categorySchema = new Schema({
     cover: {
         type: String,
         trim: true
+    },
+    postCount : {
+        type : Number,
+        default : 0
     }
 }, { timestamps: true, versionKey: false })
 

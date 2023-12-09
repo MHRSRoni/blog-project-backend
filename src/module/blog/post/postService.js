@@ -37,12 +37,16 @@ exports.createPostService = async (userId, postData) => {
         ...postData, slug: createSlug(postData.title), userId: userId
     });
 
-    return {
-        success: true,
-        operation: 'create',
-        message: 'New Post has been Created!',
-        data: post
+    if(post) {
+        await categoryModel.findByIdAndUpdate(postData?.categoryId, {$inc : {postCount : 1}})
+        return {
+            success: true,
+            operation: 'create',
+            message: 'New Post has been Created!',
+            data: post
+        }
     }
+
 };
 
 exports.readSinglePostService = async (slug) => {
@@ -312,6 +316,8 @@ exports.deletePostService = async (slug, userId) => {
     if (!deletePost) {
         throw createError(404, 'Post not found!');
     }
+
+    await categoryModel.findByIdAndUpdate(postData?.categoryId, {$inc : {postCount : -1}})
 
     return {
         success: true,
