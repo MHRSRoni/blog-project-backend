@@ -14,7 +14,7 @@ router.get('/logout', userLogoutController)
 router.get('/profile', isLoggedIn, userProfileController);
 
 router.post('/profile/update', isLoggedIn, imageUpload('user'), userProfileUpdateController);
-router.post('/update-password', userUpdatePasswordController);
+router.post('/profile/update-password', isLoggedIn, userUpdatePasswordController);
 
 router.get('/email-verify', isVerifiedFor('email verification'), userEmailVerifyController)
 router.post('/forget-password', isVerifiedFor('forget password'), userForgetPasswordController);
