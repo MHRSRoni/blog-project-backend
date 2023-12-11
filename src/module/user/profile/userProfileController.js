@@ -128,9 +128,13 @@ exports.userUpdatePasswordController = async (req, res, next) => {
 
     try {
         const {userId} = req?.user.id
-        const { oldPassword, newPassword, confrimPassword } = req.body;
-        // verify Otp user means otp
-        if (!newPassword || !confrimPassword || newPassword !== confrimPassword) {
+        const { oldPassword, newPassword, confirmPassword } = req.body;
+
+        if (!oldPassword || !newPassword || !confirmPassword ) {
+            console.log(oldPassword, newPassword, confirmPassword)
+            return res.status(400).json({ message: "fill all the field, try again" });
+        }
+        if(newPassword !== confirmPassword) {
             return res.status(400).json({ message: "password mismatch, try again" });
         }
         const {password} = await userProfileModel.findById(userId);
