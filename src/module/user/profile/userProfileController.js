@@ -193,6 +193,26 @@ exports.userProfileUpdateController = async (req, res, next) => {
 };
 
 
+/**
+ * Executes the userEmailVerifyController function.
+ * @category User Profile
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise} A promise that resolves to the JSON response.
+ */
+exports.userEmailVerifyController = async (req, res, next) => {
+    try {
+        const { email } = req.query;
+        const result = await userVerifiyService(email);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error)
+    }
+};
+
+
 exports.protectedController = async (req, res, next) => {
     try {
         const user = await userProfileModel.findOne(
