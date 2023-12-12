@@ -4,7 +4,7 @@
       "includePattern": ".js$",
       "exclude": ["node_modules"]
     },
-    "plugins": ["plugins/markdown"],
+    "plugins": ["plugins/markdown","node_modules/better-docs/category"],
     "templates": {
       "cleverLinks": false,
       "monospaceLinks": false,
@@ -13,6 +13,7 @@
       }
     },
     "opts": {
+      "template": "node_modules/better-docs",
       "destination": "docs/",
       "recurse": true
     },
