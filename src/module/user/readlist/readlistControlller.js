@@ -19,6 +19,10 @@ const {Request, Response, NextFunction} = require("express")
  * @property {boolean} success - The success status of the request.
  * @property {string} message - The message associated with the request.
  * @property {Object} [data] - The data associated with the request.
+  * @property {string} [data.totalPage] - The total number of pages.
+ * @property {string} [data.currentPage] - The current page number.
+ * @property {string} [data.perPage] - The number of posts per page.
+ * @property {Array} [data.posts] - The  psosts in the readlist data.
  * @property {Object} [error] - The error associated with the request.
  */
 //===============================================//
