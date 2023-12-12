@@ -20,7 +20,6 @@ const app = express();
 const PORT = process.env.RUNNING_PORT || 6000;
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false }));
-app.use((req, res, next) => { console.log('checking'); next() })
 app.use(parseFormData)
 
 secure(app);
