@@ -127,28 +127,26 @@ exports.userForgetPasswordController = async (req, res, next) => {
 exports.userUpdatePasswordController = async (req, res, next) => {
 
     try {
-        const {userId} = req?.user.id
+        const userId = req?.user?.id
         const { oldPassword, newPassword, confirmPassword } = req.body;
 
         if (!oldPassword || !newPassword || !confirmPassword ) {
-            console.log(oldPassword, newPassword, confirmPassword)
             return res.status(400).json({ message: "fill all the field, try again" });
         }
         if(newPassword !== confirmPassword) {
             return res.status(400).json({ message: "password mismatch, try again" });
         }
-        const {password} = await userProfileModel.findById(userId);
-
+        const user = await userProfileModel.findOne({_id : userId});
+        const password = user?.password
         const match = await bcrypt.compare(oldPassword, password);
 
-        if(!match) res.status(401).json({ message: "password mismatch, try again" });
+        if(!match) return res.status(401).json({ message: "password mismatch, try again" });
 
-        await userProfileModel.findByIdAndUpdate(userId, { password: newPassword });
-        res.status(200).json({ success : true, message: "Password Update Successful" })
+        await userProfileModel.findOneAndUpdate({_id : userId}, { password: newPassword });
+        return res.status(200).json({ success : true, message: "Password Update Successful" })
 
         
     } catch (error) {
-        console.error(error);
         next(error);
 
     }

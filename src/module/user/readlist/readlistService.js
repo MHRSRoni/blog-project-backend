@@ -2,6 +2,29 @@ const readlistModel = require("./readlistModel");
 const giveError = require('../../../utils/throwError');
 const createError = require('http-errors');
 
+
+
+/**
+ * @category Readlist
+ * @module Service
+ */
+
+/**
+ * @typedef {Object} Result Sample of the Readlist Result
+ * @property {boolean} success - The success status of the operation.
+ * @property {string} message - The message associated with the operation.
+ * @property {object} [data] - The readlist data.
+ */
+
+
+/**
+ * Retrieves a readlist from the database for a given user ID.
+ * @function readReadlist 
+ * @async
+ * @param {string} userId - The ID of the user.
+ * @return {Result} An object containing the success status, message and the retrieved readlist data.
+ * @throws {Error} If no readlist is found in the database for the given user ID.
+ */
 const readReadlist = async (userId) => {
 
     const readlist = await readlistModel.findOne({ userId }).populate('postId');

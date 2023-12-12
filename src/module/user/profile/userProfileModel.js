@@ -1,5 +1,6 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Model } = require('mongoose');
 const bcrypt = require('bcrypt');
+const { updateCategory } = require('../../blog/category/categoryService');
 
 /**
  * @module User/Profile/Model
@@ -26,7 +27,7 @@ const bcrypt = require('bcrypt');
 
 /**
  * Mongoose schema for user profiles.
- * @type {module('mongoose').Schema<UserProfile>}
+ * @type {Schema<UserProfile>}
  */
 const userProfileSchema = new Schema({
     
@@ -84,17 +85,18 @@ const userProfileSchema = new Schema({
  * Mongoose middleware to hash the user's password before saving.
  * @function
  */
-userProfileSchema.pre('save', async function (next) {
-    if(!this.userType)  this.userType = 'normal'
-    if (this.isModified('password')) this.password = await bcrypt.hash(this.password, 10);
+userProfileSchema.pre( 'findOneAndUpdate', async function (next) {
+    const update = this._update
+    if (update && update.password) update.password = await bcrypt.hash(update.password, 10);
     
     next();
 })
 
 
+
 /**
  * Mongoose model for user profile.
- * @type {module('mongoose').Model<UserProfile>}
+ * @type {Model<UserProfile>}
  */
 const userProfileModel = model('users', userProfileSchema);
 
