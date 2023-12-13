@@ -41,10 +41,12 @@ const {Request, Response, NextFunction} = require("express")
  * @async
  * 
  * @param {Request} req - The request object of express.
- * @param {string} [req.query.search] - The keyword to search for in the readlist.
- * @param {string} [req.query.currentPage=1] - The current page number.
- * @param {string} [req.query.perPage=10] - The number of posts per page.
- * @param {string} req.user.id - The userId of the user.
+ * @param {Object}  req.query - The query object of express.
+ * @param {String} [req.query.search] - The keyword to search for in the readlist.
+ * @param {String} [req.query.currentPage=1] - The current page number.
+ * @param {String} [req.query.perPage=10] - The number of posts per page.
+ * @param {Object} req.user - The user object decrypted from token.
+ * @param {String} req.user.id - The userId of the user.
  * @param {Response} res - The response object of express.
  * @param {NextFunction} next - The next middleware function of the express.
  * @return {GeneratedResponse} The JSON response containing the result of the request.
@@ -80,8 +82,10 @@ const readReadlistController = async (req, res, next) => {
  *   - If it is in readlist then call the  [removeFromReadlist]{@link module:Service~removeFromReadlist} service and send the Result as JSON response.
  *
  * @param {Request} req - The request object of express.
- * @param {string} req.user.id - The userId of the user.
- * @param {string} req.params.postId - The postId of the post.
+ * @param {Object} req.params - The params object of express.
+ * @param {String} req.params.postId - The postId of the post.
+ * @param {Object} req.user - The user object decrypted from token.
+ * @param {String} req.user.id - The userId of the user.
  * @param {Response} res - The response object of express.
  * @param {NextFunction} next - The next middleware function of the express.
  * @return {GeneratedResponse} The JSON response containing the result of the request.
@@ -124,7 +128,8 @@ const updateReadlistController = async (req, res, next) => {
  * - then send the result as JSON response
  *
  * @param {Request} req - The request object of express.
- * @param {string} req.user.id - The userId of the user.
+ * @param {Object} req.user - The user object decrypted from token.
+ * @param {String} req.user.id - The userId of the user.
  * @param {Response} res - The response object of express.
  * @param {NextFunction} next - The next middleware function of the express.
  * @return {GeneratedResponse} The JSON response containing the result of the request.
