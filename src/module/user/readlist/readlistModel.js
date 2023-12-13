@@ -1,7 +1,7 @@
 /**
  * @category Readlist
  * @author MHRoni
- * @module Model
+ * @module ReadlistModel
  */
 
 
@@ -25,7 +25,9 @@ const { Schema, model, Model } = require('mongoose')
 
 
 //============Schema=================//
-
+/**
+ * @type {Schema<Readlist>} Readlist schema
+ */
 const readlistSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,

@@ -1,6 +1,6 @@
 /**
  * @category Readlist
- * @module Validation
+ * @module ReadlistValidation
  * @author MHRoni
  */
 
