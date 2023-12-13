@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> comment/commentService.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-User_Profile_Controller.html">User/Profile/Controller</a></li><li><a href="module-User_Profile_Model.html">User/Profile/Model</a></li><li><a href="module-User_Profile_Service.html">User/Profile/Service</a></li></ul></div><div class="category"><h2>Comment</h2><h3>Modules</h3><ul><li><a href="module-CommentController.html">CommentController</a></li><li><a href="module-CommentModel.html">CommentModel</a></li><li><a href="module-CommentService.html">CommentService</a></li><li><a href="module-CommentValidation.html">CommentValidation</a></li></ul></div><div class="category"><h2>Readlist</h2><h3>Modules</h3><ul><li><a href="module-ReadlistController.html">ReadlistController</a></li><li><a href="module-ReadlistModel.html">ReadlistModel</a></li><li><a href="module-ReadlistService.html">ReadlistService</a></li><li><a href="module-ReadlistValidation.html">ReadlistValidation</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>comment/commentService.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @category Comment
+ * @module CommentService
+ * @author MHRoni
+ */
+
+//=============Imports===============//
+const createError = require("http-errors")
+const giveError = require('../../utils/throwError')
+const commentModel = require('./commentModel')
+
+//==================================//
+
+
+//=====================Types=======================//
+/**@typedef {import("./commentModel".Comment)} Comment - The sample of the comment document */
+/**@typedef {import("mongoose".ObjectId)} ObjectID - The ObjectId of the mongoose */
+
+/**
+ * @typedef {Object} ReadResult Sample of the Read Opertation Result on Comment
+ * @property {Boolean} success - The success status of the operation.
+ * @property {String} message - The message associated with the operation.
+ * @property {Object} [data] - The resulted data.
+ * @property {string} [data.totalPage] - The total number of pages.
+ * @property {string} [data.currentPage] - The current page number.
+ * @property {string} [data.perPage] - The number of comments per page.
+ * @property {string} [data.totalComments] - The number of total comments found in the operation.
+ * @property {Array&lt;Comment>} [data.comments] - [The comment data]{@link module:CommentModel~Comment} got from the operation.
+ * @property {Object} [error] - The error object.
+ */
+/**
+ * @typedef {Object} Result Sample of the Comment Service Result
+ * @property {Boolean} success - The success status of the operation.
+ * @property {String} message - The message associated with the operation.
+ * @property {Comment} [data] - [The comment data]{@link module:CommentModel~Comment}.
+ * @property {Object} [error] - The error object.
+ */
+
+/** @typedef {import('http-errors').HttpError} HttpError */
+//=================================================//
+
+
+
+//===================Services=======================//
+/**
+ * Creates a new comment in a post.
+ * @function createComment
+ * @description Create a new comment with the provided comment object.
+ * @async
+ * @param {Object} validComment - The valid comment object to be saved.
+ * @param {String|ObjectID} validComment.userId - The valid userId of the user.
+ * @param {String|ObjectID} validComment.postId - The valid postId of the post.
+ * @param {String} validComment.comment - The comment you want to make.
+ * @return {Result} - An object with the success status, message and the saved comment data.
+ * @throws {HttpError.NotImplemented} - If the comment was not saved.
+ */
+const createComment = async ({userId : user, postId : post, comment}) => {
+    const savedComment = await new commentModel(validComment).save()
+
+    if(!savedComment){
+            createError(501, 'something went wrong')
+    }
+
+    return {success : true, message : "comment created successfully", data : savedComment}
+
+}
+
+
+
+
+/**
+ * read comments based on postId.
+ * @function readComment
+ * @description Create a new comment with the provided comment object.
+ * @async
+ * @param {String} postId - The valid postId of the post.
+ * @param {String} currentPage - The current page number.
+ * @param {String} perPage - The number of comments per page.
+ * @return {ReadResult} - An object with the success status, message and comment data.
+ * @throws {HttpError.NotFound} - If no comment was found.
+ */
+const readComment = async ( postId , currentPage , perPage ) => {
+
+    const totalComments = await commentModel.countDocuments({post : postId})
+    const totalPage = Math.ceil(totalComments / perPage)
+    const comments = await commentModel.find({post : postId})
+                                .skip(perPage * (currentPage - 1))
+                                .limit(perPage)
+                                .populate({
+                                    path : 'user',
+                                    select : 'name picture',
+                                })
+                                .sort({ updatedAt: 'desc' })
+
+    if(comments?.length &lt; 1){
+            createError(404, 'no comment, yet')
+    }
+
+    return {success : true, message : `${totalComments} comments found`, data : {currentPage, perPage, totalPage, totalComments, comments}}
+
+}
+
+
+
+/**
+ * Update a comment of a post.
+ * @function updateComment
+ * @description find and update a comment if the comment is owned by the user with provided comment object.
+ * @async
+ * @param {Object} validComment - The valid comment object to be saved.
+ * @param {String} validComment.userId - The valid userId of the user.
+ * @param {Object} validComment.commentId - The valid commentId of the comment.
+ * @param {Object} validComment.comment - The updated comment you want to make.
+ * @return {Result} - An object with the success status, message and the updated comment data.
+ * @throws {HttpError.NotImplemented} - If the comment was not updated.
+ */
+const updateComment = async ({ userId : user, commentId : _id, comment}) => {
+
+    const updatedComment = await commentModel.findOneAndUpdate({user, _id}, {comment : comment}, {new : true})
+
+    if(!updatedComment){
+            createError(501, "comment was not updated")
+    }
+
+    return {success : true, message : "comment updated successfully", data : updatedComment}
+
+}
+
+
+
+
+/**
+ * Delete a comment from the post.
+ * @function deleteComment
+ * @description find and delete a comment if the comment is owned by the user.
+ * @async
+ * @param {String|ObjectID} userId - The valid userId of the user.
+ * @param {String|ObjectID} commentId - The valid commentId of the comment.
+ * @return {Result} - An object with the success status, message and the delted comment data.
+ * @throws {HttpError.NotImplemented} - If the comment was not deleted.
+ */
+const deleteComment = async (userId, commentId) => {
+
+    const deletedComment = await commentModel.findOneAndDelete({user : userId, _id : commentId})
+
+    if(!deletedComment){
+            createError(501, "comment not deleted")
+    }
+
+    return {success : true, message : "comment deleted successfully", data : deletedComment}
+
+}
+
+//==========================================//
+
+
+
+//=================Exports=================//
+module.exports = {
+    createComment,
+    readComment,
+    updateComment,
+    deleteComment
+}
+//==========================================//</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

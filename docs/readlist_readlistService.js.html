@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> readlist/readlistService.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-User_Profile_Controller.html">User/Profile/Controller</a></li><li><a href="module-User_Profile_Model.html">User/Profile/Model</a></li><li><a href="module-User_Profile_Service.html">User/Profile/Service</a></li></ul></div><div class="category"><h2>Readlist</h2><h3>Modules</h3><ul><li><a href="module-Controller.html">Controller</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Service.html">Service</a></li><li><a href="module-Validation.html">Validation</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>readlist/readlistService.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @category Readlist
+ * @module Service
+ * @author MHRoni
+ */
+
+//=====================Imports=======================//
+const readlistModel = require("./readlistModel");
+const createError = require('http-errors');
+const {ObjectId} = require('mongoose').Types;
+
+//=================================================//
+
+
+//=====================Types=======================//
+/**
+ * @typedef {Object} Result Sample of the Readlist Result
+ * @property {Boolean} success - The success status of the operation.
+ * @property {String} message - The message associated with the operation.
+ * @property {Object} [data] - The readlist data.
+ * @property {string} [data.totalPage] - The total number of pages.
+ * @property {string} [data.currentPage] - The current page number.
+ * @property {string} [data.perPage] - The number of posts per page.
+ * @property {Array} [data.posts] - The  psosts in the readlist data.
+ * @property {Object} [error] - The error object.
+ */
+
+/** @typedef {import('http-errors').HttpError} HttpError */
+//=================================================//
+
+
+
+//=====================Services=======================//
+
+/**
+ * Retrieves a readlist from the database for a given user ID.
+ * @function readReadlist 
+ * @description
+ *  - first search for the user in the readlist collection
+ *  - then skip the posts based on the current page and the number of posts per page
+ *  - then limit the posts based on the number of posts per page
+ *  - then populate the posts with the post data
+ *  - then filter the posts based on the search keyword
+ *  - finally return the readlist data
+ * @async
+ * @param {String} userId - The ID of the user.
+ * @param {String} search - The keyword to search for in the readlist.
+ * @param {String} [currentPage=1] - The current page number.
+ * @param {String} [perPage=10] - The number of posts per page.
+ * @return {Result} - An object containing the success status, message and the retrieved readlist data.
+ * @throws {HttpError.NotFound} - If no readlist found in the database for the given user ID.
+ */
+const readReadlist = async (userId, search, currentPage, perPage) => {
+    
+    //query building to read the readlist
+    const userIdQuery = { $match : { user : new ObjectId(userId) }}
+    const skipPost = { $skip : parseInt(currentPage - 1) * perPage }
+    const limitPost = { $limit : parseInt(perPage) }
+    const populatePosts = { $lookup : {
+        from : 'posts',
+        localField : 'post',
+        foreignField : '_id',
+        as : 'posts'
+    }}
+    const searchQuery = search ?{ $match : {$or : [
+        { "posts.title" : { $regex : search, $options : 'i' } },
+        { "posts.description" : { $regex : search, $options : 'i' } }
+    ]} } : {$match : {}}
+
+    const pipeline = [userIdQuery, skipPost, limitPost, populatePosts, searchQuery]
+
+    //read the readlist
+    const readlist = await readlistModel.aggregate(pipeline)
+    
+    if (readlist?.length &lt; 1) {
+        throw createError(404, 'no data found')
+    }
+
+    //document count
+    const totalPost = readlist?.length ?? 0
+    const totalPage = Math.ceil(totalPost / perPage)
+
+    return { success: true, message : 'readlist found', data: {totalPost, totalPage, currentPage, perPage, posts : readlist} }
+}
+
+
+
+
+/**
+ * Checks if a post exists in the readlist, for a user ID.
+ * @function existInReadlist 
+ * @async
+ * @param {String} userId - The ID of the user.
+ * @param {String} postId - The ID of the post.
+ * @return {Boolean} 
+ * - true : If the post exists in the readlist.
+ * - false : If the post does not exist in the readlist.
+ * @throws {HttpError.NotFound} - If no readlist found in the database for the given user ID.
+ */
+const existInReadlist = async (userId, postId) => {
+
+    const readlist = await readlistModel.findOne({ user : userId, post : postId });
+
+    if (!readlist) { return false };
+    return true;
+}
+
+
+
+
+/**
+ * Add a new post in the readlist, for a user ID.
+ * @function addInReadlist 
+ * @async
+ * @param {String} userId - The ID of the user.
+ * @param {String} postId - The ID of the post.
+ * @return {Result} - An object containing the success status, message and the retrieved readlist data.
+ * @throws {HttpError.InternalServerError} - If post was not added in the readlist for the given user ID.
+ */
+const addInReadlist = async (userId, postId) => {
+
+    const readlist = await readlistModel.create({ user : userId, post : postId });
+
+    if (!readlist) {
+           throw createError(501, "could not add in the readlist")
+    }
+
+    return { success: true, message : 'added in the readlist', data: readlist }
+}
+
+
+
+
+/**
+ * Remove a post from the readlist, for a user ID.
+ * @function removeFromReadlist 
+ * @async
+ * @param {String} userId - The ID of the user.
+ * @param {String} postId - The ID of the post.
+ * @return {Result} - An object containing the success status, message and the retrieved readlist data.
+ * @throws {HttpError.InternalServerError} - If post was not removed from the readlist for the given user ID.
+ */
+const removeFromReadlist = async (userId, postId) => {
+
+    const readlist = await readlistModel.findOneAndDelete({ user : userId, post : postId });
+
+    if (!readlist) {
+            createError(501, "could not remove from the readlist")
+    }
+
+    return { success: true, message : 'removed from the readlist', data: readlist }
+}
+
+
+
+
+/**
+ * Clear the readlist, for a user ID.
+ * @function clearReadlist 
+ * @async
+ * @param {String} userId - The ID of the user.
+ * @return {Result} - An object containing the success status, message and the retrieved readlist data.
+ * @throws {HttpError.InternalServerError} - If readlist was not removed from the database for the given user ID.
+ */
+const clearReadlist = async (userId) => {
+
+    const readlist = await readlistModel.deleteMany({ user : userId });
+
+    if (!readlist) {
+            createError(501, "could not clear the readlist")
+    }
+
+    return { success: true, message : "cleared the readlist", data: readlist }
+}
+
+//=================================================//
+
+
+//======================Exports=======================//
+module.exports = {
+    readReadlist,
+    existInReadlist,
+    addInReadlist,
+    removeFromReadlist,
+    clearReadlist
+}
+//=================================================//</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

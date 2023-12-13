@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> readlist/readlistControlller.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-User_Profile_Controller.html">User/Profile/Controller</a></li><li><a href="module-User_Profile_Model.html">User/Profile/Model</a></li><li><a href="module-User_Profile_Service.html">User/Profile/Service</a></li></ul></div><div class="category"><h2>Readlist</h2><h3>Modules</h3><ul><li><a href="module-Controller.html">Controller</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Service.html">Service</a></li><li><a href="module-Validation.html">Validation</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>readlist/readlistControlller.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @category Readlist
+ * @module Controller
+ * @author MHRoni
+*/
+
+//===================Imports===================//
+const service = require("./readlistService")
+const { validateObjectID } = require("./readlistValidation")
+//===============================================//
+
+
+
+//===================Types====================//
+const {Request, Response, NextFunction} = require("express")
+
+/**
+ * @typedef GeneratedResponse The json response generated from the Request.
+ * @property {boolean} success - The success status of the request.
+ * @property {string} message - The message associated with the request.
+ * @property {Object} [data] - The data associated with the request.
+  * @property {string} [data.totalPage] - The total number of pages.
+ * @property {string} [data.currentPage] - The current page number.
+ * @property {string} [data.perPage] - The number of posts per page.
+ * @property {Array} [data.posts] - The  psosts in the readlist data.
+ * @property {Object} [error] - The error associated with the request.
+ */
+//===============================================//
+
+
+
+
+//===================Controller===================//
+
+/**
+ * @function readReadlistController
+ * @description 
+ * - This function [validate the userId]{@link module:Validation~validateObjectID} 
+ * - call the [readReadlist]{@link module:Service~readReadlist} service and.
+ * - Then the result is send in response as json.
+ * @async
+ * 
+ * @param {Request} req - The request object of express.
+ * @param {Object}  req.query - The query object of express.
+ * @param {String} [req.query.search] - The keyword to search for in the readlist.
+ * @param {String} [req.query.currentPage=1] - The current page number.
+ * @param {String} [req.query.perPage=10] - The number of posts per page.
+ * @param {Object} req.user - The user object decrypted from token.
+ * @param {String} req.user.id - The userId of the user.
+ * @param {Response} res - The response object of express.
+ * @param {NextFunction} next - The next middleware function of the express.
+ * @return {GeneratedResponse} The JSON response containing the result of the request.
+ */
+const readReadlistController = async (req, res, next) => {
+    try {
+
+        const userId = req?.user?.id
+        const search = req.query.search
+        const currentPage = req.query.currentPage || 1
+        const perPage = req.query.perPage || 10
+
+        const validUserId = await validateObjectID(userId)
+
+        const result = await service.readReadlist(validUserId, search, currentPage, perPage)
+        return res.status(200).json(result)
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+
+/**
+ * @async
+ * @function updateReadlistController 
+ * @description
+ * - This function [validates the userId and postId]{@link module:Validation~validateObjectID}
+ * - then with the validated userId and postId check if post is [already in readlist]{@link module:Service~existInReadlist}.
+ *   - If it is not in readlist then call the  [addInReadlist]{@link module:Service~addInReadlist} service  and send the Result as JSON response.
+ *   - If it is in readlist then call the  [removeFromReadlist]{@link module:Service~removeFromReadlist} service and send the Result as JSON response.
+ *
+ * @param {Request} req - The request object of express.
+ * @param {Object} req.params - The params object of express.
+ * @param {String} req.params.postId - The postId of the post.
+ * @param {Object} req.user - The user object decrypted from token.
+ * @param {String} req.user.id - The userId of the user.
+ * @param {Response} res - The response object of express.
+ * @param {NextFunction} next - The next middleware function of the express.
+ * @return {GeneratedResponse} The JSON response containing the result of the request.
+ */
+const updateReadlistController = async (req, res, next) => {
+    try {
+
+        const userId = req?.user?.id
+        const postId = req.params?.postId
+
+        const validUserId = await validateObjectID(userId)
+        const validPostId = await validateObjectID(postId)
+
+        const alreadyExist = await service.existInReadlist(validUserId, validPostId)
+        let result = {}
+
+        if (!alreadyExist) {
+            result = await service.addInReadlist(validUserId, validPostId)
+        }
+        else {
+            result = await service.removeFromReadlist(validUserId, validPostId)
+        }
+
+        return res.status(200).json(result)
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+
+/**
+ * @async
+ * @function clearReadlistController 
+ * @description
+ * - This function [validates the userId]{@link module:Validation~validateObjectID}
+ * - then with the validated userId call the [clearReadlist]{@link module:Service~clearReadlist} service.
+ * - then send the result as JSON response
+ *
+ * @param {Request} req - The request object of express.
+ * @param {Object} req.user - The user object decrypted from token.
+ * @param {String} req.user.id - The userId of the user.
+ * @param {Response} res - The response object of express.
+ * @param {NextFunction} next - The next middleware function of the express.
+ * @return {GeneratedResponse} The JSON response containing the result of the request.
+ */
+const clearReadlistController = async (req, res, next) => {
+    try {
+
+        const userId = req?.user?.id
+        const validUserId = await validateObjectID(userId)
+
+        const result = await service.clearReadlist(validUserId)
+        return res.status(200).json(result)
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+//===============================================//
+
+
+
+//==================Exports====================//
+module.exports = {
+    readReadlistController,
+    updateReadlistController,
+    clearReadlistController
+}
+//===============================================//</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

@@ -2,9 +2,10 @@
     "source": {
       "include": ["src"],
       "includePattern": ".js$",
+      "excludePattern": "Router.js$",
       "exclude": ["node_modules"]
     },
-    "plugins": ["plugins/markdown","node_modules/better-docs/category"],
+    "plugins": ["plugins/markdown","node_modules/better-docs/category","node_modules/better-docs/typedef-import"],
     "templates": {
       "cleverLinks": false,
       "monospaceLinks": false,
