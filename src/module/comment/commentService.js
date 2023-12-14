@@ -56,7 +56,7 @@ const commentModel = require('./commentModel')
  * @throws {HttpError.NotImplemented} - If the comment was not saved.
  */
 const createComment = async ({userId : user, postId : post, comment}) => {
-    const savedComment = await new commentModel(validComment).save()
+    const savedComment = await new commentModel({user, post, comment}).save()
 
     if(!savedComment){
             createError(501, 'something went wrong')
