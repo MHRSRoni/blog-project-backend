@@ -7,7 +7,7 @@
 
 //=============Imports===============//
 const { createComment, readComment, updateComment, deleteComment } = require("./commentService");
-const {  ObjectId, commentCreateSchema, commentUpdateSchema, validateObjectId, validateObjectID, validateCommentUpdateObject } = require("./commentValidation");
+const {  ObjectId, commentCreateSchema, commentUpdateSchema, validateObjectId, validateObjectID, validateCommentUpdateObject, validateCreateCommentObject } = require("./commentValidation");
 
 //=================================//
 
