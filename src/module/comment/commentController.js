@@ -132,7 +132,7 @@ exports.updateCommentController = async (req, res, next) => {
         const validComment = await validateCommentUpdateObject(commentObject);
 
         const result = await updateComment(validComment);
-        return res.status(201).json(result);
+        return res.status(200).json(result);
         
     } catch (error) {
         next(error);
@@ -171,7 +171,7 @@ exports.deleteCommentController = async (req, res, next) => {
         const validUserId = await validateObjectID(userId);
         
         const result = await deleteComment(validUserId, validCommentId);
-        return res.status(201).json(result);
+        return res.status(200).json(result);
         
     } catch (error) {
         next(error);
