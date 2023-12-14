@@ -342,6 +342,10 @@ exports.searchPostService = async (page, limit, search, query, postId) => {
         }
     }
     if (query) {
+        if(query.categoryId){
+            const category = await categoryModel.findById(query.categoryId)
+            post.categoryName = category?.title
+        }
         finalQuery = { ...finalQuery, ...query }
     }
 
