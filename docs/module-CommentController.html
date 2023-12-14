@@ -192,9 +192,9 @@
     
     <div class="description">
         <ul>
-<li>This function validate the userId, postId and comment</li>
-<li>call the createComment service with resulted Object.</li>
-<li>Then the result of the createComment service is send in response as json.</li>
+<li>This function <a href="module-CommentValidation.html#~validateCreateCommentObject">validate the userId, postId and comment</a></li>
+<li>call the <a href="module-CommentService.html#~createComment">createComment</a> service with resulted Object.</li>
+<li>Then the result of the <a href="module-CommentService.html#~createComment">createComment</a> service is send in response as json.</li>
 </ul>
     </div>
     
@@ -519,7 +519,381 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'><p>The JSON response containing the result of the request.</p></div>
+    <div class='param-desc column is-7'><p>The JSON response containing the <a href="module-CommentService.html#~Result">result</a> of the request.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">GeneratedResponse</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~deleteCommentController">
+        <a class="href-link" href="#~deleteCommentController">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                deleteCommentController<span class="signature">(req, res, next)</span><span class="type-signature"> &rarr; {GeneratedResponse}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <ul>
+<li>This function <a href="module-CommentValidation.html#~validateObjectID">validate the userId and commentId</a></li>
+<li>call the <a href="module-CommentService.html#~deleteComment">deleteComment</a> service with resulted object.</li>
+<li>Then the result of the <a href="module-CommentService.html#~deleteComment">deleteComment</a> service is send in response as json.</li>
+</ul>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>req</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Request</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The request object of express.</p></td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>params</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The params object of express.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>params.commentId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">String</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The commentId of the comment you want to updated.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>user</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The user object decrypted from token.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>user.id</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">String</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The userId of the user.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>body</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">String</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The body of the request.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>body.comment</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">String</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The comment you want to make on the post.</p></td>
+</tr>
+
+  
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>res</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Response</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The response object of express.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>next</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">NextFunction</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The next middleware function of the express.</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="comment_commentController.js.html" class="button">View Source</a>
+            <span>
+                <a href="comment_commentController.js.html">comment/commentController.js</a>, <a href="comment_commentController.js.html#line145">line 145</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>The JSON response containing the <a href="module-CommentService.html#~Result">result</a> of the request.</p></div>
     
     
     <div class='column is-5 has-text-left'>
@@ -979,6 +1353,380 @@
 <div class="columns">
     
     <div class='param-desc column is-7'><p>The JSON response containing the <a href="module-CommentService.html#~ReadResult">result</a> of the request.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">GeneratedResponse</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~updateCommentController">
+        <a class="href-link" href="#~updateCommentController">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                updateCommentController<span class="signature">(req, res, next)</span><span class="type-signature"> &rarr; {GeneratedResponse}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <ul>
+<li>This function <a href="module-CommentValidation.html#~validateCommentUpdateObject">validate the userId, commentId and comment</a></li>
+<li>call the <a href="module-CommentService.html#~updateComment">updateComment</a> service with resulted object.</li>
+<li>Then the result of the <a href="module-CommentService.html#~updateComment">updateComment</a> service is send in response as json.</li>
+</ul>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>req</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Request</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The request object of express.</p></td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>params</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The params object of express.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>params.commentId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">String</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The commentId of the comment you want to updated.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>user</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The user object decrypted from token.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>user.id</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">String</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The userId of the user.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>body</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">String</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The body of the request.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>body.comment</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">String</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The comment you want to make on the post.</p></td>
+</tr>
+
+  
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>res</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Response</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The response object of express.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>next</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">NextFunction</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The next middleware function of the express.</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="comment_commentController.js.html" class="button">View Source</a>
+            <span>
+                <a href="comment_commentController.js.html">comment/commentController.js</a>, <a href="comment_commentController.js.html#line105">line 105</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>The JSON response containing the <a href="module-CommentService.html#~Result">result</a> of the request.</p></div>
     
     
     <div class='column is-5 has-text-left'>
