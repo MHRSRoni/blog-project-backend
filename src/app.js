@@ -36,7 +36,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.use(express.static(__dirname + '/../docs/'))
+app.use(express.static(__dirname + '/../docs/', { 'extensions': ['js', 'html', 'css'] }))
 //-------------- route ----------------//
 //Managing Backend routing
 app.use('/api/v1', router)

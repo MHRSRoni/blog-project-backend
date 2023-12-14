@@ -60,7 +60,7 @@ const readReadlist = async (userId, search, currentPage, perPage) => {
         from : 'posts',
         localField : 'post',
         foreignField : '_id',
-        as : 'posts'
+        as : 'postData'
     }}
     const searchQuery = search ?{ $match : {$or : [
         { "posts.title" : { $regex : search, $options : 'i' } },
