@@ -94,7 +94,7 @@ exports.updateReactController = async (req, res, next) => {
         const existingReact = await checkReactService(postId, userId);
 
         if (existingReact) {
-            const result = await updateReactService(postId, userId,existingReact, validReact);
+            const result = await updateReactService(postId, userId, validReact, existingReact);
 
             await updateReactCountService(postId, userId, validReact, existingReact);
 
