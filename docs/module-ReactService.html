@@ -5,7 +5,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> CommentValidation</title>
+  <title> ReactService</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -74,7 +74,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Module</p>
-                    <h1>CommentValidation</h1>
+                    <h1>ReactService</h1>
                 </header>
                 
 
@@ -114,6 +114,13 @@
     
 
     
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Ali Rafat</li>
+        </ul>
+    </dd>
+    
 
     
 
@@ -128,9 +135,9 @@
 
     
         <p class="tag-source">
-            <a href="comment_commentValidation.js.html" class="button">View Source</a>
+            <a href="blog_post_reactService.js.html" class="button">View Source</a>
             <span>
-                <a href="comment_commentValidation.js.html">comment/commentValidation.js</a>, <a href="comment_commentValidation.js.html#line1">line 1</a>
+                <a href="blog_post_reactService.js.html">blog/post/reactService.js</a>, <a href="blog_post_reactService.js.html#line1">line 1</a>
             </span>
         </p>
     
@@ -164,18 +171,16 @@
 
 
     
-    <h4 class="name" id="~validateCommentUpdateObject">
-        <a class="href-link" href="#~validateCommentUpdateObject">#</a>
+    <h4 class="name" id=".checkReactService">
+        <a class="href-link" href="#.checkReactService">#</a>
         
             
-                <span class='tag'>async</span>
-            
-                <span class='tag'>inner</span>
+                <span class='tag'>static</span>
             
         
         <span class="code-name">
             
-                validateCommentUpdateObject<span class="signature">(updateCommentObject)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
+                checkReactService<span class="signature">(postId, userId)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span>
             
         </span>
     </h4>
@@ -184,7 +189,7 @@
     
     
     <div class="description">
-        <p>Validates the updateCommentObject and returns a Promise that resolves with the validated object.</p>
+        <p>Finds a react entry in the reactModel collection based on the given postId and userId.</p>
     </div>
     
 
@@ -221,315 +226,6 @@
 
             
 <tr class="deep-level-0">
-  
-      <td class="name"><code>updateCommentObject</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">Object</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The object to be validated.</p></td>
-</tr>
-
-  
-  
-    
-<tr class="deep-level-1">
-  
-      <td class="name"><code>userId</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">string</code>
-|
-
-<code class="param-type">ObjectID</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The ID of the user creating the comment.</p></td>
-</tr>
-
-  
-    
-<tr class="deep-level-1">
-  
-      <td class="name"><code>commentId</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">string</code>
-|
-
-<code class="param-type">ObjectID</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The ID of the comment that you want to update.</p></td>
-</tr>
-
-  
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>createCommentObject.comment</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">string</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The updated comment.</p></td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="comment_commentValidation.js.html" class="button">View Source</a>
-            <span>
-                <a href="comment_commentValidation.js.html">comment/commentValidation.js</a>, <a href="comment_commentValidation.js.html#line41">line 41</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class='columns method-parameter'>
-        <div class="column is-2"><label>Returns:</label></div>
-        <div class="column is-10">
-            
-                    
-
-<div class="columns">
-    
-    <div class='param-desc column is-7'><p>A Promise that resolves with the validated updateCommentObject.</p></div>
-    
-    
-    <div class='column is-5 has-text-left'>
-        <label>Type: </label>
-        
-<code class="param-type">Promise.&lt;Object></code>
-
-
-    </div>
-    
-</div>
-
-                
-        </div>
-    </div>
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="~validateCreateCommentObject">
-        <a class="href-link" href="#~validateCreateCommentObject">#</a>
-        
-            
-                <span class='tag'>async</span>
-            
-                <span class='tag'>inner</span>
-            
-        
-        <span class="code-name">
-            
-                validateCreateCommentObject<span class="signature">(createCommentObject)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Validates the createCommentObject and returns a Promise that resolves with the validated object.</p>
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>createCommentObject</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">Object</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The object to be validated.</p></td>
-</tr>
-
-  
-  
-    
-<tr class="deep-level-1">
-  
-      <td class="name"><code>userId</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">string</code>
-|
-
-<code class="param-type">ObjectID</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The ID of the user creating the comment.</p></td>
-</tr>
-
-  
-    
-<tr class="deep-level-1">
   
       <td class="name"><code>postId</code></td>
   
@@ -538,9 +234,6 @@
   
       
 <code class="param-type">string</code>
-|
-
-<code class="param-type">ObjectID</code>
 
 
   
@@ -550,14 +243,16 @@
 
   
 
-  <td class="description last"><p>The ID of the post the comment is being created on.</p></td>
+  <td class="description last"><p>The ID of the post.</p></td>
 </tr>
 
+
+        
+
+            
+<tr class="deep-level-0">
   
-    
-<tr class="deep-level-1">
-  
-      <td class="name"><code>comment</code></td>
+      <td class="name"><code>userId</code></td>
   
 
   <td class="type">
@@ -573,10 +268,8 @@
 
   
 
-  <td class="description last"><p>The comment text.</p></td>
+  <td class="description last"><p>The ID of the user.</p></td>
 </tr>
-
-  
 
 
         
@@ -621,9 +314,9 @@
 
     
         <p class="tag-source">
-            <a href="comment_commentValidation.js.html" class="button">View Source</a>
+            <a href="blog_post_reactService.js.html" class="button">View Source</a>
             <span>
-                <a href="comment_commentValidation.js.html">comment/commentValidation.js</a>, <a href="comment_commentValidation.js.html#line22">line 22</a>
+                <a href="blog_post_reactService.js.html">blog/post/reactService.js</a>, <a href="blog_post_reactService.js.html#line18">line 18</a>
             </span>
         </p>
     
@@ -654,13 +347,13 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'><p>A Promise that resolves with the validated createCommentObject.</p></div>
+    <div class='param-desc column is-7'><p>The react value found in the reactModel collection, or undefined if not found.</p></div>
     
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<code class="param-type">Promise.&lt;Object></code>
+<code class="param-type">Promise.&lt;string></code>
 
 
     </div>
@@ -680,18 +373,16 @@
 
 
     
-    <h4 class="name" id="~validateObjectID">
-        <a class="href-link" href="#~validateObjectID">#</a>
+    <h4 class="name" id=".createReactService">
+        <a class="href-link" href="#.createReactService">#</a>
         
             
-                <span class='tag'>async</span>
-            
-                <span class='tag'>inner</span>
+                <span class='tag'>static</span>
             
         
         <span class="code-name">
             
-                validateObjectID<span class="signature">(objectId)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
+                createReactService<span class="signature">(postId, userId, react)</span><span class="type-signature"> &rarr; {object}</span>
             
         </span>
     </h4>
@@ -700,7 +391,7 @@
     
     
     <div class="description">
-        <p>Validate the objectId and returns a Promise that resolves with the validated objectId.</p>
+        <p>Creates a React service.</p>
     </div>
     
 
@@ -738,16 +429,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>objectId</code></td>
+      <td class="name"><code>postId</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">string</code>
-|
-
-<code class="param-type">ObjectID</code>
+<code class="param-type">number</code>
 
 
   
@@ -757,7 +445,57 @@
 
   
 
-  <td class="description last"><p>The objectId to be validated.</p></td>
+  <td class="description last"><p>The ID of the post.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>userId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the user.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>react</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The react to be created.</p></td>
 </tr>
 
 
@@ -803,9 +541,9 @@
 
     
         <p class="tag-source">
-            <a href="comment_commentValidation.js.html" class="button">View Source</a>
+            <a href="blog_post_reactService.js.html" class="button">View Source</a>
             <span>
-                <a href="comment_commentValidation.js.html">comment/commentValidation.js</a>, <a href="comment_commentValidation.js.html#line60">line 60</a>
+                <a href="blog_post_reactService.js.html">blog/post/reactService.js</a>, <a href="blog_post_reactService.js.html#line105">line 105</a>
             </span>
         </p>
     
@@ -836,13 +574,517 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'><p>A Promise that resolves with the validated objectId.</p></div>
+    <div class='param-desc column is-7'><p>The created react.</p></div>
     
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<code class="param-type">Promise.&lt;Object></code>
+<code class="param-type">object</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".updateReactCountService">
+        <a class="href-link" href="#.updateReactCountService">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                updateReactCountService<span class="signature">(postId, userId, curReact, preReact)</span><span class="type-signature"> &rarr; {Object}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Updates the React count service.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>postId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the post.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>userId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the user.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>curReact</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The current React value.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>preReact</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The previous React value.</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="blog_post_reactService.js.html" class="button">View Source</a>
+            <span>
+                <a href="blog_post_reactService.js.html">blog/post/reactService.js</a>, <a href="blog_post_reactService.js.html#line64">line 64</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>An object indicating the success and a message.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Object</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".updateReactService">
+        <a class="href-link" href="#.updateReactService">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                updateReactService<span class="signature">(postId, userId, curReact, preReact)</span><span class="type-signature"> &rarr; {Object}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Updates the react service with the given parameters.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>postId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the post.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>userId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the user.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>curReact</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The current react value.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>preReact</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The previous react value.</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="blog_post_reactService.js.html" class="button">View Source</a>
+            <span>
+                <a href="blog_post_reactService.js.html">blog/post/reactService.js</a>, <a href="blog_post_reactService.js.html#line35">line 35</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>An object indicating the success of the update and additional data if available.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Object</code>
 
 
     </div>

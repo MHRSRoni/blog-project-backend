@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> user/readlist/readlistValidation.js</title>
+  <title> blog/post/postValidationSchema.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>user/readlist/readlistValidation.js</h1>
+                    <h1>blog/post/postValidationSchema.js</h1>
                 </header>
                 
 
@@ -86,48 +86,63 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @category Readlist
- * @module ReadlistValidation
- * @author MHRoni
- */
+ * @category Post
+ * @module PostValidation
+ * @author Ali Rafat
+*/
 
+const Joi = require('joi');
 
-//=============Imports===============//
-const Joi = require('joi')
-
-//================================//
-
-
-
-//=============Types================//
-/**
- * @typedef ObjectID 
- * @property {Boolean} trim=true - The ObjectID is trimmed
- * @property {Number} length=24 - The length of the ObjectId
- * @property {Boolean} required=true - The ObjectID is required
- */
-//================================//
-
-
-
-//===========Functions=================//
+exports.reactValidationSchema = Joi.string().valid('like', 'dislike', 'love').required().messages({
+    'any.only': 'Invalid react type'
+});
 
 /**
- * Function to validating objectID with [Joi]{@link https://joi.dev/api/}
- * @function validateObjectID
- * @param {String|ObjectID} objectID - The objectID to validate 
- * @async
+ * Validates the data for creating a post.
+ * @function validateCreatePostData
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The request body.
+ * @param {String} req.body.categoryId - The category id of the post.
+ * @param {String} req.body.title - The title of the post.
+ * @param {String} req.body.description - The description of the post.
+ * @param {String} req.body.picture - The picture of the post.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Object} - Resolves to the next middleware function.
  */
-const validateObjectID = async(objectID) => await Joi.string().trim().length(24).required().validateAsync(objectID)
 
-//====================================//
+exports.validateCreatePostData = async (req, res, next) => {
+    try {
+        const postCreateValidationSchema = Joi.object({
 
+            categoryId: Joi.string().required().messages({
+                'string.empty': 'please provide category id',
+                'any.required': 'category id is required'
+            }),
+            title: Joi.string().trim().required().messages({
+                'string.empty': 'please provide title',
+                'any.required': 'title is required'
+            }),
+            description: Joi.string().trim().required().messages({
+                'string.empty': 'please provide description',
+                'any.required': 'description is required'
+            }),
+            picture: Joi.required().messages({
+                'string.empty': 'please provide a picture',
+                'any.required': 'picture is required'
+            }),
+        });
 
+        const data = await postCreateValidationSchema.validateAsync(req.body);
 
-//============Exports================//
-module.exports = {validateObjectID}
+        req.body = data;
 
-//===================================//</code></pre>
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+</code></pre>
         </article>
     </section>
 

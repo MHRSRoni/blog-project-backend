@@ -1,3 +1,9 @@
+/**
+ * @category Post
+ * @module PostModel
+ * @author Ali Rafat
+*/
+
 const { Schema, model } = require('mongoose');
 
 const postSchema = new Schema({
@@ -35,7 +41,7 @@ const postSchema = new Schema({
             type: Number,
             default: 0
         },
-        dislike: {
+        fire: {
             type: Number,
             default: 0
         },
@@ -50,10 +56,6 @@ const postSchema = new Schema({
     readTime: {
         type: Number
     },
-    liked: {
-        type: Boolean,
-        default: false
-    }
 
 }, { timestamps: true, versionKey: false })
 

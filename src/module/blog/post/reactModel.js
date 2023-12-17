@@ -1,3 +1,9 @@
+/**
+ * @category Post
+ * @module ReactModel
+ * @author Ali Rafat
+*/
+
 const { Schema, model } = require('mongoose');
 
 const reactSchema = new Schema({
@@ -13,7 +19,7 @@ const reactSchema = new Schema({
     },
     react: {
         type: String,
-        enum: ['like', 'dislike', 'love', 'none'],
+        enum: ['like', 'fire', 'love', 'none'],
         default: 'none'
     }
 }, { timestamps: true, versionKey: false });

@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> user/readlist/readlistValidation.js</title>
+  <title> blog/post/reactService.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>user/readlist/readlistValidation.js</h1>
+                    <h1>blog/post/reactService.js</h1>
                 </header>
                 
 
@@ -86,48 +86,114 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @category Readlist
- * @module ReadlistValidation
- * @author MHRoni
- */
+ * @category Post
+ * @module ReactService
+ * @author Ali Rafat
+*/
 
-
-//=============Imports===============//
-const Joi = require('joi')
-
-//================================//
-
-
-
-//=============Types================//
-/**
- * @typedef ObjectID 
- * @property {Boolean} trim=true - The ObjectID is trimmed
- * @property {Number} length=24 - The length of the ObjectId
- * @property {Boolean} required=true - The ObjectID is required
- */
-//================================//
-
-
-
-//===========Functions=================//
+const postModel = require("./postModel");
+const reactModel = require("./reactModel");
 
 /**
- * Function to validating objectID with [Joi]{@link https://joi.dev/api/}
- * @function validateObjectID
- * @param {String|ObjectID} objectID - The objectID to validate 
- * @async
+ * Finds a react entry in the reactModel collection based on the given postId and userId.
+ *
+ * @param {string} postId - The ID of the post.
+ * @param {string} userId - The ID of the user.
+ * @return {Promise&lt;string>} The react value found in the reactModel collection, or undefined if not found.
  */
-const validateObjectID = async(objectID) => await Joi.string().trim().length(24).required().validateAsync(objectID)
 
-//====================================//
+exports.checkReactService = async (postId, userId) => {
 
+    const result = await reactModel.findOne({ postId, userId });
 
+    return result?.react;
+};
 
-//============Exports================//
-module.exports = {validateObjectID}
+/**
+ * Updates the react service with the given parameters.
+ *
+ * @param {string} postId - The ID of the post.
+ * @param {string} userId - The ID of the user.
+ * @param {string} curReact - The current react value.
+ * @param {string} preReact - The previous react value.
+ * @returns {Object} An object indicating the success of the update and additional data if available.
+ */
 
-//===================================//</code></pre>
+exports.updateReactService = async (postId, userId, curReact, preReact) => {
+    if (curReact === preReact) {
+        await reactModel.findOneAndUpdate(
+            { postId, userId },
+            { react: 'none' }
+        )
+
+        return { success: true, message: 'react updated', }
+    } else {
+        const updated = await reactModel.findOneAndUpdate(
+            { postId, userId },
+            { react: curReact },
+            { new: true }
+        )
+
+        return { success: true, data: updated }
+    }
+};
+
+/**
+ * Updates the React count service.
+ *
+ * @param {string} postId - The ID of the post.
+ * @param {string} userId - The ID of the user.
+ * @param {string} curReact - The current React value.
+ * @param {string} preReact - The previous React value.
+ * @return {Object} An object indicating the success and a message.
+ */
+
+exports.updateReactCountService = async (postId, userId, curReact, preReact) => {
+
+    if (curReact === preReact) {
+        const previousReact = `react.${preReact}`;
+        await postModel.findByIdAndUpdate(
+            postId,
+            { $inc: { [previousReact]: -1 } },
+        )
+        await reactModel.findOneAndUpdate(
+            { postId, userId },
+            { react: 'none' })
+        await postModel.findByIdAndUpdate(postId,
+            { $pull: { 'react.reactUserId': userId } }
+        )
+        return { success: true, message: 'react updated' }
+    } else {
+        const currentReact = `react.${curReact}`;
+        const previousReact = `react.${preReact}`;
+
+        await postModel.findByIdAndUpdate(
+            postId,
+            { $inc: { [currentReact]: 1, [previousReact]: -1 } },
+        )
+        await postModel.findByIdAndUpdate(postId,
+            { $push: { 'react.reactUserId': userId } }
+        )
+
+        return { success: true, message: 'react updated' }
+    }
+
+};
+
+/**
+ * Creates a React service.
+ *
+ * @param {number} postId - The ID of the post.
+ * @param {number} userId - The ID of the user.
+ * @param {string} react - The react to be created.
+ * @return {object} The created react.
+ */
+
+exports.createReactService = async (postId, userId, react) => {
+    const created = await reactModel.create({ postId, userId, react })
+
+    return { success: true, data: created }
+};</code></pre>
         </article>
     </section>
 

@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> user/readlist/readlistValidation.js</title>
+  <title> blog/post/postModel.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>user/readlist/readlistValidation.js</h1>
+                    <h1>blog/post/postModel.js</h1>
                 </header>
                 
 
@@ -86,48 +86,73 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @category Readlist
- * @module ReadlistValidation
- * @author MHRoni
- */
+ * @category Post
+ * @module PostModel
+ * @author Ali Rafat
+*/
 
+const { Schema, model } = require('mongoose');
 
-//=============Imports===============//
-const Joi = require('joi')
+const postSchema = new Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        required: true
+    },
+    categoryId: {
+        type: Schema.Types.ObjectId,
+        ref: 'categories',
+        required: true
+    },
+    title: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    slug: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    description: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    picture: {
+        type: String,
+        trim: true
+    },
+    react: {
+        like: {
+            type: Number,
+            default: 0
+        },
+        dislike: {
+            type: Number,
+            default: 0
+        },
+        love: {
+            type: Number,
+            default: 0
+        },
+        reactUserId: {
+            type: Array
+        },
+    },
+    readTime: {
+        type: Number
+    },
+    liked: {
+        type: Boolean,
+        default: false
+    }
 
-//================================//
+}, { timestamps: true, versionKey: false })
 
+const postModel = model('posts', postSchema);
 
-
-//=============Types================//
-/**
- * @typedef ObjectID 
- * @property {Boolean} trim=true - The ObjectID is trimmed
- * @property {Number} length=24 - The length of the ObjectId
- * @property {Boolean} required=true - The ObjectID is required
- */
-//================================//
-
-
-
-//===========Functions=================//
-
-/**
- * Function to validating objectID with [Joi]{@link https://joi.dev/api/}
- * @function validateObjectID
- * @param {String|ObjectID} objectID - The objectID to validate 
- * @async
- */
-const validateObjectID = async(objectID) => await Joi.string().trim().length(24).required().validateAsync(objectID)
-
-//====================================//
-
-
-
-//============Exports================//
-module.exports = {validateObjectID}
-
-//===================================//</code></pre>
+module.exports = postModel;</code></pre>
         </article>
     </section>
 

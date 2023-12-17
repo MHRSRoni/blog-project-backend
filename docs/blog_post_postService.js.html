@@ -1,4 +1,91 @@
-/**
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> blog/post/postService.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-User_Profile_Controller.html">User/Profile/Controller</a></li><li><a href="module-User_Profile_Model.html">User/Profile/Model</a></li><li><a href="module-User_Profile_Service.html">User/Profile/Service</a></li></ul></div><div class="category"><h2>Comment</h2><h3>Modules</h3><ul><li><a href="module-CommentController.html">CommentController</a></li><li><a href="module-CommentModel.html">CommentModel</a></li><li><a href="module-CommentService.html">CommentService</a></li><li><a href="module-CommentValidation.html">CommentValidation</a></li></ul></div><div class="category"><h2>Post</h2><h3>Modules</h3><ul><li><a href="module-PostController.html">PostController</a></li><li><a href="module-PostModel.html">PostModel</a></li><li><a href="module-PostService.html">PostService</a></li><li><a href="module-PostValidation.html">PostValidation</a></li><li><a href="module-ReactModel.html">ReactModel</a></li><li><a href="module-ReactService.html">ReactService</a></li></ul></div><div class="category"><h2>Readlist</h2><h3>Modules</h3><ul><li><a href="module-ReadlistController.html">ReadlistController</a></li><li><a href="module-ReadlistModel.html">ReadlistModel</a></li><li><a href="module-ReadlistService.html">ReadlistService</a></li><li><a href="module-ReadlistValidation.html">ReadlistValidation</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>blog/post/postService.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @category Post
  * @module PostService
  * @author Ali Rafat
@@ -74,15 +161,15 @@ exports.createPostService = async (userId, postData) => {
 /**
  * Retrieves a single post from the database based on its slug.
  *
- * @function readSinglePostService
  * @param {string} slug - The slug of the post.
  * @return {object} - An object containing the post information.
  */
 
 exports.readSinglePostService = async (slug) => {
+
     const post = await postModel.findOne({ slug })
-        // .populate('userId', 'name picture')
-        .populate('categoryId', 'title cover')
+        .populate('userId', 'name picture -_id')
+    // .populate('categoryId', 'name cover - _id')
 
     return { success: true, operation: 'read', data: post }
 
@@ -133,7 +220,7 @@ exports.readAllPostService = async (userId, page, limit, sort) => {
     post.totalPost = postCount;
     post.pageCount = Math.ceil(postCount / limit);
 
-    if (endIndex < postCount) {
+    if (endIndex &lt; postCount) {
         post.next = {
             page: page + 1,
             limit: limit
@@ -183,7 +270,7 @@ exports.readPostByCategoryService = async (page, limit, categoryId) => {
     post.totalPost = postCount;
     post.pageCount = Math.ceil(postCount / limit);
 
-    if (endIndex < postCount) {
+    if (endIndex &lt; postCount) {
         post.next = {
             page: page + 1,
             limit: limit
@@ -209,11 +296,10 @@ exports.readPostByCategoryService = async (page, limit, categoryId) => {
 /**
  * Retrieves relevant posts based on the specified page, limit, and email.
  *
- * @function readRelevantPostService
  * @param {number} page - The page number.
  * @param {number} limit - The maximum number of posts per page.
  * @param {string} email - The email of the user.
- * @return {Promise<object>} An object containing the retrieved posts.
+ * @return {Promise&lt;object>} An object containing the retrieved posts.
  */
 
 exports.readRelevantPostService = async (page, limit, email) => {
@@ -240,7 +326,7 @@ exports.readRelevantPostService = async (page, limit, email) => {
         post.totalPost = postCount;
         post.pageCount = Math.ceil(postCount / limit);
 
-        if (endIndex < postCount) {
+        if (endIndex &lt; postCount) {
             post.next = {
                 page: page + 1,
                 limit: limit
@@ -272,7 +358,7 @@ exports.readRelevantPostService = async (page, limit, email) => {
         post.totalPost = postCount;
         post.pageCount = Math.ceil(postCount / limit);
 
-        if (endIndex < postCount) {
+        if (endIndex &lt; postCount) {
             post.next = {
                 page: page + 1,
                 limit: limit
@@ -317,7 +403,7 @@ exports.allPostByUser = async (userId, limit, page) => {
     // post.totalPost = posts.length;
     post.pageCount = Math.ceil(posts.length / limit);
 
-    if (endIndex < posts.length) {
+    if (endIndex &lt; posts.length) {
         post.next = {
             page: page + 1,
             limit: limit
@@ -444,11 +530,6 @@ exports.searchPostService = async (page, limit, search, query, postId) => {
             const category = await categoryModel.findById(query.categoryId)
             post.categoryName = category?.title
         }
-        // if (query.userId) {
-        //     const user = await userProfileModel.findById(query.userId)
-        //     post.Name = user?.name
-        //     post.Picture = user?.picture
-        // }
         finalQuery = { ...finalQuery, ...query }
     }
 
@@ -458,13 +539,14 @@ exports.searchPostService = async (page, limit, search, query, postId) => {
     const searchPost = await postModel.find(finalQuery)
         .skip((page - 1) * limit)
         .limit(limit)
-        .populate('userId', 'name picture')
-        .populate('categoryId', 'title cover')
+        .populate('userId', 'name picture _id')
+        .populate('categoryId', 'title _id')
+
 
     post.totalPost = totalPost;
     post.pageCount = Math.ceil(totalPost / limit);
 
-    if (endIndex < totalPost) {
+    if (endIndex &lt; totalPost) {
         post.next = {
             page: page + 1,
             limit: limit
@@ -485,3 +567,33 @@ exports.searchPostService = async (page, limit, search, query, postId) => {
     }
 };
 
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

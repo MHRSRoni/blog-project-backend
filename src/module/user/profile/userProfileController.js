@@ -4,7 +4,7 @@ const userProfileModel = require("./userProfileModel");
 const userOtpModel = require("../../auth/verification/userOtpModel");
 const createError = require('http-errors');
 const createToken = require("../../../utils/createToken");
-const {Request, Response, NextFunction} = require("express");
+const { Request, Response, NextFunction } = require("express");
 const bcrypt = require('bcrypt');
 
 /**
@@ -130,22 +130,22 @@ exports.userUpdatePasswordController = async (req, res, next) => {
         const userId = req?.user?.id
         const { oldPassword, newPassword, confirmPassword } = req.body;
 
-        if (!oldPassword || !newPassword || !confirmPassword ) {
+        if (!oldPassword || !newPassword || !confirmPassword) {
             return res.status(400).json({ message: "fill all the field, try again" });
         }
-        if(newPassword !== confirmPassword) {
+        if (newPassword !== confirmPassword) {
             return res.status(400).json({ message: "password mismatch, try again" });
         }
-        const user = await userProfileModel.findOne({_id : userId});
+        const user = await userProfileModel.findOne({ _id: userId });
         const password = user?.password
         const match = await bcrypt.compare(oldPassword, password);
 
-        if(!match) return res.status(401).json({ message: "password mismatch, try again" });
+        if (!match) return res.status(401).json({ message: "password mismatch, try again" });
 
-        await userProfileModel.findOneAndUpdate({_id : userId}, { password: newPassword });
-        return res.status(200).json({ success : true, message: "Password Update Successful" })
+        await userProfileModel.findOneAndUpdate({ _id: userId }, { password: newPassword });
+        return res.status(200).json({ success: true, message: "Password Update Successful" })
 
-        
+
     } catch (error) {
         next(error);
 
@@ -242,7 +242,8 @@ exports.protectedController = async (req, res, next) => {
                 userName: req.user.name.givenName.toLowerCase() + Math.floor(Math.random() * 1000),
                 email: req.user.emails[0].value,
                 picture: req.user.photos[0].value,
-                userType: 'google'
+                userType: 'google',
+                status: 'verified'
             })
 
             const userData = {

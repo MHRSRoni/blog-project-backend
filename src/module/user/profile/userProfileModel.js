@@ -30,7 +30,7 @@ const { updateCategory } = require('../../blog/category/categoryService');
  * @type {Schema<UserProfile>}
  */
 const userProfileSchema = new Schema({
-    
+
     userType: {
         type: String,
         required: true,
@@ -60,7 +60,7 @@ const userProfileSchema = new Schema({
     picture: {
         type: String,
         trim: true,
-        default : 'https://res.cloudinary.com/dscxtnb94/image/upload/v1700723393/health_plus/user/download_dxmyep.png'
+        default: 'https://res.cloudinary.com/dscxtnb94/image/upload/v1700723393/health_plus/user/download_dxmyep.png'
     },
     phone: {
         type: String,
@@ -75,7 +75,7 @@ const userProfileSchema = new Schema({
     },
     status: {
         type: String,
-        default: () => this.userType == 'normal' ? 'unverified' : 'verified'
+        default: 'unverified'
     }
 },
     { versionKey: false, timestamps: true }
@@ -84,11 +84,19 @@ const userProfileSchema = new Schema({
 /**
  * Mongoose middleware to hash the user's password before saving.
  * @function
- */
-userProfileSchema.pre( 'findOneAndUpdate', async function (next) {
+*/
+
+userProfileSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 15);
+    }
+    next();
+})
+
+userProfileSchema.pre('findOneAndUpdate', async function (next) {
     const update = this._update
     if (update && update.password) update.password = await bcrypt.hash(update.password, 10);
-    
+
     next();
 })
 

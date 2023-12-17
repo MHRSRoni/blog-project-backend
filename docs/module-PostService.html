@@ -5,7 +5,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> User/Profile/Controller</title>
+  <title> PostService</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -74,7 +74,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Module</p>
-                    <h1>User/Profile/Controller</h1>
+                    <h1>PostService</h1>
                 </header>
                 
 
@@ -90,8 +90,6 @@
 <article>
     <div class="container-overview">
     
-        
-            <div class="description"><p>This is the controller that handles user profile requests.</p></div>
         
 
         
@@ -116,6 +114,13 @@
     
 
     
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Ali Rafat</li>
+        </ul>
+    </dd>
+    
 
     
 
@@ -130,9 +135,9 @@
 
     
         <p class="tag-source">
-            <a href="user_profile_userProfileController.js.html" class="button">View Source</a>
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
             <span>
-                <a href="user_profile_userProfileController.js.html">user/profile/userProfileController.js</a>, <a href="user_profile_userProfileController.js.html#line10">line 10</a>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line1">line 1</a>
             </span>
         </p>
     
@@ -166,8 +171,8 @@
 
 
     
-    <h4 class="name" id=".userEmailVerifyController">
-        <a class="href-link" href="#.userEmailVerifyController">#</a>
+    <h4 class="name" id=".allPostByUser">
+        <a class="href-link" href="#.allPostByUser">#</a>
         
             
                 <span class='tag'>static</span>
@@ -175,7 +180,7 @@
         
         <span class="code-name">
             
-                userEmailVerifyController<span class="signature">(req, res, next)</span><span class="type-signature"> &rarr; {Promise}</span>
+                allPostByUser<span class="signature">(userId, limit, page)</span><span class="type-signature"> &rarr; {object}</span>
             
         </span>
     </h4>
@@ -184,7 +189,7 @@
     
     
     <div class="description">
-        <p>Executes the userEmailVerifyController function.</p>
+        <p>Retrieves all posts by a specific user.</p>
     </div>
     
 
@@ -222,13 +227,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>req</code></td>
+      <td class="name"><code>userId</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">Object</code>
+<code class="param-type">string</code>
 
 
   
@@ -238,7 +243,7 @@
 
   
 
-  <td class="description last"><p>The request object.</p></td>
+  <td class="description last"><p>The ID of the user.</p></td>
 </tr>
 
 
@@ -247,13 +252,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>res</code></td>
+      <td class="name"><code>limit</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">Object</code>
+<code class="param-type">number</code>
 
 
   
@@ -263,7 +268,7 @@
 
   
 
-  <td class="description last"><p>The response object.</p></td>
+  <td class="description last"><p>The maximum number of posts to retrieve per page.</p></td>
 </tr>
 
 
@@ -272,13 +277,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>next</code></td>
+      <td class="name"><code>page</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">function</code>
+<code class="param-type">number</code>
 
 
   
@@ -288,7 +293,7 @@
 
   
 
-  <td class="description last"><p>The next middleware function.</p></td>
+  <td class="description last"><p>The page number to retrieve.</p></td>
 </tr>
 
 
@@ -334,9 +339,9 @@
 
     
         <p class="tag-source">
-            <a href="user_profile_userProfileController.js.html" class="button">View Source</a>
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
             <span>
-                <a href="user_profile_userProfileController.js.html">user/profile/userProfileController.js</a>, <a href="user_profile_userProfileController.js.html#line207">line 207</a>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line306">line 306</a>
             </span>
         </p>
     
@@ -367,13 +372,13 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'><p>A promise that resolves to the JSON response.</p></div>
+    <div class='param-desc column is-7'><p>An object containing the success status, the number of posts retrieved, and the retrieved posts.</p></div>
     
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<code class="param-type">Promise</code>
+<code class="param-type">object</code>
 
 
     </div>
@@ -393,8 +398,8 @@
 
 
     
-    <h4 class="name" id=".userForgetPasswordController">
-        <a class="href-link" href="#.userForgetPasswordController">#</a>
+    <h4 class="name" id=".deletePostService">
+        <a class="href-link" href="#.deletePostService">#</a>
         
             
                 <span class='tag'>static</span>
@@ -402,7 +407,7 @@
         
         <span class="code-name">
             
-                userForgetPasswordController<span class="signature">(req, res, next)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
+                deletePostService<span class="signature">(slug, userId)</span><span class="type-signature"> &rarr; {object}</span>
             
         </span>
     </h4>
@@ -411,7 +416,7 @@
     
     
     <div class="description">
-        <p>Controller function for handling user forget password requests.</p>
+        <p>Deletes a post by slug and userId.</p>
     </div>
     
 
@@ -449,13 +454,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>req</code></td>
+      <td class="name"><code>slug</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">Request</code>
+<code class="param-type">string</code>
 
 
   
@@ -465,7 +470,7 @@
 
   
 
-  <td class="description last"><p>The request object.</p></td>
+  <td class="description last"><p>The slug of the post to be deleted.</p></td>
 </tr>
 
 
@@ -474,13 +479,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>res</code></td>
+      <td class="name"><code>userId</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">Response</code>
+<code class="param-type">string</code>
 
 
   
@@ -490,32 +495,7 @@
 
   
 
-  <td class="description last"><p>The response object.</p></td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>next</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">NextFunction</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The next middleware function.</p></td>
+  <td class="description last"><p>The ID of the user who owns the post.</p></td>
 </tr>
 
 
@@ -561,9 +541,9 @@
 
     
         <p class="tag-source">
-            <a href="user_profile_userProfileController.js.html" class="button">View Source</a>
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
             <span>
-                <a href="user_profile_userProfileController.js.html">user/profile/userProfileController.js</a>, <a href="user_profile_userProfileController.js.html#line92">line 92</a>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line397">line 397</a>
             </span>
         </p>
     
@@ -595,14 +575,14 @@
 <div class="columns">
     
     <div class='param-desc column is-7'><ul>
-<li>Returns a promise that resolves to undefined.</li>
+<li>An object indicating the success of the operation and a message.</li>
 </ul></div>
     
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<code class="param-type">Promise.&lt;void></code>
+<code class="param-type">object</code>
 
 
     </div>
@@ -622,8 +602,8 @@
 
 
     
-    <h4 class="name" id=".userProfileUpdateController">
-        <a class="href-link" href="#.userProfileUpdateController">#</a>
+    <h4 class="name" id=".readAllPostService">
+        <a class="href-link" href="#.readAllPostService">#</a>
         
             
                 <span class='tag'>static</span>
@@ -631,7 +611,7 @@
         
         <span class="code-name">
             
-                userProfileUpdateController<span class="signature">(req, res, next)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span>
+                readAllPostService<span class="signature">(userId, page, limit, sort)</span><span class="type-signature"> &rarr; {object}</span>
             
         </span>
     </h4>
@@ -640,7 +620,7 @@
     
     
     <div class="description">
-        <p>Updates the user profile.</p>
+        <p>Retrieves all posts for a given user.</p>
     </div>
     
 
@@ -678,13 +658,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>req</code></td>
+      <td class="name"><code>userId</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">Request</code>
+<code class="param-type">string</code>
 
 
   
@@ -694,7 +674,7 @@
 
   
 
-  <td class="description last"><p>The request object.</p></td>
+  <td class="description last"><p>The ID of the user.</p></td>
 </tr>
 
 
@@ -703,13 +683,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>res</code></td>
+      <td class="name"><code>page</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">Response</code>
+<code class="param-type">number</code>
 
 
   
@@ -719,7 +699,7 @@
 
   
 
-  <td class="description last"><p>The response object.</p></td>
+  <td class="description last"><p>The page number to retrieve.</p></td>
 </tr>
 
 
@@ -728,13 +708,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>next</code></td>
+      <td class="name"><code>limit</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">NextFunction</code>
+<code class="param-type">number</code>
 
 
   
@@ -744,7 +724,32 @@
 
   
 
-  <td class="description last"><p>The next middleware function.</p></td>
+  <td class="description last"><p>The number of posts to retrieve per page.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>sort</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The sorting option for the posts ('latest' or 'top').</p></td>
 </tr>
 
 
@@ -790,9 +795,9 @@
 
     
         <p class="tag-source">
-            <a href="user_profile_userProfileController.js.html" class="button">View Source</a>
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
             <span>
-                <a href="user_profile_userProfileController.js.html">user/profile/userProfileController.js</a>, <a href="user_profile_userProfileController.js.html#line183">line 183</a>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line101">line 101</a>
             </span>
         </p>
     
@@ -823,7 +828,461 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'><p>The updated user profile.</p></div>
+    <div class='param-desc column is-7'><p>An object containing the success status, operation type, and retrieved post data.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">object</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".readPostByCategoryService">
+        <a class="href-link" href="#.readPostByCategoryService">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                readPostByCategoryService<span class="signature">(page, limit, categoryId)</span><span class="type-signature"> &rarr; {Object}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Retrieves a list of posts by category.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>page</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The page number to retrieve.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>limit</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The maximum number of posts per page.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>categoryId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the category.</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
+            <span>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line168">line 168</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>The response object containing the list of posts, pagination information, and category name.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Object</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".readRelevantPostService">
+        <a class="href-link" href="#.readRelevantPostService">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                readRelevantPostService<span class="signature">(page, limit, email)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Retrieves relevant posts based on the specified page, limit, and email.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>page</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The page number.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>limit</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The maximum number of posts per page.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>email</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The email of the user.</p></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
+            <span>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line218">line 218</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>An object containing the retrieved posts.</p></div>
     
     
     <div class='column is-5 has-text-left'>
@@ -849,8 +1308,8 @@
 
 
     
-    <h4 class="name" id=".userUpdatePasswordController">
-        <a class="href-link" href="#.userUpdatePasswordController">#</a>
+    <h4 class="name" id=".readSinglePostService">
+        <a class="href-link" href="#.readSinglePostService">#</a>
         
             
                 <span class='tag'>static</span>
@@ -858,7 +1317,7 @@
         
         <span class="code-name">
             
-                userUpdatePasswordController<span class="signature">(req, res, next)</span><span class="type-signature"> &rarr; {Object}</span>
+                readSinglePostService<span class="signature">(slug)</span><span class="type-signature"> &rarr; {object}</span>
             
         </span>
     </h4>
@@ -867,7 +1326,7 @@
     
     
     <div class="description">
-        <p>Update the user's password and clear OTP.</p>
+        <p>Retrieves a single post from the database based on its slug.</p>
     </div>
     
 
@@ -905,54 +1364,7 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>req</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">Request</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The request object.</p></td>
-</tr>
-
-  
-  
-    
-<tr class="deep-level-1">
-  
-      <td class="name"><code>body</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">Object</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The request body.</p></td>
-</tr>
-
-  
-    
-<tr class="deep-level-1">
-  
-      <td class="name"><code>body.email</code></td>
+      <td class="name"><code>slug</code></td>
   
 
   <td class="type">
@@ -968,105 +1380,7 @@
 
   
 
-  <td class="description last"><p>The email of the user.</p></td>
-</tr>
-
-  
-    
-<tr class="deep-level-1">
-  
-      <td class="name"><code>body.otp</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">string</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The OTP code.</p></td>
-</tr>
-
-  
-    
-<tr class="deep-level-1">
-  
-      <td class="name"><code>body.newPassword</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">string</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The new password.</p></td>
-</tr>
-
-  
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>res</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">Response</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The response object.</p></td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>next</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">NextFunction</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The next middleware function.</p></td>
+  <td class="description last"><p>The slug of the post.</p></td>
 </tr>
 
 
@@ -1112,463 +1426,9 @@
 
     
         <p class="tag-source">
-            <a href="user_profile_userProfileController.js.html" class="button">View Source</a>
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
             <span>
-                <a href="user_profile_userProfileController.js.html">user/profile/userProfileController.js</a>, <a href="user_profile_userProfileController.js.html#line127">line 127</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class='columns method-parameter'>
-        <div class="column is-2"><label>Returns:</label></div>
-        <div class="column is-10">
-            
-                    
-
-<div class="columns">
-    
-    <div class='param-desc column is-7'><p>The response object with a success message.</p></div>
-    
-    
-    <div class='column is-5 has-text-left'>
-        <label>Type: </label>
-        
-<code class="param-type">Object</code>
-
-
-    </div>
-    
-</div>
-
-                
-        </div>
-    </div>
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="~userLoginControllerHandleuserlogin">
-        <a class="href-link" href="#~userLoginControllerHandleuserlogin">#</a>
-        
-            
-                <span class='tag'>async</span>
-            
-                <span class='tag'>inner</span>
-            
-        
-        <span class="code-name">
-            
-                userLoginController Handle user login<span class="signature">(req, res, next)</span><span class="type-signature"> &rarr; {GeneratedResponse}</span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Handles user login by validating the request body and calling the userLoginService function from the service.</p>
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>req</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">Request</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The request object.</p></td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>res</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">Response</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The response object.</p></td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>next</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">NextFunction</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The next middleware function.</p></td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="user_profile_userProfileController.js.html" class="button">View Source</a>
-            <span>
-                <a href="user_profile_userProfileController.js.html">user/profile/userProfileController.js</a>, <a href="user_profile_userProfileController.js.html#line44">line 44</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class='columns method-parameter'>
-        <div class="column is-2"><label>Returns:</label></div>
-        <div class="column is-10">
-            
-                    
-
-<div class="columns">
-    
-    <div class='param-desc column is-7'><p>The response generated from the Request.If successfull a token is attatched in the response data.</p></div>
-    
-    
-    <div class='column is-5 has-text-left'>
-        <label>Type: </label>
-        
-<code class="param-type">GeneratedResponse</code>
-
-
-    </div>
-    
-</div>
-
-                
-        </div>
-    </div>
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="~userLogoutControllerLogsouttheuserbydestroyingthesessionandreturningasuccessmessage.">
-        <a class="href-link" href="#~userLogoutControllerLogsouttheuserbydestroyingthesessionandreturningasuccessmessage.">#</a>
-        
-            
-                <span class='tag'>async</span>
-            
-                <span class='tag'>inner</span>
-            
-        
-        <span class="code-name">
-            
-                userLogoutController Logs out the user by destroying the session and returning a success message.<span class="signature">(req, res, next)</span><span class="type-signature"> &rarr; {Object}</span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>req</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">Request</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The request object.</p></td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>res</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">Response</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The response object.</p></td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>next</code></td>
-  
-
-  <td class="type">
-  
-      
-<code class="param-type">NextFunction</code>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last"><p>The next middleware function.</p></td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="user_profile_userProfileController.js.html" class="button">View Source</a>
-            <span>
-                <a href="user_profile_userProfileController.js.html">user/profile/userProfileController.js</a>, <a href="user_profile_userProfileController.js.html#line64">line 64</a>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line81">line 81</a>
             </span>
         </p>
     
@@ -1600,14 +1460,14 @@
 <div class="columns">
     
     <div class='param-desc column is-7'><ul>
-<li>an object with a success status and a message</li>
+<li>An object containing the post information.</li>
 </ul></div>
     
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<code class="param-type">Object</code>
+<code class="param-type">object</code>
 
 
     </div>
@@ -1627,24 +1487,26 @@
 
 
     
-    <h4 class="name" id="~userProfileControllerRetrievestheuserprofilefromthedatabaseandsendsitasaJSONresponse.">
-        <a class="href-link" href="#~userProfileControllerRetrievestheuserprofilefromthedatabaseandsendsitasaJSONresponse.">#</a>
+    <h4 class="name" id=".searchPostService">
+        <a class="href-link" href="#.searchPostService">#</a>
         
             
-                <span class='tag'>async</span>
-            
-                <span class='tag'>inner</span>
+                <span class='tag'>static</span>
             
         
         <span class="code-name">
             
-                userProfileController Retrieves the user profile from the database and sends it as a JSON response.<span class="signature">(req, res, next)</span><span class="type-signature"> &rarr; {Object}</span>
+                searchPostService<span class="signature">(page, limit, search, query, postId)</span><span class="type-signature"> &rarr; {object}</span>
             
         </span>
     </h4>
     
 
     
+    
+    <div class="description">
+        <p>Retrieves a list of posts based on search criteria.</p>
+    </div>
     
 
 
@@ -1681,13 +1543,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>req</code></td>
+      <td class="name"><code>page</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">Request</code>
+<code class="param-type">number</code>
 
 
   
@@ -1697,7 +1559,7 @@
 
   
 
-  <td class="description last"><p>The request object.</p></td>
+  <td class="description last"><p>The page number of the results.</p></td>
 </tr>
 
 
@@ -1706,13 +1568,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>res</code></td>
+      <td class="name"><code>limit</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">Response</code>
+<code class="param-type">number</code>
 
 
   
@@ -1722,7 +1584,7 @@
 
   
 
-  <td class="description last"><p>The response object.</p></td>
+  <td class="description last"><p>The maximum number of posts to retrieve per page.</p></td>
 </tr>
 
 
@@ -1731,13 +1593,13 @@
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>next</code></td>
+      <td class="name"><code>search</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">NextFunction</code>
+<code class="param-type">string</code>
 
 
   
@@ -1747,7 +1609,83 @@
 
   
 
-  <td class="description last"><p>The next middleware function.</p></td>
+  <td class="description last"><p>The search term to filter posts by title or description.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>query</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>Additional query parameters for filtering posts.</p></td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>categoryId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the category to filter posts by.</p></td>
+</tr>
+
+  
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>postId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the post to retrieve reactions for.</p></td>
 </tr>
 
 
@@ -1793,9 +1731,9 @@
 
     
         <p class="tag-source">
-            <a href="user_profile_userProfileController.js.html" class="button">View Source</a>
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
             <span>
-                <a href="user_profile_userProfileController.js.html">user/profile/userProfileController.js</a>, <a href="user_profile_userProfileController.js.html#line155">line 155</a>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line426">line 426</a>
             </span>
         </p>
     
@@ -1826,13 +1764,13 @@
 
 <div class="columns">
     
-    <div class='param-desc column is-7'><p>The user profile as a JSON response.</p></div>
+    <div class='param-desc column is-7'><p>The response object containing the list of posts and pagination information.</p></div>
     
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<code class="param-type">Object</code>
+<code class="param-type">object</code>
 
 
     </div>
@@ -1848,25 +1786,31 @@
 
 </div>
             
-            </div>
-        </div>
-    
-
-    
-        <div class='vertical-section'>
-            <h1>Type Definitions</h1>
-            <div class="members">
-            
                 <div class="member">
 
-<h4 class="name" id="~GeneratedResponse">
-    <a class="href-link" href="#~GeneratedResponse">#</a>
+
     
-    <span class="code-name">
-        GeneratedResponse
-    </span>
+    <h4 class="name" id=".updatePostService">
+        <a class="href-link" href="#.updatePostService">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                updatePostService<span class="signature">(slug, userId, postData)</span><span class="type-signature"> &rarr; {object}</span>
+            
+        </span>
+    </h4>
     
-</h4>
+
+    
+    
+    <div class="description">
+        <p>Updates a post in the database.</p>
+    </div>
+    
 
 
 
@@ -1875,11 +1819,11 @@
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
+    <h5>Parameters:</h5>
     
 <div class="table-container">
-    <table class="props table">
+    <table class="params table">
         <thead>
         <tr>
             
@@ -1898,78 +1842,86 @@
 
         <tbody>
         
+
             
 <tr class="deep-level-0">
-    
-        <td class="name"><code>success</code></td>
-    
+  
+      <td class="name"><code>slug</code></td>
+  
 
-    <td class="type">
-    
-        
-<code class="param-type">boolean</code>
-
-
-    
-    </td>
-
-    
-
-    
-
-    <td class="description last"><p>The success status of the request</p></td>
-</tr>
-
-        
-            
-<tr class="deep-level-0">
-    
-        <td class="name"><code>message</code></td>
-    
-
-    <td class="type">
-    
-        
+  <td class="type">
+  
+      
 <code class="param-type">string</code>
 
 
-    
-    </td>
+  
+  </td>
 
-    
+  
 
-    
+  
 
-    <td class="description last"><p>The message associated with the request</p></td>
+  <td class="description last"><p>The slug of the post.</p></td>
 </tr>
 
+
         
+
             
 <tr class="deep-level-0">
-    
-        <td class="name"><code>data</code></td>
-    
+  
+      <td class="name"><code>userId</code></td>
+  
 
-    <td class="type">
-    
-        
-<code class="param-type">Object</code>
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
 
 
-    
-    </td>
+  
+  </td>
 
-    
+  
 
-    
+  
 
-    <td class="description last"><p>The data associated with the request</p></td>
+  <td class="description last"><p>The ID of the user who owns the post.</p></td>
 </tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>postData</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The data to update the post with.</p></td>
+</tr>
+
 
         
         </tbody>
     </table>
 </div>
+
+
 
 
 
@@ -2006,9 +1958,9 @@
 
     
         <p class="tag-source">
-            <a href="user_profile_userProfileController.js.html" class="button">View Source</a>
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
             <span>
-                <a href="user_profile_userProfileController.js.html">user/profile/userProfileController.js</a>, <a href="user_profile_userProfileController.js.html#line15">line 15</a>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line350">line 350</a>
             </span>
         </p>
     
@@ -2018,10 +1970,401 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>An object with success, operation, and message properties.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">object</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="~createPostService">
+        <a class="href-link" href="#~createPostService">#</a>
+        
+            
+                <span class='tag'>inner</span>
+            
+        
+        <span class="code-name">
+            
+                createPostService<span class="signature">(userId, postData)</span><span class="type-signature"> &rarr; {object|boolean|string|string|object}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <p>Creates a new post for a given user.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>userId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the user creating the post.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>postData</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The data of the post being created.</p></td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>title</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The title of the post.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>description</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The description of the post.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>categoryId</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The ID of the category the post belongs to.</p></td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="blog_post_postService.js.html" class="button">View Source</a>
+            <span>
+                <a href="blog_post_postService.js.html">blog/post/postService.js</a>, <a href="blog_post_postService.js.html#line15">line 15</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><ul>
+<li>The result of the post creation.</li>
+</ul></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">object</code>
+
+
+    </div>
+    
+</div>
+
+                
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>result.success - Indicates if the post creation was successful.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">boolean</code>
+
+
+    </div>
+    
+</div>
+
+                
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>result.operation - The operation performed (e.g., 'create').</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">string</code>
+
+
+    </div>
+    
+</div>
+
+                
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>result.message - A message describing the result of the operation.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">string</code>
+
+
+    </div>
+    
+</div>
+
+                
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>result.data - The created post data.</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">object</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
 </div>
             
             </div>
         </div>
+    
+
     
 
     
