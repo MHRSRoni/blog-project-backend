@@ -1,3 +1,9 @@
+/**
+ * @category Post
+ * @module ReactService
+ * @author Ali Rafat
+*/
+
 const postModel = require("./postModel");
 const reactModel = require("./reactModel");
 

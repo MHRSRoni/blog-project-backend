@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> user/readlist/readlistValidation.js</title>
+  <title> blog/post/reactModel.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -76,7 +76,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>user/readlist/readlistValidation.js</h1>
+                    <h1>blog/post/reactModel.js</h1>
                 </header>
                 
 
@@ -86,48 +86,36 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @category Readlist
- * @module ReadlistValidation
- * @author MHRoni
- */
+ * @category Post
+ * @module ReactModel
+ * @author Ali Rafat
+*/
 
+const { Schema, model } = require('mongoose');
 
-//=============Imports===============//
-const Joi = require('joi')
+const reactSchema = new Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        required: true
+    },
+    postId: {
+        type: Schema.Types.ObjectId,
+        ref: 'blogs',
+        required: true
+    },
+    react: {
+        type: String,
+        enum: ['like', 'dislike', 'love', 'none'],
+        default: 'none'
+    }
+}, { timestamps: true, versionKey: false });
 
-//================================//
+const reactModel = model('react', reactSchema);
 
+module.exports = reactModel;
 
-
-//=============Types================//
-/**
- * @typedef ObjectID 
- * @property {Boolean} trim=true - The ObjectID is trimmed
- * @property {Number} length=24 - The length of the ObjectId
- * @property {Boolean} required=true - The ObjectID is required
- */
-//================================//
-
-
-
-//===========Functions=================//
-
-/**
- * Function to validating objectID with [Joi]{@link https://joi.dev/api/}
- * @function validateObjectID
- * @param {String|ObjectID} objectID - The objectID to validate 
- * @async
- */
-const validateObjectID = async(objectID) => await Joi.string().trim().length(24).required().validateAsync(objectID)
-
-//====================================//
-
-
-
-//============Exports================//
-module.exports = {validateObjectID}
-
-//===================================//</code></pre>
+</code></pre>
         </article>
     </section>
 

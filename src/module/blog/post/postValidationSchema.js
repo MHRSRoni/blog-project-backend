@@ -1,8 +1,28 @@
+/**
+ * @category Post
+ * @module PostValidation
+ * @author Ali Rafat
+*/
+
 const Joi = require('joi');
 
-exports.reactValidationSchema = Joi.string().valid('like', 'dislike', 'love').required().messages({
+exports.reactValidationSchema = Joi.string().valid('like', 'fire', 'love').required().messages({
     'any.only': 'Invalid react type'
 });
+
+/**
+ * Validates the data for creating a post.
+ * @function validateCreatePostData
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The request body.
+ * @param {String} req.body.categoryId - The category id of the post.
+ * @param {String} req.body.title - The title of the post.
+ * @param {String} req.body.description - The description of the post.
+ * @param {String} req.body.picture - The picture of the post.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Object} - Resolves to the next middleware function.
+ */
 
 exports.validateCreatePostData = async (req, res, next) => {
     try {
