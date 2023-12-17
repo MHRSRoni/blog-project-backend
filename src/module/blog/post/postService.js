@@ -5,6 +5,22 @@ const userProfileModel = require("../../user/profile/userProfileModel");
 const categoryModel = require("../category/categoryModel");
 const reactModel = require("./reactModel");
 
+
+/**
+ * Creates a new post for a given user.
+ *
+ * @param {string} userId - The ID of the user creating the post.
+ * @param {object} postData - The data of the post being created.
+ * @param {string} postData.title - The title of the post.
+ * @param {string} postData.description - The description of the post.
+ * @param {string} postData.categoryId - The ID of the category the post belongs to.
+ * @return {object} - The result of the post creation.
+ * @return {boolean} result.success - Indicates if the post creation was successful.
+ * @return {string} result.operation - The operation performed (e.g., 'create').
+ * @return {string} result.message - A message describing the result of the operation.
+ * @return {object} result.data - The created post data.
+ */
+
 exports.createPostService = async (userId, postData) => {
     const checkTitle = await postModel.findOne({ title: postData.title })
 
@@ -37,8 +53,8 @@ exports.createPostService = async (userId, postData) => {
         ...postData, slug: createSlug(postData.title), userId: userId
     });
 
-    if(post) {
-        await categoryModel.findByIdAndUpdate(postData?.categoryId, {$inc : {postCount : 1}})
+    if (post) {
+        await categoryModel.findByIdAndUpdate(postData?.categoryId, { $inc: { postCount: 1 } })
         return {
             success: true,
             operation: 'create',
@@ -49,15 +65,32 @@ exports.createPostService = async (userId, postData) => {
 
 };
 
+/**
+ * Retrieves a single post from the database based on its slug.
+ *
+ * @param {string} slug - The slug of the post.
+ * @return {object} - An object containing the post information.
+ */
+
 exports.readSinglePostService = async (slug) => {
 
     const post = await postModel.findOne({ slug })
         .populate('userId', 'name picture -_id')
-        // .populate('categoryId', 'name cover - _id')
+    // .populate('categoryId', 'name cover - _id')
 
     return { success: true, operation: 'read', data: post }
 
 };
+
+/**
+ * Retrieves all posts for a given user.
+ *
+ * @param {string} userId - The ID of the user.
+ * @param {number} page - The page number to retrieve.
+ * @param {number} limit - The number of posts to retrieve per page.
+ * @param {string} sort - The sorting option for the posts ('latest' or 'top').
+ * @return {object} An object containing the success status, operation type, and retrieved post data.
+ */
 
 exports.readAllPostService = async (userId, page, limit, sort) => {
 
@@ -117,6 +150,15 @@ exports.readAllPostService = async (userId, page, limit, sort) => {
 
 };
 
+/**
+ * Retrieves a list of posts by category.
+ *
+ * @param {number} page - The page number to retrieve.
+ * @param {number} limit - The maximum number of posts per page.
+ * @param {string} categoryId - The ID of the category.
+ * @return {Object} The response object containing the list of posts, pagination information, and category name.
+ */
+
 exports.readPostByCategoryService = async (page, limit, categoryId) => {
     let post = {};
 
@@ -157,6 +199,15 @@ exports.readPostByCategoryService = async (page, limit, categoryId) => {
     }
 
 };
+
+/**
+ * Retrieves relevant posts based on the specified page, limit, and email.
+ *
+ * @param {number} page - The page number.
+ * @param {number} limit - The maximum number of posts per page.
+ * @param {string} email - The email of the user.
+ * @return {Promise<object>} An object containing the retrieved posts.
+ */
 
 exports.readRelevantPostService = async (page, limit, email) => {
     let post = {};
@@ -236,6 +287,16 @@ exports.readRelevantPostService = async (page, limit, email) => {
     }
 };
 
+/**
+ * Retrieves all posts by a specific user.
+ *
+ * @param {string} userId - The ID of the user.
+ * @param {number} limit - The maximum number of posts to retrieve per page.
+ * @param {number} page - The page number to retrieve.
+ * @return {object} An object containing the success status, the number of posts retrieved, and the retrieved posts.
+ */
+
+
 exports.allPostByUser = async (userId, limit, page) => {
     let post = {};
 
@@ -270,6 +331,15 @@ exports.allPostByUser = async (userId, limit, page) => {
         data: post,
     }
 }
+
+/**
+ * Updates a post in the database.
+ *
+ * @param {string} slug - The slug of the post.
+ * @param {string} userId - The ID of the user who owns the post.
+ * @param {object} postData - The data to update the post with.
+ * @return {object} An object with success, operation, and message properties.
+ */
 
 exports.updatePostService = async (slug, userId, postData) => {
 
@@ -309,6 +379,15 @@ exports.updatePostService = async (slug, userId, postData) => {
     }
 };
 
+/**
+ * Deletes a post by slug and userId.
+ *
+ * @param {string} slug - The slug of the post to be deleted.
+ * @param {string} userId - The ID of the user who owns the post.
+ * @return {object} - An object indicating the success of the operation and a message.
+ */
+
+
 exports.deletePostService = async (slug, userId) => {
 
     const deletePost = await postModel.findOneAndDelete({ slug, userId });
@@ -317,7 +396,7 @@ exports.deletePostService = async (slug, userId) => {
         throw createError(404, 'Post not found!');
     }
 
-    await categoryModel.findByIdAndUpdate(postData?.categoryId, {$inc : {postCount : -1}})
+    await categoryModel.findByIdAndUpdate(postData?.categoryId, { $inc: { postCount: -1 } })
 
     return {
         success: true,
@@ -325,6 +404,18 @@ exports.deletePostService = async (slug, userId) => {
         message: 'Post has been Deleted!'
     }
 };
+
+/**
+ * Retrieves a list of posts based on search criteria.
+ *
+ * @param {number} page - The page number of the results.
+ * @param {number} limit - The maximum number of posts to retrieve per page.
+ * @param {string} search - The search term to filter posts by title or description.
+ * @param {object} query - Additional query parameters for filtering posts.
+ * @param {string} query.categoryId - The ID of the category to filter posts by.
+ * @param {string} postId - The ID of the post to retrieve reactions for.
+ * @return {object} The response object containing the list of posts and pagination information.
+ */
 
 exports.searchPostService = async (page, limit, search, query, postId) => {
 
@@ -342,7 +433,7 @@ exports.searchPostService = async (page, limit, search, query, postId) => {
         }
     }
     if (query) {
-        if(query.categoryId){
+        if (query.categoryId) {
             const category = await categoryModel.findById(query.categoryId)
             post.categoryName = category?.title
         }
