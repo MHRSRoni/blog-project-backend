@@ -62,12 +62,20 @@ const readReadlist = async (userId, search, currentPage, perPage) => {
         foreignField : '_id',
         as : 'postData'
     }}
+    const populateUserData = {
+        $lookup : {
+            from : 'users',
+            localField : 'user',
+            foreignField : '_id',
+            as : 'userData'        
+    }}
+
     const searchQuery = search ?{ $match : {$or : [
         { "posts.title" : { $regex : search, $options : 'i' } },
         { "posts.description" : { $regex : search, $options : 'i' } }
     ]} } : {$match : {}}
 
-    const pipeline = [userIdQuery, skipPost, limitPost, populatePosts, searchQuery]
+    const pipeline = [userIdQuery, skipPost, limitPost, populatePosts, searchQuery, populateUserData]
 
     //read the readlist
     const readlist = await readlistModel.aggregate(pipeline)
