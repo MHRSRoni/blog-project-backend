@@ -56,8 +56,8 @@ const readReadlistController = async (req, res, next) => {
 
         const userId = req?.user?.id
         const search = req.query.search
-        const currentPage = req.query.currentPage || 1
-        const perPage = req.query.perPage || 10
+        const currentPage = req.query.currentPage //|| 1
+        const perPage = req.query.perPage // || 10
 
         const validUserId = await validateObjectID(userId)
 

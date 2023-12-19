@@ -54,8 +54,8 @@ const readReadlist = async (userId, search, currentPage, perPage) => {
     
     //query building to read the readlist
     const userIdQuery = { $match : { user : new ObjectId(userId) }}
-    const skipPost = { $skip : parseInt(currentPage - 1) * perPage }
-    const limitPost = { $limit : parseInt(perPage) }
+    const skipPost = { $skip : Number(currentPage - 1) * perPage }
+    const limitPost = { $limit : Number(perPage) }
     const populatePosts = { $lookup : {
         from : 'posts',
         localField : 'post',
@@ -75,7 +75,9 @@ const readReadlist = async (userId, search, currentPage, perPage) => {
         { "posts.description" : { $regex : search, $options : 'i' } }
     ]} } : {$match : {}}
 
-    const pipeline = [userIdQuery, skipPost, limitPost, populatePosts, searchQuery, populateUserData]
+    const pipelineWithPagination = [userIdQuery, skipPost, limitPost, populatePosts, searchQuery, populateUserData]
+    const pipelineWithoutPagination = [userIdQuery, populatePosts, searchQuery, populateUserData]
+    const pipeline = (currentPage && perPage) ? pipelineWithPagination : pipelineWithoutPagination
 
     //read the readlist
     const readlist = await readlistModel.aggregate(pipeline)
@@ -85,8 +87,8 @@ const readReadlist = async (userId, search, currentPage, perPage) => {
     }
 
     //document count
-    const totalPost = readlist?.length ?? 0
-    const totalPage = Math.ceil(totalPost / perPage)
+    totalPost = await readlistModel.countDocuments({user : new ObjectId(userId)}) || 0
+    const totalPage = Math.ceil(totalPost / perPage) || undefined
 
     return { success: true, message : 'readlist found', data: {totalPost, totalPage, currentPage, perPage, posts : readlist} }
 }
