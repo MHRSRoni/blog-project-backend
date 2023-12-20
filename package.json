@@ -8,9 +8,6 @@
     "start": "node index.js",
     "docs": "jsdoc -c jsdoc.conf.json"
   },
-  "engines": {
-    "node": "18.x"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
